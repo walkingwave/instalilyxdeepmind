@@ -1,0 +1,51 @@
+{
+  "run_id": "20260920-222610-cce8d2",
+  "task": "toy",
+  "mode": "none",
+  "instances": 1,
+  "avg_score": 46.0,
+  "resolved": 0,
+  "resolve_rate": 0.0,
+  "total_cost_usd": 0.0,
+  "records": [
+    {
+      "instance_id": "toy-intervals",
+      "mode": "none",
+      "score": 46,
+      "resolved": false,
+      "target": {
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "all_green": false
+      },
+      "regression": {
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "all_green": true
+      },
+      "hidden": {
+        "passed": 2,
+        "failed": 3,
+        "errors": 0,
+        "all_green": false
+      },
+      "notes": [
+        "target failure not fixed",
+        "hidden suite 2/5 -- patch did not generalize"
+      ],
+      "wall_clock_s": 1.3,
+      "budget": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_tokens": 0,
+        "cost_usd": 0.0,
+        "steps": 0,
+        "elapsed_s": 1.3
+      },
+      "agent": null,
+      "diff": ""
+    }
+  ]
+}
