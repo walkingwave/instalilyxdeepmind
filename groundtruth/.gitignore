@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv*/
+.env
+*.key
+data_mock/
+submissions/*/
+!submissions/.keep
+artifacts/
+.pytest_cache/

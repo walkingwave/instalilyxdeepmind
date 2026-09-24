@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gtlab"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["numpy==2.3.5", "scipy==1.16.3", "httpx"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+train = ["torch"]
+
+[project.scripts]
+gt = "gtlab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["gtlab*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
