@@ -731,3 +731,73 @@ Rejected: blend $\lambda$ as a lever. u005 showed shrinkage toward $y_0$ costs u
 persistence is far off; the leak is in the equilibrium map and the missing dynamics, not in the
 mix. Still to read: the per-category split of our uploads in the portal (sustained vs sequence
 transfer), which would rank items 1–4 by category.
+
+### 11. Category bands from the portal receipts, and the plan they imply (Fri morning)
+
+Every receipt is JSON at `/submissions/<id>` with `bands = {overall, id, extrapolation}`;
+`overall = 0.25·id + 0.75·extrapolation`, so `id` is the sustained category and `extrapolation`
+is the mean of order, recovery and composition ("sequence transfer" on the standings). Saved in
+`tune/bands.json`. Our standing after Thursday's sweep: #16, 0.5047 overall, 0.5279 sequence,
+hence sustained 0.435. #1: 0.751 overall, 0.760 sequence, sustained ≈ 0.72.
+
+Best-of per system (receipt id, kind), with the persistence bands from u001 for reference:
+
+| system | best | overall | sustained | sequence | pers. sustained | pers. sequence |
+|---|---|---:|---:|---:|---:|---:|
+| supply_chain | 843 l0b_lin | 0.702 | 0.508 | 0.766 | 0.462 | 0.406 |
+| ad_auction | 836 l1 | 0.628 | 0.537 | 0.659 | 0.484 | 0.467 |
+| traffic | 844 l0b_lin | 0.626 | 0.446 | 0.686 | 0.308 | 0.249 |
+| power_grid | 840 l0b_lin | 0.593 | 0.499 | 0.625 | 0.412 | 0.511 |
+| wildlife | 856 l0b_lin | 0.555 | 0.597 | 0.541 | 0.191 | 0.233 |
+| reservoir | 841 l0b_lin | 0.529 | 0.563 | 0.517 | 0.361 | 0.342 |
+| hospital_queue | 859 l0b_lin λ0.8 | 0.493 | 0.370 | 0.533 | 0.311 | 0.487 |
+| market | 839 l0b_lin | 0.481 | 0.474 | 0.483 | 0.129 | 0.204 |
+| social_contagion | 842 l0b_lin | 0.440 | 0.410 | 0.451 | 0.187 | 0.345 |
+| epidemic | 848 l0b_lin λ0.5 | 0.327 | 0.297 | 0.336 | 0.273 | 0.271 |
+
+Where the gap to #1 sits, by weight: sustained $(0.72 - 0.435) \times 0.25 = 0.07$; sequence
+$(0.76 - 0.53) \times 0.75 = 0.17$. **Seventy percent of the gap is in the sequence categories**,
+i.e. in the transient dynamics after a change (order, recovery, composition), not in the long-hold
+level. That matches §10 finding 1 (the one-pole map has no transient shape) more than finding 2.
+Sustained is still the weakest band on 8 of 10 systems, and on supply_chain (0.51 vs 0.77),
+traffic (0.45 vs 0.69) and hospital_queue (0.37 vs 0.53) the sustained band is barely above
+persistence: the fitted equilibrium is wrong at the held levels (§10 finding 2).
+
+Other reads from the bands:
+- Blend λ < 1 loses sustained hardest (market λ 0.8: 0.474 → 0.323; supply_chain λ 1.2:
+  sequence 0.766 → 0.691). λ stays at 1 except epidemic and hospital, as decided in §7.
+- Quadratic features (u004) lost both bands on traffic and power_grid; l1 on market lost both.
+- Epidemic and social_contagion are below 0.45 in both bands: those two need a new model, not tuning.
+
+Plan, ordered by expected points per unit of work, credits separate:
+
+**Friday (no credits; 3 slots per system):**
+1. Extrapolation guard in the runtime: clamp the equilibrium $W\phi(u)$ to the observed range of
+   $v$ plus 0.25 × range, and clip margin 1× on hospital_queue, traffic, market, power_grid.
+   Replace u006's "clip 10×" factors on market and power_grid with this. Local check: the
+   out-of-range fraction on eval-shaped schedules (§10 table) must go to ≈ 0.
+2. Reservoir: inflow$(t)$ exogenous rule (§10) and the level integrator driven by it, with the
+   irrigation control in the balance ($\Delta\text{level} = c_1\,\text{inflow} - c_2\,\text{outflow}
+   - c_3\,\text{irrigation} + b$, pooled least squares on both runs).
+3. Epidemic: SIR-type grey box. Two observables, two runs, two waves; fit $\beta(u), \gamma$,
+   hospitalisation fraction and lag by least squares on the 520 ticks; ship as the epidemic model
+   if it beats λ = 0.5 on both runs in-sample and stays finite over 4,000 ticks.
+4. Hospital_queue: queue capacity clamp (≈ 333) and wait_time as a function of queue above
+   capacity; traffic: exit flow = delayed, smoothed admission (l1 with the 8-tick delay from u006);
+   power_grid: second-order load (rebound). Each is one factor for a Friday or Saturday slot.
+5. Autotune: store the bands with every score; screen on both bands; treat leave-one-run-out
+   differences under 0.05 as ties; add the out-of-range gate to the build.
+
+**Saturday purchase (needs a go; 15,080 credits left):** the sequence categories need history
+data and the sustained category needs held levels we own. Per system, in this order:
+- composition: single-control blocks at $\alpha \approx 0.85$, 60 ticks each, then the joint
+  pulse, from one reset ($60(m+1)$ ticks: 180–420 per system);
+- recovery: a pulse train with gaps 10 / 40 / 150 (about 350 ticks);
+- sustained: one long hold, 600–1,000 ticks, at an interior level ($\alpha = 0.5$) for the five
+  slow systems (reservoir, supply_chain, social_contagion, wildlife, epidemic) and 400 for the rest.
+Roughly 1,100–1,600 per system, 300–500 kept in reserve. Priority by band gap: supply_chain,
+traffic, hospital_queue, power_grid, then the rest.
+
+**Sunday–Monday:** refit every kind on the full data, one-factor public tests on the remaining
+slots, then the Monday 12:00 final upload of the best-of, and keep one slot per system for a
+Tuesday correction.
