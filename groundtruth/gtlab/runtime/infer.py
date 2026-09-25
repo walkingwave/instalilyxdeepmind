@@ -337,6 +337,11 @@ def apply_post(doc, Y, U, y0=None):
             if r.get("lag"):                     # observable may lag the control by one tick
                 cap = np.maximum(cap, np.concatenate([cap[:1], cap[:-1]]))
             Y[:, j] = np.minimum(Y[:, j], cap)
+        elif r.get("type") == "le_const" and r.get("obs") in obs:
+            # hard capacity: obs <= value (e.g. hospital queue <= 333 beds; overflow is referred elsewhere)
+            Y[:, obs.index(r["obs"])] = np.minimum(Y[:, obs.index(r["obs"])], float(r["value"]))
+        elif r.get("type") == "ge_const" and r.get("obs") in obs:
+            Y[:, obs.index(r["obs"])] = np.maximum(Y[:, obs.index(r["obs"])], float(r["value"]))
         elif r.get("type") == "exo_harmonic" and r.get("obs") in obs:
             # obs_t = c0 + sum_h s_h sin(2 pi h t / P) + c_h cos(2 pi h t / P), t = 0.. (phase locked to reset)
             j = obs.index(r["obs"])

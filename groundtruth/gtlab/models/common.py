@@ -47,6 +47,8 @@ POST_RULES = {
     "ad_auction": [{"type": "le_control", "obs": "spend", "control": "budget_cap", "lag": 1, "scale": 1.04}],
     # inflow is a deterministic season phase-locked to reset (MATH_LOG Fri s10.3). The level
     # integrator rule (plans/reservoir_integrate_rule.json) is net negative LOO and stays optional.
+    # queue never exceeds 333 in 440 ticks across three runs (332.3-333.0); "overflow is referred elsewhere"
+    "hospital_queue": [{"type": "le_const", "obs": "queue", "value": 333.0}],
     "reservoir": [
         {"type": "exo_harmonic", "obs": "inflow", "period": 67.8,
          "coef": [11.43, 2.154, 0.293, -0.018, -0.006]},
