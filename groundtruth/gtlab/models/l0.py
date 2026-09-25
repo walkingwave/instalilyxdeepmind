@@ -8,6 +8,7 @@ from __future__ import annotations
 import numpy as np
 
 from gtlab.models import common as C
+from gtlab.models.l1 import _col_tr
 from gtlab.runtime import infer as rt
 
 
@@ -66,9 +67,17 @@ class L0b(C.DevModel):
                     ys.append((V[:, j] - decay) * w)
                 X, y = np.vstack(Xs), np.concatenate(ys)
                 Wj = C.ridge(X, y)
-                sse = float(np.sum((X @ Wj - y) ** 2))
-                if best is None or sse < best[0]:
-                    best = (sse, a, Wj)
+                # pick a by the competition score in physical units (sigma-weighted, robust),
+                # not by SSE in transformed space (audit: logit space over-weights 0/1 ends)
+                loss = 0.0
+                trj = _col_tr(self.tr, j)
+                for (F, V, v0, w), (X1, y1) in zip(data, zip(Xs, ys)):
+                    vhat = (X1 @ Wj) / w + (a ** np.arange(1, F.shape[0] + 1)) * v0[j]   # Phi @ Wj + decay
+                    yhat = rt.g_inv(vhat[:, None], trj)[:, 0]
+                    ytrue = rt.g_inv(V[:, j:j + 1], trj)[:, 0]
+                    loss += float(np.sum(w ** 2 * (1.0 - 1.0 / (1.0 + np.abs(yhat - ytrue) / self.sigma[j]))))
+                if best is None or loss < best[0]:
+                    best = (loss, a, Wj)
             self.a[j] = best[1]
             self.W[:, j] = best[2]
         return self

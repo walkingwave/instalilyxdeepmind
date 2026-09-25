@@ -21,8 +21,11 @@ from gtlab.models import common as C
 from gtlab.package import build
 
 
-def fit_doc(sid, kind, runs, time_budget_s=120):
+def fit_doc(sid, kind, runs, time_budget_s=120, include_val=False):
+    """Fit `kind` on the train runs (val.* runs are held out unless include_val, e.g. the final refit)."""
     spec = S.get(sid)
+    if not include_val:
+        runs = [r for r in runs if r.tags.get("split") != "val"]
     if not runs or kind == "l0a":
         return C.make_doc(spec, {"kind": "l0a"}, runs=runs or None, info={"model_id": "l0a"}), "l0a"
     clip = C.soft_clip(spec, runs)
@@ -46,6 +49,7 @@ def main():
     ap.add_argument("--systems", default=",".join(S.SYSTEM_IDS))
     ap.add_argument("--data-root", default=None)
     ap.add_argument("--mock", action="store_true")
+    ap.add_argument("--include-val", action="store_true", help="final refit: train on held-out val runs too")
     a = ap.parse_args()
     over = json.loads(a.picks) if a.picks else {}
     picks, summary = {}, {}
@@ -55,10 +59,8 @@ def main():
         runs = []
         if (d / "ledger.jsonl").exists():
             runs = load_runs(spec, Ledger(d, sid, mock=a.mock))
-            for r in runs:
-                r.tags["split"] = "train"
         kind = over.get(sid, a.kind)
-        doc, used = fit_doc(sid, kind, runs)
+        doc, used = fit_doc(sid, kind, runs, include_val=a.include_val)
         picks[sid] = doc
         summary[sid] = {"kind": used, "runs": len(runs), "ticks": int(sum(r.T for r in runs))}
         print(sid, summary[sid], flush=True)

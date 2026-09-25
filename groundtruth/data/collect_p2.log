@@ -1,0 +1,75 @@
+﻿epidemic p2:
+  p2.pulse120_280        T= 400  done=   0  todo= 400  new
+  TOTAL steps to buy: 400
+  reset p2.pulse120_280: picked candidate 9/10 run_id=Py0aErcusunwae9w0GOqWXUXVGAo92q8
+  p2.pulse120_280: complete (400 ticks)
+market p2:
+  p2.pulse40             T=  80  done=   0  todo=  80  new
+  p2.mid40               T=  40  done=   0  todo=  40  new
+  p2.multilevel200       T= 200  done=   0  todo= 200  new
+  TOTAL steps to buy: 320
+  reset p2.pulse40: picked candidate 7/8 run_id=p0WL0popgR2zc4ml6bBz0ihdMhXez6IP
+  p2.pulse40: complete (80 ticks)
+  reset p2.mid40: picked candidate 5/6 run_id=x36_jpPLTMAIZPajTmzGbhs1rzIpLaYL
+  p2.mid40: complete (40 ticks)
+  reset p2.multilevel200: picked candidate 14/15 run_id=RseV5UcT6YHcUd6HysPkObflFwi46EoU
+  p2.multilevel200: complete (200 ticks)
+traffic p2:
+  p2.pulse40             T=  80  done=   0  todo=  80  new
+  p2.mid40               T=  40  done=   0  todo=  40  new
+  p2.multilevel200       T= 200  done=   0  todo= 200  new
+  TOTAL steps to buy: 320
+  reset p2.pulse40: picked candidate 7/8 run_id=KAbrM0qJhWg46cf3eIQpl8wjWY5mwDaO
+  p2.pulse40: complete (80 ticks)
+  reset p2.mid40: picked candidate 14/15 run_id=W53xO2IClYv8PKxtHyTajz83vuxqpaq7
+  p2.mid40: complete (40 ticks)
+  reset p2.multilevel200: picked candidate 14/15 run_id=Z4VDj5VyHkS8BBKhipm-zmVVR2WrjhQH
+  p2.multilevel200: complete (200 ticks)
+power_grid p2:
+  p2.pulse60_120         T= 180  done=   0  todo= 180  new
+  p2.multilevel200       T= 200  done=   0  todo= 200  new
+  TOTAL steps to buy: 380
+  reset p2.pulse60_120: picked candidate 9/10 run_id=cjNf_cs9e_j9ZG99kRzJAgPx6gXY-0wr
+  p2.pulse60_120: complete (180 ticks)
+  reset p2.multilevel200: picked candidate 14/15 run_id=t2tZl9erOkcOz3hkprOGAVcZ8g8wv-Bd
+  p2.multilevel200: complete (200 ticks)
+supply_chain p2:
+  p2.pulse200_200        T= 400  done=   0  todo= 400  new
+  TOTAL steps to buy: 400
+  reset p2.pulse200_200: picked candidate 13/14 run_id=Nm5A7VrHFYCs-pvSah8yOX3nRWGflBPq
+  p2.pulse200_200: complete (400 ticks)
+wildlife p2:
+  p2.pulse200_200        T= 400  done=   0  todo= 400  new
+  TOTAL steps to buy: 400
+  reset p2.pulse200_200: picked candidate 4/5 run_id=oyK4dBynbAZaGQXQhdbWlUgVJa0EfMa7
+  p2.pulse200_200: complete (400 ticks)
+reservoir p2:
+  p2.pulse200_200        T= 400  done=   0  todo= 400  new
+  TOTAL steps to buy: 400
+  reset p2.pulse200_200: picked candidate 14/15 run_id=ZTZzSoWXbhTIz9iepOWqSHtzZZ7Zvwia
+  p2.pulse200_200: complete (400 ticks)
+ad_auction p2:
+  p2.pulse60_120         T= 180  done=   0  todo= 180  new
+  p2.multilevel200       T= 200  done=   0  todo= 200  new
+  TOTAL steps to buy: 380
+  reset p2.pulse60_120: picked candidate 14/15 run_id=OgqVqKEhtvu0SXZ-RFhU5Q33fNLgapQL
+  p2.pulse60_120: complete (180 ticks)
+  reset p2.multilevel200: picked candidate 5/6 run_id=becRs-w9tea2o__S4_oa4Zvw2JIWYci0
+  p2.multilevel200: complete (200 ticks)
+social_contagion p2:
+  p2.pulse200_200        T= 400  done=   0  todo= 400  new
+  TOTAL steps to buy: 400
+  reset p2.pulse200_200: picked candidate 11/12 run_id=79zv0dyTqL7U4Sw8VZq2FuqImSIhKxRx
+  p2.pulse200_200: complete (400 ticks)
+hospital_queue p2:
+  p2.pulse40             T=  80  done=   0  todo=  80  new
+  p2.mid40               T=  40  done=   0  todo=  40  new
+  p2.multilevel200       T= 200  done=   0  todo= 200  new
+  TOTAL steps to buy: 320
+  reset p2.pulse40: picked candidate 7/8 run_id=eEmxEHbRL9yxjyH1lqD4tL4a4YDyaZo1
+  p2.pulse40: complete (80 ticks)
+  reset p2.mid40: picked candidate 14/15 run_id=YqAKfNwXBhGoWGg8lraGhx4zazQ8fRNH
+  p2.mid40: complete (40 ticks)
+  reset p2.multilevel200: picked candidate 14/15 run_id=zsc1xY5TyYoS1uCyaW9x286D-1PvjtsX
+  p2.multilevel200: complete (200 ticks)
+bought 3720 REAL steps

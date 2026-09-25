@@ -105,8 +105,6 @@ def data_ticks(sid, data_root=None):
     if not (d / "ledger.jsonl").exists():
         return 0, []
     runs = load_runs(S.get(sid), Ledger(d, sid, mock=MOCK))
-    for r in runs:
-        r.tags["split"] = "train"
     return int(sum(r.T for r in runs)), runs
 
 
@@ -213,16 +211,16 @@ def propose_one(hist, kinds, ticks, final=False, screen=None):
 
 
 # ----------------------------------------------------------------------------- build
-def _fit_doc(sid, cfg, runs, cache):
+def _fit_doc(sid, cfg, runs, cache, include_val=False):
     sys.path.insert(0, str(ROOT / "scripts"))
     from build_from_data import fit_doc
     if cfg["kind"] == "l0a":
         doc, _ = fit_doc(sid, "l0a", runs)
         doc["info"] = dict(doc.get("info") or {}, model_id="l0a")
         return doc
-    key = (sid, cfg["kind"], cfg.get("data_ticks"))
+    key = (sid, cfg["kind"], cfg.get("data_ticks"), include_val)
     if key not in cache:
-        cache[key] = fit_doc(sid, cfg["kind"], runs)[0]
+        cache[key] = fit_doc(sid, cfg["kind"], runs, include_val=include_val)[0]
     base = json.loads(json.dumps(cache[key]))
     lam = float(cfg.get("lam", 1.0))
     if abs(lam - 1.0) > 1e-9:
@@ -248,7 +246,7 @@ def cmd_propose(a):
             cfg, why = None, f"no slots left today ({used}/3); wanted: {why}"
         plan[sid] = {"config": cfg, "why": why, "slots_used_today": used, "screen": screen}
         if cfg is not None:
-            picks[sid] = _fit_doc(sid, cfg, runs, cache)
+            picks[sid] = _fit_doc(sid, cfg, runs, cache, include_val=a.final)
     for sid, p in plan.items():
         print(f"{sid:17s} {'SKIP' if p['config'] is None else json.dumps(p['config']):52s} {p['why']}")
     if not picks:

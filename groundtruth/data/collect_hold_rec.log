@@ -1,0 +1,61 @@
+﻿  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\epidemic\plan.json (hash 8907054dde78b300)
+epidemic p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 14/15 run_id=z5X7-1sOh5An4rSiycdtnjAa4HlpZzxa
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\market\plan.json (hash 9dc50eb4bbe04e71)
+market p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 6/7 run_id=DlcF-0hHib9WZg-5nQ2wYtPu-X1K5Hhy
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\traffic\plan.json (hash 868337a105e886d0)
+traffic p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 4/5 run_id=aTLykufzs1VqDc2MgY-413ruDIiSAauy
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\power_grid\plan.json (hash 20884875c421b250)
+power_grid p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 8/9 run_id=8FE-caWUWgzlKQJ_8Xup-Xd5cCmGqraq
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\supply_chain\plan.json (hash eca76c51a66a2e60)
+supply_chain p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 4/5 run_id=lvSdqvwRSKKw08ZXsMlkkIVdPYv_91c3
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\wildlife\plan.json (hash b0aa660a7520844d)
+wildlife p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 14/15 run_id=pSsBcK2a9NoVsJFhxbd2wGvx3gmRhslj
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\reservoir\plan.json (hash db5427e33259d87f)
+reservoir p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 8/9 run_id=aENBsLddC1fSLb1lL5lbbjjTkhUGOwFA
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\ad_auction\plan.json (hash 5649520d26a587b7)
+ad_auction p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 14/15 run_id=gUyC4l_IQ1LZvnCEgAq5g0o2FPlSo0WG
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\social_contagion\plan.json (hash 7cc3764caf6e5d82)
+social_contagion p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 4/5 run_id=5Ey_6pVlRQaKzzpEjibWBTCqB8i2PC5N
+  p1.hold_rec: complete (120 ticks)
+  materialized p1 into C:\Users\Dylan Ho\Documents\Projects\instalily-hackathon\instalilyxdeepmind\groundtruth\data\hospital_queue\plan.json (hash 559ca7610d7a6fc7)
+hospital_queue p1:
+  p1.hold_rec            T= 120  done=   0  todo= 120  new
+  TOTAL steps to buy: 120
+  reset p1.hold_rec: picked candidate 4/5 run_id=yd18-NpH0eyE8xFixlcNOaRzpun8RO_W
+  p1.hold_rec: complete (120 ticks)
+bought 1200 REAL steps

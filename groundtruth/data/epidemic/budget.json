@@ -1,0 +1,11 @@
+{
+ "system": "epidemic",
+ "total": 2000,
+ "phases": {
+  "p1": 1000,
+  "p2": 500,
+  "val": 250,
+  "reserve": 250
+ },
+ "floor": 0
+}

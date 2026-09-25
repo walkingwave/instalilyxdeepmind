@@ -44,9 +44,12 @@ class L1(C.DevModel):
     kind = "l1"
 
     def __init__(self, spec, K=3, hist=True, pairs="auto", delay_grid=(0, 1, 2, 4, 8), delays=None,
-                 max_nfev=60, time_budget_s=None, **cfg):
+                 max_nfev=60, time_budget_s=None, anchor=True, **cfg):
         super().__init__(spec, **cfg)
         self.K = int(K)
+        # anchor: the initial state is tied to the observed initial, z0_k = (v0_j - c)/K + b_k, so
+        # v_0 = v0_j + sum_k b_k; only K small offsets are free instead of a K x p matrix E.
+        self.anchor = bool(anchor)
         self.hist = bool(hist)
         self.phi = C.phi_spec(spec.m, pairs=pairs)
         self.delay_grid = tuple(delay_grid) if delays is None else (None,)
@@ -81,22 +84,35 @@ class L1(C.DevModel):
             cols = []
             for a in avec:
                 cols.append(C.lfilt(a, D["F"], np.zeros(nf)))
-            for a in avec:
-                cols.append((a ** tt)[:, None] * D["v0"][None, :])
-            for a in avec:
-                cols.append((a ** tt)[:, None])
-            cols.append(np.ones((T, 1)))
+            if self.anchor:
+                # v_t = c + sum_k a_k^t (v0_j - c)/K + sum_k lfilt(a_k, F) W_k
+                #     = v0_j D_t + c (1 - D_t) + ...,  D_t = mean_k a_k^t
+                Dt = np.mean([a ** tt for a in avec], axis=0)
+                cols.append((1.0 - Dt)[:, None])
+                target = D["V"][:, j] - D["v0"][j] * Dt
+            else:
+                for a in avec:
+                    cols.append((a ** tt)[:, None] * D["v0"][None, :])
+                for a in avec:
+                    cols.append((a ** tt)[:, None])
+                cols.append(np.ones((T, 1)))
+                target = D["V"][:, j]
             X = np.hstack(cols) * D["w"][:, None]
             Xs.append(X)
-            ys.append(D["V"][:, j] * D["w"])
+            ys.append(target * D["w"])
         X, y = np.vstack(Xs), np.concatenate(ys)
         beta = C.ridge(X, y)
         sse = float(np.sum((X @ beta - y) ** 2))
         K, nf = len(avec), data[0]["F"].shape[1]
         W = beta[:K * nf].reshape(K, nf)
-        E = beta[K * nf:K * nf + K * p].reshape(K, p)
-        b = beta[K * nf + K * p:K * nf + K * p + K]
-        c = beta[-1]
+        if self.anchor:
+            E = np.zeros((K, p)); E[:, j] = 1.0 / K
+            b = np.zeros(K)
+            c = beta[-1]
+        else:
+            E = beta[K * nf:K * nf + K * p].reshape(K, p)
+            b = beta[K * nf + K * p:K * nf + K * p + K]
+            c = beta[-1]
         return sse, {"a": np.array(avec, float), "W": W, "E": E, "b": b, "c": float(c)}
 
     def _best_linear(self, data, j):
@@ -132,6 +148,8 @@ class L1(C.DevModel):
         K, p = self.K, self.spec.p
         lo = [np.full(K, -4.0), np.full(K * nf, -np.inf), [-np.inf], np.full(K * p, -np.inf), np.full(K, -np.inf)]
         hi = [np.full(K, 9.2), np.full(K * nf, np.inf), [np.inf], np.full(K * p, np.inf), np.full(K, np.inf)]
+        if self.anchor:
+            lo[4] = np.full(K, -1.0); hi[4] = np.full(K, 1.0)
         if self.hist:
             lo += [np.full(K, -0.95), [_logit(0.5)]]
             hi += [np.full(K, 5.0), [_logit(0.9995)]]
@@ -144,7 +162,10 @@ class L1(C.DevModel):
         if self.hist:
             h = C.lfilt(par["ah"], dist, 0.0)
             Q = Q * (1.0 + np.outer(h, par["gamma"]))
-        z0 = par["E"] @ v0 + par["b"]            # [K]
+        if self.anchor:
+            z0 = (v0[par["j"]] - par["c"]) / self.K + par["b"]   # [K]
+        else:
+            z0 = par["E"] @ v0 + par["b"]            # [K]
         v = np.full(T, par["c"])
         for k in range(self.K):
             v = v + C.lfilt(par["a"][k], Q[:, k], z0[k])
@@ -152,6 +173,7 @@ class L1(C.DevModel):
 
     def _resid_obs(self, x, data, j, nf, trj, lo, hi, sig):
         par = self._unpack(x, nf)
+        par["j"] = j
         res = []
         for D in data:
             v = self._sim_obs(par, D["F"], D["v0"], D["d"])
@@ -224,6 +246,8 @@ class L1(C.DevModel):
             else:
                 x, cost = x0, cost0
             par = self._unpack(x, nf)
+            if self.anchor:                      # E is unused by the anchored simulation; pin it
+                par["E"] = np.zeros((K, p)); par["E"][:, j] = 1.0 / K
             self.a[:, j] = par["a"]; self.W[:, :, j] = par["W"]; self.c[j] = par["c"]
             self.E[:, j, :] = par["E"]; self.b[:, j] = par["b"]
             if self.hist:
@@ -240,15 +264,16 @@ class L1(C.DevModel):
         V = np.empty((U.shape[0], self.spec.p))
         for j in range(self.spec.p):
             par = {"a": self.a[:, j], "W": self.W[:, :, j].copy(), "c": self.c[j], "E": self.E[:, j, :],
-                   "b": self.b[:, j]}
+                   "b": self.b[:, j], "j": j}
             if self.hist:
                 par["gamma"] = self.gamma[:, j]; par["ah"] = self.ah[j]
             V[:, j] = self._sim_obs(par, F, v0, dist)
         return rt.g_inv(V, self.tr)
 
     def export(self):
+        b_out = self.b - self.c[None, :] / self.K if self.anchor else self.b
         blob = {"kind": "l1", "tr": self.tr, "phi": self.phi, "delays": [int(d) for d in self.delays],
-                "a": self.a.tolist(), "W": self.W.tolist(), "E": self.E.tolist(), "b": self.b.tolist(),
+                "a": self.a.tolist(), "W": self.W.tolist(), "E": self.E.tolist(), "b": b_out.tolist(),
                 "c": self.c.tolist(), "hist": None}
         if self.hist:
             blob["hist"] = {"ah": self.ah.tolist(), "gamma": self.gamma.tolist(), "urec": self.urec.tolist()}

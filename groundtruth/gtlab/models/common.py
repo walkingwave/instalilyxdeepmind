@@ -20,7 +20,7 @@ def hard_vectors(spec):
     return lo, hi
 
 
-CLIP_MARGIN = 1.0
+CLIP_MARGIN = 3.0
 
 
 def soft_clip(spec, runs, margin=None):

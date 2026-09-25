@@ -1,0 +1,584 @@
+# Math log
+
+Lab notebook for the Toronto 26 forecasting challenge. One dated entry per working session.
+Each entry records the question, the math, the evidence, the decision, and what we rejected.
+Everything needed to rebuild a model or defend a number lives here.
+
+Conventions: $y_t \in \mathbb{R}^p$ observables after action $u_t \in \mathbb{R}^m$; $T = 4000$ ticks per
+scored episode; $\sigma_j$ the organiser's fixed scale per observable; per-tick score
+$s(e) = 1/(1+|e|/\sigma)$.
+
+---
+
+## 2026-09-24 (Thu) — Metric analysis, round-one design, full math audit
+
+State at start: 0 of 2,000 credits spent on every system. One public upload (u001, persistence on
+all 10): mean 0.3416, ~14th. Leader 0.7284.
+
+### 1. What the metric rewards
+
+$s(e) = 1/(1+|e|/\sigma)$ per observable per tick, averaged over ticks, observables, 40 episodes,
+then over four equally weighted categories.
+
+Properties we rely on:
+
+1. $s$ is symmetric, decreasing in $|e|$, and **convex** in $|e|$ (second derivative
+   $2/(\sigma^2(1+|e|/\sigma)^3) > 0$). Convexity means mass near $e = 0$ is worth more than the
+   same mass spread out: a forecast that is exactly right half the time and badly wrong the other
+   half beats one that is moderately wrong all the time.
+2. For a symmetric unimodal predictive belief $q$ about $y_t$, the point forecast maximising
+   $\mathbb{E}_q[s(y - \hat y)]$ is the centre of $q$ (Anderson's lemma: $s$ is symmetric and
+   decreasing, so the expectation is maximised at the symmetry point). Mean, median and mode
+   coincide there. **No shrinkage is justified by the metric itself.**
+3. Shrinkage toward persistence $y_0$ (our "blend": $\hat y = y_0 + \lambda(\text{model} - y_0)$)
+   is only justified when the belief is bimodal: "model right" vs "model broke". When the two modes
+   are far apart ($|\text{model} - y_0| \gg \sigma$), the optimum is one of the modes, not a convex
+   combination: a point between two distant modes scores badly against both. Per tick the blend
+   beats both ends only where the model error $e_m$ and the persistence error $e_0$ have opposite
+   signs, with optimum $\lambda^* = e_0/(e_0 - e_m)$. So one global $\lambda$ is a weak knob.
+4. **Oscillations must not be damped to the mean.** We previously argued (strategy report §3.5)
+   that a phase-uncertain oscillation should be shrunk by $e^{-v/2}$ ($v$ = phase variance). That is
+   the $L_2$-optimal forecast, wrong for this metric. Monte Carlo (400k draws, truth
+   $A\sin\phi$, forecast $cA\sin(\phi+\delta)$, $\delta \sim N(0,v)$):
+
+   | amplitude | best $c$ | $e^{-v/2}$ | note |
+   |---|---|---|---|
+   | $A = \sigma$ | 0.65 – 0.98 | 0.14 – 0.78 | damping barely matters |
+   | $A = 3\sigma$ | 0.83 – 0.98 | | even with fully decorrelated phase |
+   | $A = 10\sigma$ | ~1 | | wrong-phase oscillator 0.211 beats flat mean 0.192 |
+
+   Reason: the wrong-phase oscillator's error passes through zero twice per beat; the flat mean
+   never does. Convexity of $s$ rewards the former. **Decision:** keep full amplitude on wildlife
+   and power_grid cycles; fix the strategy report.
+5. The organiser's $\sigma$ comes from "frozen reference trajectories". Ours (`sigma_proxy`) is the
+   pooled std of our collected runs, floored at $3\times$ a first-difference noise estimate. It scales
+   with our experiment design, not theirs. If their references are long holds, their $\sigma$ is
+   smaller than ours. We hedge selection over $\sigma \times \{0.5, 1, 2\}$ but that band may not
+   cover it. Treat $\hat\sigma$ as a weight, never as a truth.
+6. Surrogate loss: we fit l1/l2 with Cauchy $\log(1 + r^2)$ on $r = (y-\hat y)/\hat\sigma$. The
+   metric is linear-then-flat in $|e|$; Cauchy is quadratic-then-flat, so it under-weights errors
+   below $\sigma$. Acceptable, not exact.
+
+### 2. Round-one experiment design
+
+Question: with 2,000 steps per system and no data yet, what is the best first purchase for
+choosing the rest of the week's strategy?
+
+Plan on the table: `hold_rec` (reset, hold recovery action 120 ticks) + `hold_pulse` (reset,
+pulse 60 ticks, recovery 60 ticks). 240 per system, 2,400 total.
+
+What each buys:
+
+- `hold_rec`: the reset transient (present in every scored episode since every episode starts
+  from reset), the recovery equilibrium, the dominant time constant $\tau$, and the measurement
+  noise from the stationary tail. This is the timescale probe: it tells us the size of a "step".
+- `hold_pulse` at $\alpha = 1$: one joint step on and one off. Response size and on/off asymmetry.
+  All $m$ controls move together, so **zero per-control information**. Nothing for composition
+  or order.
+
+Identifiability: the two runs contain exactly two distinct control vectors, $u_{rec}$ and
+$u_{pulse}$. Any equilibrium map $W \in \mathbb{R}^{(m+1)\times p}$ (linear features) has $m+1$
+unknowns per observable and two equations. Ridge returns the minimum-norm split across controls,
+which is arbitrary. Composition and order test episodes query control vectors never seen. So after
+round one the honest model is "persistence + one shared step response", nothing finer. That is fine
+for round one; it is not fine for the final.
+
+Weaknesses of the 60/60 dwell: it is a guess made before $\tau$ is known. If $\tau \geq 100$
+(reservoir: one tick is one day and inflow is seasonal; wildlife: predator–prey cycles;
+supply_chain: inventories are integrators), 60 ticks show only the initial slope. If $\tau \approx 5$,
+55 of each 60 are wasted.
+
+**Decision (pending approval): split the round.**
+
+1. Buy `hold_rec` only, all systems: 120 each, 1,200 total.
+2. Estimate $\tau$ per observable by fitting $y_t = y_\infty + (y_0 - y_\infty)e^{-t/\tau}$ to the
+   hold, and the noise $\hat\sigma_n$ from the last 40 ticks' first differences
+   ($\hat\sigma_n = 1.4826\,\mathrm{MAD}(\Delta y)/\sqrt 2$).
+3. Set the pulse dwell per system to $D = \mathrm{clip}(3\tau_{\max}, 30, 120)$ and buy
+   `hold_pulse` with that $D$ on and $D$ off. Fast systems keep the spare credits for a third hold
+   level (interior, `mid`), which starts the equilibrium map toward the sustained category.
+
+Cost of splitting: one extra collect command. Value: the dwell matches measured physics, not
+mock guesses. Total stays near 240 per system.
+
+Rejected: buying `long_train` (450) first. Slow modes matter, but we cannot size gaps or lengths
+before $\tau$ is known, and the run would be one initial condition.
+
+### 3. Audit of the model ladder (l0 / l1 / l2 / ensemble / runtime)
+
+Method: hand-derived each forward recursion and compared training code against the numpy
+runtime; checked transform inverses; checked stability bounds; read the parity tests.
+
+Correct:
+- l0b: $v_t = a^t v_0 + \sum_{k<t} a^{t-1-k}\,\phi(u_k)W$ matches the runtime recursion.
+- l1: $v_t = c + \sum_k z^{(k)}_{t+1}$ with the history multiplier $(1+\gamma h_t)$ applied before
+  the state update; delays applied to $u$ consistently.
+- l2: block-diagonal $A$ with complex modes as $2\times2$ rotations, $|{\rm eig}| \leq 0.9995$;
+  `lfilter` initial state $z_0 = \lambda x_0$ gives $x_1 = A x_0 + B f_0$; runtime identical.
+- Transforms: logit, log1p and affine all invert exactly; logit argument clamped to $\pm 60$ sd.
+- Alignment: $y_t$ is the observation after $u_t$, as the rules state.
+- Stability: l0b $0<a<1$; l1 $a = \sigma(x)$, $x \in [-4, 9.2]$; l2 radius $\leq 0.9995$;
+  non-finite outputs replaced by clipped persistence. Nothing can blow up.
+
+Findings (severity order) and decisions:
+
+| # | finding | effect | decision |
+|---|---|---|---|
+| 1 | Per-control $W$ unidentifiable from hold-only data (§2) | order + composition guesses | buy compose/order runs before trusting $W$; until then `l0b_lin` with per-control linear features only, blended |
+| 2 | `soft_clip` floors the allowed output range at $10^{-3}\lvert\max\rvert$ of what was observed. With 120-tick holds, a slow integrator that moved 2 % is capped at ~4 % for all 4,000 ticks | caps a correct model; persistence unhurt; hits sustained | loosen for stable-by-construction kinds (margin 3–5 or hard bounds only), keep the $50\times$ divergence gate |
+| 3 | l1/l2 initial state $z_0 = E\,g(y_0) + b$ with $E \in \mathbb{R}^{K\times p}$ free, fitted from a handful of $y_0$ vectors. Columns $a^t v_{0,i}$ are collinear, so $E$ is overfit; at an unseen $y_0$ the offset persists for hundreds of ticks when $a \approx 0.99$ | early-tick error in every episode | tie $z_0$ to $g(y_0)$ (identity $E$, one scalar shrink) |
+| 4 | $y_0$ is noisy and never denoised. Resets randomise only observables, so the across-run mean and variance of $y_0$ are known | bias at every tick for slow observables | shrink $\hat y_0 = \bar m + \frac{v_{prior}}{v_{prior}+v_{noise}}(y_0 - \bar m)$ |
+| 5 | l0b fits $a$ and $W$ by SSE in transformed space, no $\sigma$; logit space over-weights values near 0/1 | mild metric mismatch on the kind we ship first | fit with $\sigma$-weighted loss in physical space |
+| 6 | Early-tick weight applied as $\sqrt w$ on the residual inside Cauchy: $\log(1+wr^2) \neq w\log(1+r^2)$, so it changes the effective $\sigma$ instead of the weight | minor | apply as a loss weight or drop |
+| 7 | Noise estimate uses pooled first differences including transients | inflated $\hat\sigma_n$ | estimate from the stationary tail of `hold_rec` only |
+| 8 | Clip inside the residual gives zero gradient on saturated ticks | fits can stick | guarded by "keep init if worse"; leave |
+
+Test gaps: no blend parity test, no noisy-$y_0$ sensitivity test, log1p/logit paths not covered,
+l1 with delays > 0 not exercised through the runtime, `sigma_proxy` untested, `select.py` untested.
+
+### 4. Audit of the strategy report against the rules and the code
+
+Errors in the report:
+- §3.5 oscillation shrinkage: wrong, see §1.4 above.
+- §3.3 "the mean is not the target": for symmetric unimodal beliefs it is; see §1.2.
+- §3.6 calls Cauchy "quadratic-then-flat" as if it matched the metric; the metric is
+  linear-then-flat.
+- §4 "40 short runs from reset are nearly as informative as one long run" is asserted and
+  contradicted by our own credit study (long runs are the only thing that helped at 1,000 steps).
+- Minor: 15 µs per RHS evaluation is optimistic (expect 50–100 µs; still within 1,200 s);
+  "diagonalisable" should read "diagonalisable over $\mathbb{C}$".
+
+Report says implemented, code does not:
+- Soft box margin 20 % → code uses 1.0 (0.2 hurt on mocks).
+- T-optimal mechanism discrimination → not implemented; p2 mechanism experiments are placeholders.
+- Multiple shooting for the ODE fit → absent; multistart plus truncation only.
+- "Validation runs never trained on" → every run is tagged `train` by autotune and the builder.
+- Stress gate with plausibility box → default margin is $50\times$ data range; the autotune
+  propose path skips the gate entirely.
+- Per-horizon damping → blend $\lambda$ is a constant, never per tick.
+- Budget table and timeline → stale (240 first, not 1,000).
+
+**Decision:** fix the report before any presentation. Until then this log is the reference.
+
+### 5. Audit of the leaderboard loop (`autotune`)
+
+- Public score is deterministic on 40 fixed episodes, so the issue with tuning $\lambda$ from
+  uploads is shape, not noise: $S(\lambda) = \text{mean}_t\, s(e_{0,t} + \lambda(e_{m,t} - e_{0,t}))$
+  is a sum of cusped bumps, not a parabola. Three uploads (a full day's slots) for one scalar on
+  one kind, and any data purchase invalidates the points, so the search restarts daily.
+- **Decision:** tune $\lambda$ locally on leave-one-run-out rollouts (free, unlimited, can be per
+  observable and per horizon). Spend uploads on comparing *kinds*, plus one confirmation.
+- Local screen: 2–6 held-out scores, no variance, scored against noisy $y$ with $\hat\sigma$ from
+  the same runs. **Decision:** use paired per-run differences against persistence; veto only on a
+  sign test (loses on every run) or mean difference $< -0.02$ with paired SE below it; print the SE.
+- Mild overfitting to the public set: ~15 comparisons per system on one fixed 40-episode set over
+  five days. Final uses different episodes. Keep the number of public-driven picks small.
+
+### 6. Audit of the credit study (`scripts/design_study.py`, CREDIT_PLAN.md)
+
+What it did: mock ODEs (our own templates, parameters perturbed by $\exp U(-0.25, 0.25)$), two
+worlds (AB seed 0, BC seed 5), 6 designs × 5 budgets, models `l0b_lin` and `l1` only, 16 episodes
+per system, $T = 2000$ not 4,000, $\sigma$ = across-episode std of noiseless truth, no standard
+errors, a different RNG per budget rung (so rungs use different initial conditions), and the
+"plan" design at 420 truncates `long_train` mid-train.
+
+What it shows: `l0b_lin` and `l1` (a linear equilibrium map plus three first-order lags per
+observable, a few dozen parameters) saturate at about 240 mock ticks. The 240 → 420 drop
+(0.67 → 0.65) is the noise floor.
+
+What it does not show: how much data a richer model (l2, the ODE templates) needs; any
+data-versus-model interaction; calibration to reality (mock persistence scores 0.49–0.52 versus
+real 0.34, market 0.18, so the mocks are *less* dynamic than the real systems in exactly the
+quantity being studied).
+
+**Decision:** the CREDIT_PLAN sentence "after 240 the model is the bottleneck" is downgraded to
+"l0b/l1 saturate at ~240". Re-run the curve on real data before deciding the remaining 1,760 per
+system. Keep the round-one purchase; it is cheap and needed regardless.
+
+### 7. Environment
+
+Python 3.12 is not installed on the workstation (only 3.9 and 3.14). The scoring sandbox is 3.12
+with numpy 2.3.5 / scipy 1.16.3. Install 3.12 and build the venv from it so local parity checks
+mean something.
+
+### 8. Open items carried forward
+
+1. Approval and purchase of `hold_rec` (1,200 credits total), then sized `hold_pulse`.
+2. Implement findings 2, 3, 4 of §3 before the first fitted upload.
+3. Move $\lambda$ tuning local (§5).
+4. Fix `split="train"` tagging so validation runs are actually held out.
+5. Route the propose path through the stress gate.
+6. Correct the strategy report (§4).
+7. ODE templates: demoted to optional ensemble member (§9). No credits for mechanism tests.
+
+### 9. Audit of the grey-box ODE templates (`gtlab/ode/`)
+
+Method: ran the fast test suite (interface, numpy-only import scan, 4,000-step stress on all three
+mechanism pairs × six schedules, batch/scalar parity, mocks): all pass. Then a real fit experiment
+on the mocks, where the template *is* the truth and the true parameters sit within ±25 % of the
+initial guess: the most optimistic setting possible.
+
+Findings, severity order:
+
+1. **Six of ten `x0` rules ignore part of the observed initial.** ad_auction anchors nothing;
+   traffic starts from an all-zero state; market ignores volume and depth; supply_chain ignores
+   shipments; hospital_queue ignores discharges; reservoir ignores outflow. Tick-one error on a
+   metric that rewards staying near $y_0$. Persistence beats these on sustained.
+2. **Mechanism pair is not identifiable from hold data.** market mock, truth AB, 240 ticks of
+   hold_rec + hold_pulse: the wrong pair AC reached lower training cost (51.7) than AB (61.3).
+   With no validation runs the selector falls back to training cost, so it picks pairs by noise.
+3. **Fitting on 240 ticks can be worse than the prior.** market: untouched initial parameters
+   scored 0.67 / 0.66 on eval-shaped pulses / mixed; fitted parameters 0.44 / 0.37 (training fit
+   0.90). wildlife: 0.88 / 0.82 fitted vs 0.81 / 0.85 initial (wash). ad_auction: 0.98 / 0.95 vs
+   0.78 / 0.85 (works, simplest template). Cause: 19–28 free parameters per system against two
+   excited modes; the optimiser walks along flat directions (slow $	au$ in $[10, 5000]$,
+   mechanism gains) and extrapolates worse than the prior. Cauchy loss does not fix this; only
+   freezing most parameters or strong priors would.
+4. **Fixed-step RK4 can go unstable inside the parameter bounds.** reservoir with one substep:
+   mixing coupling eigenvalue up to ~2.8 (RK4 limit 2.78), flushing rates ~10, $\nu\,\mathrm{inflow}/V$
+   unbounded as $V 	o 0$. power_grid burst rate up to 6 per tick at $dt = 0.5$. supply_chain
+   dispatch rate 5 at $dt = 0.5$. Clipping turns blow-ups into finite garbage instead of NaN, so
+   the fitter sees a rugged, flat residual landscape.
+5. Minor: `export()` writes `param_names` strings into model.json (check flatpack strips it);
+   `lead_time_buy` mapped to a rush share with no basis in the brief; traffic speed modelled by
+   occupancy while the brief defines it from journey times and class mix.
+
+Per-system plausibility against the briefs: power_grid, hospital_queue, epidemic, wildlife map the
+hints well; market, supply_chain, social_contagion miss named couplings (placement speeds, shared
+cooling/drive service, three audience types); reservoir collapses stratification to one scalar and
+is numerically the weakest; traffic and ad_auction do not anchor to $y_0$.
+
+Runtime: 0.21–0.69 s per 4,000-tick episode on this PC, ~175 s for all 10 systems × 40 episodes.
+Fits the 1,200 s limit with a $6	imes$ margin.
+
+**Decision.** The ODE code stays but is not the main bet. Next three days go to the data-driven
+ladder (l0b_lin / l1 / l2 with blend), which anchors at $y_0$ by construction. ODE work, if any,
+is limited to: fix `x0` anchoring for the six systems, fit 3–6 parameters with the rest frozen,
+use only as an ensemble member behind blend. **No credits are spent on "mechanism test" runs
+to feed this fitter.** The strategy report's "ODE is the main bet" is withdrawn.
+
+### 10. Setup and checks run tonight (no credits)
+
+- Installed Python 3.12.10, built `.venv` with numpy 2.3.5 / scipy 1.16.3 (sandbox pins).
+- Tests: 141 pass, 2 fail. The two failures are the packaging checker's sandboxed run, which
+  uses `preexec_fn` (Linux only). Expected on Windows; the checker must run on Linux.
+- Gateway budget call (free): 2,000 remaining on every system. Auth works.
+- Dry run of `hold_rec` (free): 120 ticks per system, 1,200 total. Not purchased.
+
+### 11. Purchase 1: `hold_rec`, 120 ticks × 10 systems = 1,200 credits (22:00–22:15)
+
+Server balance after: 1,880 on every system. Ledger agrees, no drift.
+
+Per-observable summary (`scripts/probe_summary.py`): $y_0$ = noisy initial, $y_{end}$ = mean of
+the last 40 ticks, $\tau$ from a single-exponential fit $y_t = y_\infty + (y_1 - y_\infty)e^{-t/\tau}$
+(fit % = RMSE of that fit relative to scale; large means non-exponential), noise = tail
+first-difference MAD $\times 1.4826/\sqrt2$.
+
+| system | observable | $y_0$ | $y_{end}$ | change | $\tau$ | fit % | noise % |
+|---|---|---:|---:|---:|---:|---:|---:|
+| epidemic | daily_cases | 187 | 51 | −73 % | 73 | 46 | 0.19 |
+| epidemic | hospital_load | 60 | 47 | −0.3 % of scale, still falling | >1000 | 1 | 0.02 |
+| market | price | 93.4 | 94.3 | +1 % | 20 | 0.7 | 0.36 |
+| market | volume | 91.6 | 1.8 | −98 % | 2.7 | 0.1 | 0.01 |
+| market | depth | 117 | 91 | −22 % | 16 | 0.8 | 0.25 |
+| traffic | flow_a / flow_b | 36 / 33 | 0 / 0 | −100 % | 2 / 17 | 0 | 0 |
+| traffic | speed_a / speed_b | 36 / 42 | 49 / 49 | +27 / +13 % | 3.4 | 0.2 | 0.2 |
+| power_grid | load | 106 | 92 | −13 % | 22 | 6.6 | 0.31 |
+| power_grid | frequency | 49.84 | 50.40 | +1.1 % | 23 | 0.6 | 0.04 |
+| power_grid | renewable_share | 0.29 | 0.37 | +24 % | 30 | 5.8 | 0.22 |
+| supply_chain | shipments | 26 | 0 | −100 % | 1.4 | 0 | 0.01 |
+| supply_chain | inventory_supplier | 98 | 362 | +72 %, still rising | 12 | 3.5 | 0.25 |
+| supply_chain | inventory_retail | 105 | 0 | −100 % | 1.5 | 1.3 | 0 |
+| wildlife | prey_north | 86 | 121 | +41 % | 343 | 23 | 0.85 |
+| wildlife | predator_north / south | 8.7 / 12.6 | 2.5 / 2.6 | −71 / −80 % | 18 | 1.6 | 0.15 |
+| wildlife | prey_south | 96 | 97 | +1 % | 96 | 14 | 0.40 |
+| reservoir | level | 481 | 941 | +47 %, integrating | 30 | 1.8 | 0.60 |
+| reservoir | inflow | 10.5 | 11.4 | +8 % | 21 | 13 | 0.79 |
+| reservoir | outflow | 6.4 | 10.1 | +12 % | 253 | 7.9 | 0.17 |
+| reservoir | quality | 0.87 | 0.95 | +9 % | 3.8 | 0.6 | 0.83 |
+| ad_auction | win_rate | 0.44 | 0.26 | −40 % | 20 | 1.9 | 0.95 |
+| ad_auction | spend | 10.6 | 13.1 | +22 % | 50 | 8.5 | 0.61 |
+| ad_auction | conversions | 0.87 | 3.2 | +67 % | 7.4 | 14 | 0.54 |
+| social_contagion | adopters_a / b | 53 / 22 | 59 / 44 | linear growth, no saturation | >1000 | 0.2 | 0.01 |
+| hospital_queue | wait_time | 3.0 | 0.003 | −100 % | 10 | 2 | 0.12 |
+| hospital_queue | queue | 66 | 23 | −65 % | 6.5 | 7.3 | 0.17 |
+| hospital_queue | discharges | 8.2 | 11.5 | +28 % | 1.2 | 28 | 0.61 |
+
+Reset pools (free): initial observables vary about ±20 % around their medians, e.g. epidemic
+daily_cases 104–235, reservoir level 401–560, wildlife predators 8–15.
+
+What this changes:
+
+1. **Noise is negligible** (0.01–1 % of scale). Errors will come from hidden state and wrong
+   dynamics, not measurement noise. $y_0$ denoising (§3 finding 4) is low priority.
+2. **The systems are far more dynamic than the mocks.** Persistence loses 40–100 % of scale on
+   many observables within 120 ticks. The mock design study under-stated the value of data
+   (§6 already flagged this).
+3. **The recovery action is a degenerate corner for four systems**: traffic flows, supply_chain
+   shipments and retail inventory, hospital wait time, market volume all go to zero under it.
+   The recovery equilibrium therefore says little about interior control levels, which the
+   sustained category holds. Interior levels are needed early.
+4. **Integrators and slow modes are real**: reservoir level doubled in 120 ticks and is still
+   climbing; supply_chain supplier inventory ×3.7 and climbing; social_contagion adopters grow
+   linearly; wildlife prey_north $\tau \approx 340$; epidemic is a wave (non-exponential). Over
+   4,000 ticks these must saturate somewhere we have not seen. A long run is required for these
+   five systems, and the $\pm 20\%$ initial spread means the saturation level, not the initial,
+   dominates the sustained score.
+5. Timescales split cleanly: fast ($\tau < 20$: traffic, hospital_queue, market), medium
+   ($\tau$ 20–50: power_grid, ad_auction, reservoir quality), slow (the five above).
+
+### 12. Purchase 2 design (materialized as phase `p2`, `plans/p1b_pulse.json`, not yet bought)
+
+Per system 120 ticks, 1,200 total:
+
+- Fast systems (traffic, hospital_queue, market): `pulse40` = pulse 40 on, recovery 40 off, then
+  `mid40` = a fresh reset held 40 ticks at the bounds midpoint. Three equilibria instead of one,
+  and the on/off response at $2\tau$ or more.
+- All others: `pulse60` = pulse 60 on, recovery 60 off. For the slow systems this gives the
+  initial slopes of both responses; saturation is deferred to the long run.
+
+Rejected: pulse 120 on only for slow systems (loses the off-response that the recovery category
+scores on every pulse).
+
+### 13. Free public probe built (not yet uploaded)
+
+`submissions/20260924-2232-20260924-relax`: `l0b_lin` (relax from $y_0$ toward a learned
+equilibrium with one learned rate per observable) fitted on `hold_rec` for the six systems whose
+recovery equilibrium is not degenerate: epidemic, wildlife, social_contagion, power_grid,
+reservoir, ad_auction. Omitted systems keep persistence. In-sample on `hold_rec` (own
+$\hat\sigma$): model 0.57–0.72 vs persistence 0.29–0.56. Out of sample unknown; that is the point
+of the upload. 4,000-tick rollouts finite, within plausible ranges, 0.02 s each. Today's three
+upload slots are unused and expire at midnight, so this costs nothing.
+
+### 14. Upload u002 (public, Sep 24 ~23:00): relax model on six systems
+
+| system | persistence (u001) | relax `l0b_lin` (u002) | delta |
+|---|---:|---:|---:|
+| ad_auction | 0.4711 | 0.6044 | +0.133 |
+| reservoir | 0.3471 | 0.4625 | +0.115 |
+| social_contagion | 0.3052 | 0.3672 | +0.062 |
+| power_grid | 0.4867 | 0.5448 | +0.058 |
+| wildlife | 0.2227 | 0.2785 | +0.056 |
+| epidemic | 0.2720 | 0.1562 | −0.116 |
+
+Ten-system mean: 0.3416 → 0.3724 (other four unchanged at persistence).
+
+Reading: one 120-tick hold from reset, turned into "relax from $y_0$ toward a fixed level at a
+fixed rate", is worth +0.06 to +0.13 wherever the recovery hold is representative of the dynamics.
+Epidemic is the exception: its hold was a wave (single-exponential fit error 46 %), the learned
+"equilibrium" of 51 cases is a point on a falling curve, and interventions in the test schedules
+change the wave itself. Epidemic reverts to persistence until it has a wave-capable model
+(SEIR-like, or at least a second-order lag). Decision for the next upload: keep u002 on the five
+gainers, persistence on epidemic, and add fitted models for the four degenerate systems once
+purchase 2 gives interior levels.
+
+### 15. Simulations on the real hold_rec data (`scripts/sim_next.py`, free)
+
+Two questions. (a) Extrapolation: fit each kind on ticks 1–80 of the hold, score ticks 81–120
+with our $\hat\sigma$. (b) Committee disagreement: 18 members per system (l0b_lin and l1 × three
+$\sigma$ multipliers × three block bootstraps of the run), rolled on 300-tick candidate
+schedules; spread = median absolute deviation from the committee median, in $\hat\sigma$ units,
+averaged over ticks and observables. Large spread means the data would settle something the
+models cannot.
+
+| system | persist | l0b_lin | l1 | highest-spread candidates (σ units) |
+|---|---:|---:|---:|---|
+| epidemic | 0.66 | 0.38 | 0.73 | all ≈ 0.4 (composition, mid hold, order) |
+| market | 0.29 | 0.68 | 0.80 | mid40 0.29, pulse40 0.23 |
+| traffic | 0.05 | 0.87 | 0.85 | mid40 1.50, pulse40 0.77, multilevel 0.38 |
+| power_grid | 0.33 | 0.79 | 0.24 | long pulse hold 0.70, pulse60 0.67, sustained 0.61 |
+| supply_chain | 0.09 | 0.87 | 0.92 | pulse60 0.26, multilevel 0.17 |
+| wildlife | 0.43 | 0.56 | 0.86 | pulse60 0.36, composition 0.35 |
+| reservoir | 0.38 | 0.59 | 0.54 | sustained 1.05, long pulse hold 1.03, mid hold 0.91 |
+| ad_auction | 0.33 | 0.43 | 0.74 | long pulse hold 2.29, sustained 2.02, pulse60 1.75 |
+| social_contagion | 0.43 | 0.43 | 0.98 | every long schedule ≈ 1.35 |
+| hospital_queue | 0.32 | 0.92 | 0.98 | ≈ 0 everywhere (all members collapse to the same zero state) |
+
+Reading:
+- The lag model l1 extrapolates the tail of the hold far better than relax-to-equilibrium on 7
+  of 10 systems; l0b_lin wins on power_grid (l1 over-fits the oscillatory rebound with 80 ticks)
+  and reservoir. Epidemic: nothing beats persistence by much; the wave is not a lag.
+- Committee spread points at long holds and pulse-level holds for ad_auction, reservoir,
+  social_contagion and power_grid: the models do not know the saturation level. For traffic and
+  market the spread is at interior levels (mid40): the recovery corner is degenerate and the
+  models have never seen a non-zero flow under a held control.
+- Caveat: every member has seen one control vector. Spread on control-moving schedules is a
+  floor. It cannot yet rank pulse-train gaps or order effects.
+
+### 16. Strategy research and the decision (full text: `docs/study/strategy_synthesis.md`,
+sources `docs/study/research_input_design.md`, `docs/study/research_models.md`)
+
+Literature check on our shape (space-filling first, committee-adaptive after): right shape, two
+corrections. (1) For slow modes and integrators, a segment must last 3–5 $\tau$ to pin the gain
+(Ljung ch. 13; Rivera/Braun switching-time rules); 200-tick random excitation with ~14-tick
+segments returns slopes, not gains, for the five slow systems. (2) The largest documented lever for
+open-loop rollout error is the training loss (simulation / multi-step error with multiple
+shooting: Ribeiro 2020, Forgione & Piga 2021), not cleverer excitation; adaptive design gains are
+constant-factor (Wagenmaker 2020), so it gets a capped slice, not the majority.
+
+**Purchase 2 revised (phase `p2`, `plans/p2_v2.json`, dry-run 3,720):**
+
+| group | systems | experiments | per system |
+|---|---|---|---|
+| fast | traffic, hospital_queue, market | pulse 40/40, mid hold 40, multilevel 200 (market dwell 15–60) | 320 |
+| medium | power_grid, ad_auction | pulse 60 on / 120 off, multilevel 200 with 40–70 dwell | 380 |
+| slow | wildlife, reservoir, social_contagion, supply_chain | pulse 200 on / recovery 200 off | 400 |
+| slow | epidemic | pulse 120 on / recovery 280 off | 400 |
+
+Balance after: 1,480–1,560 per system. Then P3 Sat (650: recovery-shaped train, single-vs-joint,
+held-out validation run; swap to a 400-tick midpoint hold where the 200-on segment did not
+settle), P4 Sun (adaptive committee picks, capped), 300 reserve to Tue 09:00.
+
+Model order: Fri audit fixes + l1/l0b_lin per-control refit and upload; Sat l2 by multiple
+shooting with eigenvalue 1.0 allowed inside the physical box; Sun per-system structure (SIR wave
+for epidemic, full-amplitude modes for wildlife, integrator priors, log1p floors for the
+degenerate-corner systems), median ensemble except on oscillatory systems.
+
+Oscillation dispute closed with a derivation (synthesis §D): under $s(e)=1/(1+|e|/\sigma)$ with
+phase uncertainty, full amplitude is optimal whenever $A \gtrsim 3\sigma$; the $e^{-v/2}$ shrink
+is an $L_2$ result and does not apply. Do not average ensemble members with different phases.
+
+## 2026-09-25 (Fri, early) — Purchase 2 done, model fixes, screening
+
+### 1. Purchase 2 (phase `p2`): 3,720 credits, 22:50–00:10
+
+Bought exactly as in the Sep 24 §12/§16 table. Server balances after: epidemic, supply_chain,
+wildlife, reservoir, social_contagion 1,480; power_grid, ad_auction 1,500; market, traffic,
+hospital_queue 1,560. Ledger agrees. Total spent so far 4,920 of 20,000.
+
+### 2. Model fixes from the audit (Sep 24 §3), all tests pass
+
+- `soft_clip` margin 1.0 → 3.0 × observed range (still inside hard bounds). Reason: integrators
+  and slow modes leave the short-run range over 4,000 ticks; the 50× stress gate still catches
+  divergence.
+- l1 initial state anchored: $z_{0,k} = (v_{0,j} - c)/K + b_k$ so $v_0 = v_{0,j} + \sum_k b_k$;
+  only $K$ offsets in $[-1, 1]$ sd are free instead of a $K \times p$ matrix $E$. Linear init
+  solves for $W, c$ with the anchored decay $D_t = \frac1K\sum_k a_k^t$: target
+  $V_t - v_{0,j}D_t$, columns $[\mathrm{lfilt}(a_k, F), (1 - D_t)]$. Export folds the anchor into
+  the runtime's $z_0 = E v_0 + b$ form ($E = e_j/K$, $b \leftarrow b - c/K$), verified by the
+  parity test to $10^{-8}$. Bug found on the way: least_squares drifted the unused $E$ entries,
+  so $E$ is pinned after the fit.
+- l0b picks its relaxation rate $a$ by the competition score in physical units
+  ($\sum w^2 (1 - s(e))$ with our $\hat\sigma$) instead of SSE in transformed space; $W$ still by
+  ridge.
+- Held-out runs (`val.*`) are no longer relabeled as training by autotune and the builder; the
+  final refit passes `--include-val` / `--final` to use them.
+- Not done: stress gate on the propose path (finalize already replaces non-finite output with
+  clipped persistence, and the clip bounds the rest); early-tick loss weighting.
+
+### 3. Leave-one-run-out screen (`scripts/screen.py`) and upload u003
+
+Robust score on the held-out run, paired against persistence (mean ± SE over folds):
+
+| system | runs | persistence | l0b_lin | l1 | pick |
+|---|---:|---:|---:|---:|---|
+| epidemic | 2 | 0.554 | 0.484 (−0.07) | 0.447 (−0.11) | persistence |
+| market | 4 | 0.454 | 0.770 (+0.32 ± 0.05) | 0.736 | l0b_lin |
+| traffic | 4 | 0.412 | 0.605 (+0.19 ± 0.03) | 0.510 | l0b_lin |
+| power_grid | 3 | 0.559 | 0.707 (+0.15 ± 0.02) | 0.487 | l0b_lin |
+| supply_chain | 2 | 0.323 | 0.715 (+0.39 ± 0.04) | 0.598 | l0b_lin |
+| wildlife | 2 | 0.396 | 0.706 | 0.721 (+0.33 ± 0.06) | l1 |
+| reservoir | 2 | 0.423 | 0.597 (+0.18 ± 0.05) | 0.406 | l0b_lin |
+| ad_auction | 3 | 0.551 | 0.609 | 0.698 (+0.15 ± 0.07) | l1 |
+| social_contagion | 2 | 0.695 | 0.707 (+0.01 ± 0.02) | 0.615 | l0b_lin |
+| hospital_queue | 4 | 0.571 | 0.631 | 0.645 (+0.07 ± 0.08) | l1 |
+
+With per-control linear features and 3–4 control vectors, the relax model now beats persistence
+by 0.15–0.39 on six systems. l1 wins only where the dynamics are visibly second-order
+(wildlife, ad_auction rebound) or fast with queues (hospital). Epidemic still beats nothing:
+the wave needs its own model.
+
+u003 = these picks, all 10 systems, `submissions/20260924-2301-u003-screen`. 4,000-tick rollouts
+on all four categories finite, 17 s projected for the whole evaluation. Public-upload policy from
+here: one factor per system per upload, three uploads per day = thirty free held-out tests on the
+true test distribution; the next upload is designed from u003's per-system deltas.
+
+### 4. u003 public scores (Thu 23:05) and the u004 hypothesis test
+
+| system | u002/u001 | u003 | Δ | LOO estimate |
+|---|---:|---:|---:|---:|
+| traffic | 0.264 | 0.626 | +0.36 | 0.61 |
+| market | 0.185 | 0.481 | +0.30 | 0.77 |
+| supply_chain | 0.420 | 0.702 | +0.28 | 0.72 |
+| wildlife | 0.279 | 0.429 | +0.15 | 0.72 |
+| social_contagion | 0.367 | 0.440 | +0.07 | 0.71 |
+| reservoir | 0.463 | 0.529 | +0.07 | 0.60 |
+| power_grid | 0.545 | 0.593 | +0.05 | 0.71 |
+| ad_auction | 0.604 | 0.628 | +0.02 | 0.70 |
+| hospital_queue | 0.443 | 0.451 | +0.01 | 0.65 |
+| epidemic | 0.272 | 0.272 | 0 | 0.55 |
+
+Mean 0.372 → **0.515**. Where LOO and public agree (traffic, supply_chain) the model transfers.
+Where LOO sits 0.2–0.3 above public (market, wildlife, social_contagion, hospital_queue,
+power_grid) the test schedules exercise dynamics our four runs do not contain: LOO folds hold out
+one of our own hold/pulse/multilevel runs, which are all from reset and short, while the test has
+4,000-tick holds and trains. Those five are the priority for Saturday's data.
+
+u004 (`submissions/20260924-2305-u004-test`), one factor per system:
+
+| system | u003 | u004 | question |
+|---|---|---|---|
+| epidemic | persistence | l0b_lin blend λ = 0.5 | does half relaxation beat persistence on the wave? |
+| market | l0b_lin | l1 | which of the two LOO-close kinds transfers? |
+| wildlife | l1 | l0b_lin | same |
+| ad_auction | l1 | l0b_lin | same |
+| hospital_queue | l1 | l0b_lin | same |
+| traffic, power_grid, supply_chain, reservoir, social_contagion | l0b_lin | l0b (quadratic + pairwise control features) | do nonlinear equilibrium maps help? |
+
+### 5. u004 results (Thu ~23:40)
+
+| system | u003 | u004 | verdict |
+|---|---:|---:|---|
+| wildlife | 0.429 | 0.555 | l0b_lin transfers; l1 over-fit the cycle phase (LOO 0.72 was on our own runs) |
+| epidemic | 0.272 | 0.327 | half-strength relaxation beats persistence; tune λ |
+| hospital_queue | 0.451 | 0.478 | l0b_lin |
+| ad_auction | 0.628 | 0.586 | l1 stays |
+| market | 0.481 | 0.336 | l0b_lin stays; l1 does not transfer |
+| traffic | 0.626 | 0.556 | quadratic features hurt |
+| power_grid | 0.593 | 0.550 | quadratic hurt |
+| social_contagion | 0.440 | 0.412 | quadratic hurt |
+| reservoir | 0.529 | 0.527 | tie |
+| supply_chain | 0.702 | 0.700 | tie |
+
+Best-of per system: mean **0.536**. Rules learned: linear control features only (quadratic and
+pairwise terms over-fit with 4 short runs); the simple relax model transfers better than the lag
+model wherever the two are close locally; blend strength is a real knob on epidemic.
+Friday hypotheses (one per system per upload): epidemic λ ∈ {0.3, 0.7}; blend λ = 0.8 on the
+systems whose LOO sits far above public (market, power_grid, social_contagion, hospital_queue);
+l1 with anchored state vs l0b_lin on ad_auction is settled (l1).
+
+### 6. u005 prepared for Friday morning (`submissions/20260924-2309-u005-lam`)
+
+Single factor: blend strength $\lambda$ in $\hat y = y_0 + \lambda(\text{model} - y_0)$, per
+system, against the u003/u004 winner at $\lambda = 1$ (epidemic against $\lambda = 0.5$).
+
+| λ | systems | reason |
+|---|---|---|
+| 0.7 | epidemic | 0.5 beat 0 (persistence); is more relaxation better still? |
+| 0.8 | market, power_grid, social_contagion, hospital_queue, wildlife, reservoir, ad_auction (l1) | local LOO sat 0.1–0.3 above public: over-confident models, shrink toward $y_0$ |
+| 1.2 | traffic, supply_chain | LOO and public agreed: test mild extrapolation |
+
+Per-tick optimum is $\lambda^* = e_0/(e_0 - e_m)$ (Sep 24 §1.3); a global $\lambda$ can only
+help where model and persistence errors have opposite signs on most ticks. This upload measures
+whether that holds per system. Friday's second and third uploads bracket the winner.
+
+### 7. u005 results and end-of-day record
+
+| system | λ | before | u005 | Δ |
+|---|---:|---:|---:|---:|
+| hospital_queue | 0.8 | 0.4776 | 0.4925 | +0.015 |
+| traffic | 1.2 | 0.6259 | 0.6116 | −0.014 |
+| supply_chain | 1.2 | 0.7016 | 0.6444 | −0.057 |
+| market | 0.8 | 0.4806 | 0.3422 | −0.138 |
+
+Shrinkage toward $y_0$ is a loss wherever persistence is catastrophically wrong (market volume:
+$|e_0| \approx 88$ vs $|e_m|$ of a few units, so $0.2\,|e_0|$ of added error every tick). Rule:
+$\lambda = 1$ except where a paired test shows opposite-sign errors (epidemic 0.5, hospital 0.8).
+
+**Best public score per system, end of Thu Sep 24** (mean 0.537, from 0.342):
+supply_chain 0.7016 l0b_lin · ad_auction 0.6283 l1 · traffic 0.6259 l0b_lin · power_grid 0.5932
+l0b_lin · wildlife 0.5550 l0b_lin · reservoir 0.5286 l0b_lin · hospital_queue 0.4925 l0b_lin λ0.8 ·
+market 0.4806 l0b_lin · social_contagion 0.4404 l0b_lin · epidemic 0.3265 l0b_lin λ0.5.
+
+The action-by-action account with the mathematics of each effect is in
+`docs/study/actions_and_effects_2026-09-24.md`.

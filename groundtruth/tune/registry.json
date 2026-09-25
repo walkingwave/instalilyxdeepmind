@@ -51,6 +51,232 @@
    },
    "uploaded": true,
    "why": {}
+  },
+  {
+   "date": "2026-09-24",
+   "dir": "submissions\\20260924-2232-20260924-relax",
+   "id": "u002",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.6044,
+    "epidemic": 0.1562,
+    "power_grid": 0.5448,
+    "reservoir": 0.4625,
+    "social_contagion": 0.3672,
+    "wildlife": 0.2785
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-24",
+   "dir": "submissions\\20260924-2301-u003-screen",
+   "id": "u003",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.6283,
+    "epidemic": 0.272,
+    "hospital_queue": 0.4505,
+    "market": 0.4806,
+    "power_grid": 0.5932,
+    "reservoir": 0.5286,
+    "social_contagion": 0.4404,
+    "supply_chain": 0.7016,
+    "traffic": 0.6259,
+    "wildlife": 0.4292
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "l1",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "kind": "l0a"
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "l1",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "l1",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-24",
+   "dir": "submissions\\20260924-2305-u004-test",
+   "id": "u004",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.5858,
+    "epidemic": 0.3265,
+    "hospital_queue": 0.4776,
+    "market": 0.3355,
+    "power_grid": 0.5503,
+    "reservoir": 0.5268,
+    "social_contagion": 0.4122,
+    "supply_chain": 0.6997,
+    "traffic": 0.5557,
+    "wildlife": 0.555
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 0.5
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "l1",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-24",
+   "dir": "submissions\\20260924-2312-u005-lam4",
+   "id": "u005",
+   "phase": "public",
+   "scores": {
+    "hospital_queue": 0.4925,
+    "market": 0.3422,
+    "supply_chain": 0.6444,
+    "traffic": 0.6116
+   },
+   "systems": {
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 0.8
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 0.8
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.2
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "l0b_lin",
+     "lam": 1.2
+    }
+   },
+   "uploaded": true,
+   "why": {}
   }
  ]
 }
