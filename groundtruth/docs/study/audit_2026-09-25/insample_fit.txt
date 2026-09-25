@@ -1,0 +1,158 @@
+
+===== epidemic  sigma_proxy=[86.473 32.966]  a=[0.989 0.877]  tau=[88.5  8.2]  tr=['affine', 'affine']
+   clip lo=[0. 0.] hi=[1940.77  532.75]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [-0.01 -0.17]  school_closure
+     [-0.01 -0.17]  mask_mandate
+     [-0.01 -0.17]  vaccination_rate
+     [-0.2   0.54]  const
+   p1.hold_rec          T=120  model=[0.49 0.45] pers=[0.42 0.47]  early50=[0.45 0.45] late=[0.52 0.44]  mean|e|=[116.99  46.09]
+   p2.pulse120_280      T=400  model=[0.81 0.6 ] pers=[0.79 0.53]  early50=[0.75 0.59] late=[0.82 0.6 ]  mean|e|=[23.64 25.47]
+   eval[sustained  ] min=[104.1  64.3] max=[186.3  95.9] end=[104.1  93.1] frac@lo=[0. 0.] frac@hi=[0. 0.]
+   eval[order      ] min=[103.8  65. ] max=[186.3 101.7] end=[103.8  90.2] frac@lo=[0. 0.] frac@hi=[0. 0.]
+   eval[recovery   ] min=[104.2  65. ] max=[186.3 101.7] end=[104.6  97.2] frac@lo=[0. 0.] frac@hi=[0. 0.]
+   eval[composition] min=[103.2  64.3] max=[186.3 101.7] end=[105.  101.7] frac@lo=[0. 0.] frac@hi=[0. 0.]
+
+===== market  sigma_proxy=[ 9.544  8.708 26.537]  a=[0.992 0.877 0.945]  tau=[131.7   8.2  18.1]  tr=['affine', 'log1p', 'affine']
+   clip lo=[0. 0. 0.] hi=[204.81 438.95 404.91]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [-7.84  0.71 -0.62]  interest_rate
+     [ 5.16 -0.48 -1.99]  transaction_tax
+     [ 0.08 -0.5   1.04]  const
+   p1.hold_rec          T=120  model=[0.93 0.96 0.97] pers=[0.9  0.09 0.55]  early50=[0.95 0.93 0.95] late=[0.91 0.98 0.98]  mean|e|=[0.81 0.46 0.91]
+   p2.pulse40           T=80   model=[0.7  0.92 0.78] pers=[0.75 0.08 0.57]  early50=[0.67 0.9  0.82] late=[0.74 0.96 0.72]  mean|e|=[4.6  0.85 8.46]
+   p2.mid40             T=40   model=[0.93 0.89 0.91] pers=[0.93 0.08 0.59]  early50=[0.93 0.89 0.91] late=[nan nan nan]  mean|e|=[0.72 1.34 2.66]
+   p2.multilevel200     T=200  model=[0.78 0.94 0.79] pers=[0.46 0.09 0.33]  early50=[0.89 0.89 0.76] late=[0.75 0.95 0.8 ]  mean|e|=[2.99 0.65 7.57]
+   eval[sustained  ] min=[81.6  1.4 37.1] max=[143.7  55.4 112.9] end=[81.6  2.2 55.4] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[order      ] min=[52.7  1.5 49.7] max=[127.5  57.8 115.8] end=[93.3  2.  67. ] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[recovery   ] min=[87.3  2.  38.4] max=[ 94.4  57.8 115.8] end=[92.8  2.1 75.1] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[composition] min=[21.3  1.4 20.6] max=[142.5  59.  111.9] end=[94.4  2.  90.1] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+
+===== traffic  sigma_proxy=[ 9.105  7.478 12.101 10.778]  a=[0.4   0.4   0.963 0.945]  tau=[ 1.7  1.7 26.9 18.1]  tr=['log1p', 'log1p', 'affine', 'affine']
+   clip lo=[0. 0. 0. 0.] hi=[271.53 163.94 163.99 148.66]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [ 0.45  0.6   0.98 -1.37]  signal_timing
+     [0.63 1.1  2.33 3.62]  lane_closure
+     [0.71 0.77 0.36 1.4 ]  toll
+     [ 0.97  0.78 -3.65 -3.19]  ramp_metering
+     [-1.06 -1.48 -2.58 -2.26]  freight_priority
+     [-0.55 -0.42  0.92  1.67]  clearance_effort
+     [-0.21 -0.27  0.57 -0.2 ]  const
+   p1.hold_rec          T=120  model=[0.95 0.96 0.87 0.92] pers=[0.2  0.19 0.48 0.63]  early50=[0.95 0.95 0.74 0.86] late=[0.96 0.96 0.96 0.97]  mean|e|=[0.44 0.35 2.21 0.96]
+   p2.pulse40           T=80   model=[0.62 0.66 0.7  0.74] pers=[0.24 0.21 0.4  0.45]  early50=[0.66 0.63 0.79 0.81] late=[0.55 0.71 0.55 0.62]  mean|e|=[10.    8.19  6.33  4.72]
+   p2.mid40             T=40   model=[0.61 0.57 0.81 0.79] pers=[0.21 0.2  0.78 0.8 ]  early50=[0.61 0.57 0.81 0.79] late=[nan nan nan nan]  mean|e|=[6.36 6.22 3.63 3.47]
+   p2.multilevel200     T=200  model=[0.72 0.67 0.71 0.78] pers=[0.21 0.22 0.63 0.65]  early50=[0.83 0.8  0.69 0.8 ] late=[0.68 0.62 0.72 0.78]  mean|e|=[5.53 5.37 5.57 3.46]
+   eval[sustained  ] min=[ 0.1  0.1 34.  34.5] max=[ 2.4  2.3 40.8 49.8] end=[ 2.4  2.3 34.  34.5] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[order      ] min=[0.4 0.3 0.  1. ] max=[ 5.2  2.8 49.7 48.7] end=[ 2.1  1.2  0.  15. ] frac@lo=[0.   0.   0.77 0.  ] frac@hi=[0. 0. 0. 0.]
+   eval[recovery   ] min=[ 0.4  0.3  6.1 13.6] max=[ 3.1  2.7 49.7 48.7] end=[ 0.4  0.3 41.2 42.3] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[composition] min=[0. 0. 0. 0.] max=[ 3.9  3.3 74.  88.8] end=[ 0.4  0.3 49.7 48.7] frac@lo=[0.12 0.12 0.09 0.02] frac@hi=[0. 0. 0. 0.]
+
+===== power_grid  sigma_proxy=[22.365  0.713  0.153]  a=[0.4 0.4 0.4]  tau=[1.7 1.7 1.7]  tr=['affine', 'affine', 'logit']
+   clip lo=[ 0.   41.12  0.  ] hi=[440.02  59.96   1.  ]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [-2.84  3.14 -0.72]  price_signal
+     [ 2.15  1.59 -0.69]  reserve_dispatch
+     [ 2.33 -2.18  1.64]  charging_allowance
+     [-0.02  2.24  0.6 ]  interconnector
+     [-0.94 -2.51 -0.86]  const
+   p1.hold_rec          T=120  model=[0.78 0.77 0.9 ] pers=[0.64 0.6  0.66]  early50=[0.69 0.65 0.89] late=[0.85 0.85 0.91]  mean|e|=[7.18 0.26 0.02]
+   p2.pulse60_120       T=180  model=[0.67 0.69 0.9 ] pers=[0.54 0.67 0.48]  early50=[0.6  0.64 0.98] late=[0.7  0.71 0.87]  mean|e|=[13.25  0.38  0.02]
+   p2.multilevel200     T=200  model=[0.69 0.78 0.95] pers=[0.49 0.45 0.52]  early50=[0.63 0.77 0.98] late=[0.72 0.79 0.94]  mean|e|=[11.04  0.22  0.01]
+   eval[sustained  ] min=[104.3  49.8   0. ] max=[134.1  50.4   0.1] end=[104.3  50.4   0.1] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[order      ] min=[22.8 49.6  0. ] max=[96.7 50.9  0.4] end=[22.8 50.9  0. ] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[recovery   ] min=[90.2 49.8  0. ] max=[139.3  50.5   0.4] end=[90.3 50.4  0.4] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[composition] min=[38.2 48.7  0. ] max=[185.7  53.1   0.5] end=[90.2 50.4  0.4] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+
+===== supply_chain  sigma_proxy=[ 9.103 91.96  44.816]  a=[0.4   0.918 0.877]  tau=[ 1.7 12.1  8.2]  tr=['log1p', 'log1p', 'log1p']
+   clip lo=[0. 0. 0.] hi=[ 225.79 1462.68  902.95]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [ 0.58 -0.28  0.25]  order_quantity
+     [-0.37  0.16 -0.17]  lead_time_buy
+     [ 0.22 -0.11  0.09]  product_mix
+     [ 0.26 -0.13  0.1 ]  production_effort
+     [-0.35  0.15 -0.16]  receiving_effort
+     [-0.48  0.22 -0.22]  maintenance
+     [ 0.1  -0.06  0.03]  const
+   p1.hold_rec          T=120  model=[0.98 0.91 0.99] pers=[0.26 0.31 0.3 ]  early50=[0.97 0.85 0.97] late=[0.98 0.95 1.  ]  mean|e|=[ 0.22 10.29  0.82]
+   p2.pulse200_200      T=400  model=[0.72 0.64 0.82] pers=[0.3  0.29 0.4 ]  early50=[0.58 0.4  0.48] late=[0.74 0.67 0.86]  mean|e|=[ 5.43 84.9  25.55]
+   eval[sustained  ] min=[  0.5 109.2   0.2] max=[  3.1 347.2  53.2] end=[  2.4 273.8   0.6] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[order      ] min=[  0.2 109.8   0.1] max=[  8.8 367.4  51.6] end=[  8.8 212.    1.5] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[recovery   ] min=[  0.2 109.8   0.1] max=[ 10.6 367.4  51.6] end=[  0.2 312.8   0.3] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[composition] min=[  0.2 107.7   0.1] max=[ 13.5 367.4  55.6] end=[  0.2 367.4   0.1] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+
+===== wildlife  sigma_proxy=[62.734  1.163 50.562  1.434]  a=[0.729 0.945 0.877 0.945]  tau=[ 3.7 18.1  8.2 18.1]  tr=['log1p', 'affine', 'log1p', 'affine']
+   clip lo=[0. 0. 0. 0.] hi=[803.26  40.01 654.3   45.56]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [-0.66 -0.32 -0.7  -0.28]  hunting_quota
+     [0.75 0.12 0.78 0.1 ]  habitat_protection
+     [-0.76 -0.37 -0.8  -0.32]  corridor_access
+     [ 0.07 -0.21  0.06 -0.19]  const
+   p1.hold_rec          T=120  model=[0.8  0.88 0.74 0.86] pers=[0.58 0.19 0.83 0.16]  early50=[0.75 0.84 0.71 0.82] late=[0.83 0.91 0.77 0.9 ]  mean|e|=[18.26  0.17 19.    0.24]
+   p2.pulse200_200      T=400  model=[0.86 0.87 0.87 0.87] pers=[0.53 0.12 0.54 0.17]  early50=[0.88 0.69 0.93 0.73] late=[0.86 0.89 0.86 0.89]  mean|e|=[12.98  0.21  9.54  0.23]
+   eval[sustained  ] min=[36.2  1.9 31.2  2. ] max=[134.4   8.4 112.   12.1] end=[36.2  1.9 31.2  2. ] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[order      ] min=[6.7 1.4 6.3 1.5] max=[134.4   8.4 112.   12.1] end=[6.7 1.4 6.3 1.5] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[recovery   ] min=[10.5  1.6  9.8  1.7] max=[134.4   8.4 112.   12.1] end=[109.6   2.1  61.1   2.2] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[composition] min=[9.1 1.5 8.4 1.6] max=[134.4   8.3 112.   12. ] end=[134.4   2.4 112.    2.6] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+
+===== reservoir  sigma_proxy=[257.722   1.57    4.316   0.017]  a=[0.975 0.4   0.4   0.818]  tau=[40.   1.7  1.7  5.5]  tr=['affine', 'affine', 'affine', 'logit']
+   clip lo=[0.   0.   0.   0.26] hi=[2975.95   28.67   48.92    1.  ]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [-0.44  0.03  0.3  -0.01]  release_rate
+     [-0.6   0.03  0.4  -0.07]  irrigation_allocation
+     [-0.6   0.03  0.4  -0.07]  withdrawal_depth
+     [ 0.97 -0.   -0.6   0.31]  aeration
+     [ 0.37  0.03 -0.2   0.25]  const
+   p1.hold_rec          T=120  model=[0.92 0.55 0.53 0.8 ] pers=[0.45 0.53 0.53 0.17]  early50=[0.93 0.55 0.56 0.81] late=[0.91 0.55 0.5  0.8 ]  mean|e|=[22.95  1.45  4.03  0.  ]
+   p2.pulse200_200      T=400  model=[0.88 0.56 0.7  0.71] pers=[0.57 0.56 0.45 0.1 ]  early50=[0.85 0.58 0.83 0.64] late=[0.89 0.56 0.68 0.72]  mean|e|=[36.37  1.4   2.36  0.01]
+   eval[sustained  ] min=[484.1  11.1   8.3   0.9] max=[662.6  11.6   9.5   0.9] end=[662.6  11.6   8.8   0.9] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[order      ] min=[493.7  11.1   5.4   0.9] max=[979.9  11.5   9.    1. ] end=[635.9  11.5   9.    0.9] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[recovery   ] min=[493.7  11.1   5.4   0.9] max=[979.9  11.6  11.9   1. ] end=[777.7  11.5   5.4   0.9] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+   eval[composition] min=[326.6  11.1   5.4   0.9] max=[979.9  11.6  12.5   1. ] end=[979.9  11.5   5.4   1. ] frac@lo=[0. 0. 0. 0.] frac@hi=[0. 0. 0. 0.]
+
+===== ad_auction  sigma_proxy=[ 0.174 18.839  1.69 ]  a=[0.963 0.877 0.918]  tau=[26.9  8.2 12.1]  tr=['logit', 'log1p', 'log1p']
+   clip lo=[0. 0. 0.] hi=[  1.   402.98  29.93]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [2.42 1.45 1.06]  bid
+     [-1.53 -0.73 -0.95]  budget_cap
+     [1.38 2.66 2.92]  targeting_breadth
+     [-0.87 -1.45 -1.21]  const
+   p1.hold_rec          T=120  model=[0.78 0.89 0.78] pers=[0.47 0.81 0.43]  early50=[0.72 0.77 0.63] late=[0.82 0.98 0.89]  mean|e|=[0.06 2.65 0.58]
+   p2.pulse60_120       T=180  model=[0.82 0.77 0.79] pers=[0.55 0.58 0.41]  early50=[0.88 0.51 0.65] late=[0.79 0.87 0.84]  mean|e|=[ 0.05 10.77  0.59]
+   p2.multilevel200     T=200  model=[0.75 0.83 0.71] pers=[0.46 0.65 0.62]  early50=[0.76 0.91 0.77] late=[0.74 0.81 0.69]  mean|e|=[0.09 6.17 1.09]
+   eval[sustained  ] min=[0.  0.1 0.1] max=[ 0.4 14.1  2.8] end=[ 0.2 14.1  2.8] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[order      ] min=[0.  0.1 0.1] max=[  1.  278.7  29.9] end=[  1.  278.7  29.9] frac@lo=[0. 0. 0.] frac@hi=[0.   0.   0.38]
+   eval[recovery   ] min=[ 0.2 10.9  1. ] max=[ 0.5 47.4  6.1] end=[ 0.3 18.9  4. ] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+   eval[composition] min=[0. 6. 1.] max=[ 0.9 50.6  6.7] end=[ 0.2 12.9  3.1] frac@lo=[0. 0. 0.] frac@hi=[0. 0. 0.]
+
+===== social_contagion  sigma_proxy=[63.946 36.83 ]  a=[0.963 0.983]  tau=[26.9 59.5]  tr=['affine', 'affine']
+   clip lo=[0. 0.] hi=[720.38 472.19]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [0.9 0.9]  seeding
+     [1. 1.]  incentive
+     [0.6 0.6]  bridge_outreach
+     [-0.82 -0.78]  const
+   p1.hold_rec          T=120  model=[0.91 0.87] pers=[0.91 0.79]  early50=[0.89 0.85] late=[0.91 0.89]  mean|e|=[6.89 5.49]
+   p2.pulse200_200      T=400  model=[0.82 0.72] pers=[0.52 0.59]  early50=[0.81 0.81] late=[0.82 0.7 ]  mean|e|=[15.84 16.85]
+   eval[sustained  ] min=[54.9 23.1] max=[129.8  85.4] end=[129.8  85.4] frac@lo=[0. 0.] frac@hi=[0. 0.]
+   eval[order      ] min=[49.8 22.4] max=[145.8  94.6] end=[145.8  94.6] frac@lo=[0. 0.] frac@hi=[0. 0.]
+   eval[recovery   ] min=[49.8 22.4] max=[155.   82.5] end=[94.2 61. ] frac@lo=[0. 0.] frac@hi=[0. 0.]
+   eval[composition] min=[49.8 22.9] max=[188.7 119.1] end=[49.8 39.6] frac@lo=[0. 0.] frac@hi=[0. 0.]
+
+===== hospital_queue  sigma_proxy=[ 73.199 126.968   5.477]  a=[0.983 0.945 0.729]  tau=[59.5 18.1  3.7]  tr=['log1p', 'affine', 'log1p']
+   clip lo=[0. 0. 0.] hi=[1286.57 1263.99  128.1 ]
+   W (rows: controls + const; cols: obs) in transformed units:
+     [-4.9  -1.17  2.52]  staffing
+     [ 1.99 -0.67 -0.45]  elective_scheduling
+     [-4.76 -3.11 -1.62]  diagnostic_allocation
+     [ 2.37  0.33 -0.14]  urgent_priority
+     [-0.13  2.65  1.36]  overtime
+     [-0.68 -1.58 -0.15]  followup_capacity
+     [ 4.55  2.66 -0.82]  const
+   p1.hold_rec          T=120  model=[1.   0.78 0.91] pers=[0.96 0.76 0.59]  early50=[0.99 0.79 0.82] late=[1.   0.77 0.97]  mean|e|=[ 0.37 36.58  1.21]
+   p2.pulse40           T=80   model=[0.82 0.66 0.74] pers=[0.64 0.34 0.49]  early50=[0.85 0.77 0.74] late=[0.76 0.48 0.74]  mean|e|=[18.21 78.01  2.51]
+   p2.mid40             T=40   model=[0.99 0.87 0.55] pers=[0.85 0.43 0.51]  early50=[0.99 0.87 0.55] late=[nan nan nan]  mean|e|=[ 1.03 19.43  6.35]
+   p2.multilevel200     T=200  model=[0.77 0.84 0.73] pers=[0.51 0.36 0.42]  early50=[0.94 0.88 0.69] late=[0.72 0.83 0.75]  mean|e|=[32.48 25.93  2.71]
+   eval[sustained  ] min=[  4.1 107.4   3.6] max=[1286.6  807.1    7. ] end=[251.6 329.3   3.6] frac@lo=[0. 0. 0.] frac@hi=[0.65 0.   0.  ]
+   eval[order      ] min=[ 0.  60.9  0.8] max=[1286.6  597.9   11.6] end=[1286.6  388.8    0.8] frac@lo=[0.18 0.   0.  ] frac@hi=[0.77 0.   0.  ]
+   eval[recovery   ] min=[ 0.  60.9  0.5] max=[120.7 431.   11.6] end=[  1.8 136.1   8.7] frac@lo=[0.65 0.   0.  ] frac@hi=[0. 0. 0.]
+   eval[composition] min=[0.  0.  0.1] max=[1286.6  599.5   85.8] end=[ 0.  60.9 11.6] frac@lo=[0.41 0.19 0.  ] frac@hi=[0.05 0.   0.  ]

@@ -635,3 +635,99 @@ One factor per system against the best-of:
 | market, power_grid | clip margin 10× (near hard bounds only) | same question, other direction |
 
 Rollouts finite on all four categories; cap rule holds with zero violations; full evaluation 14 s.
+
+### 10. Score audit: where the 0.54 comes from (Fri morning, no credits)
+
+Question: our best-of mean is 0.537 against a leaderboard top of 0.728. Which part of the pipeline
+loses the points? Method (scripts and raw output in `docs/study/audit_2026-09-25/`): re-fit
+`l0b_lin` in-sample on every run we own and score it per run and per observable with our own
+$\hat\sigma$; roll the *uploaded* `predict.py` files (best-of from u003/u004/u005) over eval-shaped
+4,000-tick schedules of all four categories and count ticks predicted outside the observed data
+range; test the data for exogenous structure.
+
+**1. The in-sample fit is already the ceiling.** Per-run scores of `l0b_lin` on its own training
+data (own $\hat\sigma$, mean over observables): epidemic 0.47 / 0.71, market 0.80–0.95, traffic
+0.66–0.93, power_grid 0.69–0.82, supply_chain 0.73 / 0.96, wildlife 0.82 / 0.87, reservoir 0.70 /
+0.71, ad_auction 0.76–0.82, social_contagion 0.77 / 0.89, hospital_queue 0.74–0.90. A model that
+cannot fit what it was trained on cannot transfer. The one-pole map
+$v_{t+1} = a v_t + (1-a)\,W\phi(u_t)$ has no representation for what the data show:
+
+| system | shape in the data | what the one-pole fit does |
+|---|---|---|
+| epidemic | wave: cases 188 → 512 (t=20) → 69 (t=60); second wave after release at t=120 | $\tau = 88$ decay through the hump; ≈ persistence |
+| power_grid | load 93 → 76 (t=20) → 99 (t=60) under a constant hold (thermostat rebound) | picks $a = 0.4$: an instantaneous map, no rebound |
+| reservoir | level is a capped integrator (481 → 941 then flat; −1.3/tick under release 12) | relax with $\tau = 40$ toward a linear level |
+| traffic | exit flows rise 20–40 ticks *after* the admission pulse ends (pipeline) | $\tau = 1.7$ on flows: attributes flow to the wrong control sign |
+| hospital_queue | queue saturates at ≈ 330 (beds), wait_time then explodes 0 → 220 | log1p-linear map, no capacity |
+| wildlife | prey 86 → 195 (t=20) → 122: overshoot | monotone relax |
+
+Fri §8 concluded "the model class is not the bottleneck" from a leave-one-run-out comparison of
+two models of the *same* class; the in-sample residuals say otherwise.
+
+**2. Extrapolation of the equilibrium map is the largest single leak.** Uploaded models on
+eval-shaped schedules, fraction of the 4,000 ticks predicted more than 5 % of range outside the
+observed data range:
+
+| system (upload) | observable | data range | predicted | ticks outside |
+|---|---|---|---|---:|
+| hospital_queue (u005) | wait_time | 0–322 | up to 1,030 | 22–38 % (order) |
+| hospital_queue (u005) | queue | 23–333 | down to 7 | 28–39 % (order) |
+| traffic (u003) | speed_a / speed_b | 11–49 | up to 84 / 89 | 74 % (one sustained) |
+| market (u003) | price | 78–110 | 143 / below 78 | 32–79 % |
+| power_grid (u003) | load | 64–158 | below 64 | 72 % (one sustained) |
+
+Mechanism: $W$ is linear in $\tilde u$ in log1p / logit space, so a control corner we never held
+multiplies out exponentially, and the 3× clip margin (Fri §2) lets it run to the box edge
+(wait_time clip = 1,287). Every test category holds control vectors we do not own: sustained
+holds at unseen levels, recovery at $\alpha \in [0.7, 1]$ per control, composition with single
+controls moved. We have 2–16 distinct control vectors per system, mostly 2–4.
+
+**3. Reservoir inflow is a deterministic season, not noise.** Runs 0 and 1 agree tick for tick
+(correlation 0.991, mean |difference| 0.25 on an sd of 1.6): the phase is locked to reset, so every
+test episode sees the same inflow$(t)$. Two-harmonic least squares on the 400-tick run, period
+scanned 30–1,200 at 0.1:
+
+$$\text{inflow}(t) = 11.43 + 2.154\sin\tfrac{2\pi t}{67.8} + 0.293\cos\tfrac{2\pi t}{67.8}
+ - 0.018\sin\tfrac{4\pi t}{67.8} - 0.006\cos\tfrac{4\pi t}{67.8}$$
+
+Residual sd 0.19 in-sample, 0.145 on the held-out 120-tick run. Score on that run (own
+$\hat\sigma = 1.57$): sinusoid 0.919, constant 0.553, persistence 0.535. Fri §8 searched periods
+200–730 only and reported "no season". Inflow is one quarter of the reservoir observables and the
+input to the level integrator. No other observable shows a clean exogenous period on the segments
+we own (power_grid load's 45-tick component is the rebound, not a driver).
+
+**4. $y_0$ carries little information on several observables.** market volume 90–110 → 16–19 at
+t=5 → 2–3 at t=20 in all four runs; traffic flows → 0 at t=5 in all four; supply_chain retail
+105 → 0; hospital discharges → 0 at t=5 in three of four. The hidden state, not the reported
+initial, sets the first 20 ticks. Anchoring $v_0 = g(y_0)$ with one pole is the right shape for a
+decay, wrong for a burst (discharges, flows).
+
+**5. The local screen is not calibrated.** $\hat\sigma$ is the std over everything we collected
+(epidemic 86 cases, reservoir level 258, hospital queue 127, wait 73), so local scores read
+0.1–0.3 above public; with 2–4 runs the fold SE is ±0.05, so most screen "wins" are ties.
+
+**6. Data.** 440–520 ticks per system, 2–4 runs, nothing past tick 400, 15,080 credits (75 %)
+unspent. The sustained category holds for thousands of ticks we have never observed.
+
+Decisions:
+
+1. Reservoir: ship inflow$(t)$ as an exogenous post rule (table or the formula above, phase from
+   tick 0 = first action after reset) and feed it into the level integrator. Expected ≈ +0.09 on
+   reservoir from inflow alone.
+2. Extrapolation guard before any further upload: clip margin ≤ 1× on hospital_queue, traffic,
+   market, power_grid, and bound the equilibrium $W\phi(u)$ in transformed space to the observed
+   range of $v$ (plus a small margin), so an unseen corner relaxes to the nearest observed level
+   instead of past it. The u006 factors (clip 1× vs 10×) test only the box, not the map.
+3. Structural models where the residual shape is known: epidemic SIR-type on the 520 ticks we own
+   (β, γ, hospitalisation lag are identifiable from one wave plus one restricted wave); traffic
+   transport delay on flows; power_grid second-order (rebound); hospital_queue capacity clamp.
+   These are the four systems whose in-sample fit is worst.
+4. Saturday's purchase, in this order: one long hold (≥ 1,000 ticks) per slow system for the
+   sustained level; single-control pulses at $\alpha \approx 0.85$ for composition; interior
+   levels for the corner-degenerate systems. Data for the map first, more model kinds second.
+5. Report per-observable local scores; treat leave-one-run-out differences under 0.05 as ties.
+
+Rejected: blend $\lambda$ as a lever. u005 showed shrinkage toward $y_0$ costs up to −0.14 where
+persistence is far off; the leak is in the equilibrium map and the missing dynamics, not in the
+mix. Still to read: the per-category split of our uploads in the portal (sustained vs sequence
+transfer), which would rank items 1–4 by category.
