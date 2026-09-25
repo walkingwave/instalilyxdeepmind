@@ -1,0 +1,9 @@
+{
+ "ad_auction": "plans\\ad_auction_ad_auction_min_doc.json",
+ "hospital_queue": "plans\\hospital_queue_hospital_queue_min_doc.json",
+ "power_grid": "plans\\power_grid_power_grid_min_doc.json",
+ "reservoir": "plans\\reservoir_reservoir_min_doc.json",
+ "supply_chain": "plans\\supply_chain_supply_chain_min_doc.json",
+ "traffic": "plans\\traffic_traffic_min_doc.json",
+ "wildlife": "plans\\wildlife_wildlife_min_doc.json"
+}

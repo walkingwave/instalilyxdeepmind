@@ -1,0 +1,89 @@
+{
+ "format": 1,
+ "system": "power_grid",
+ "observables": [
+  "load",
+  "frequency",
+  "renewable_share"
+ ],
+ "controls": [
+  "price_signal",
+  "reserve_dispatch",
+  "charging_allowance",
+  "interconnector"
+ ],
+ "bounds": {
+  "price_signal": [
+   0.0,
+   2.0
+  ],
+  "reserve_dispatch": [
+   0.0,
+   150.0
+  ],
+  "charging_allowance": [
+   0.0,
+   1.0
+  ],
+  "interconnector": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "price_signal": 1.5,
+  "reserve_dispatch": 0.0,
+  "charging_allowance": 1.0,
+  "interconnector": 1.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  1.0
+ ],
+ "clip_lo": [
+  0.0,
+  46.50374190597566,
+  0.0
+ ],
+ "clip_hi": [
+  251.79274055968358,
+  54.577144234973325,
+  0.8363628566359417
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "power_grid_min",
+  "theta": [
+   127.13175003233319,
+   22.005766248466337,
+   0.10237220723764669,
+   0.28621742032516395,
+   0.551115023460852,
+   3.00000000008556,
+   0.023750997242856512,
+   5.14525350471263e-10,
+   1.0000000000113252,
+   0.5560085355772026,
+   0.37396725721760665,
+   71.59548239633595
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:power_grid_min",
+  "n_runs": 3,
+  "n_ticks": 500,
+  "cost": 138.77205594030204
+ }
+}

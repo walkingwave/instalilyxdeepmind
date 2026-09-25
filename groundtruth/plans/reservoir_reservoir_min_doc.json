@@ -1,0 +1,107 @@
+{
+ "format": 1,
+ "system": "reservoir",
+ "observables": [
+  "level",
+  "inflow",
+  "outflow",
+  "quality"
+ ],
+ "controls": [
+  "release_rate",
+  "irrigation_allocation",
+  "withdrawal_depth",
+  "aeration"
+ ],
+ "bounds": {
+  "release_rate": [
+   0.0,
+   12.0
+  ],
+  "irrigation_allocation": [
+   0.0,
+   8.0
+  ],
+  "withdrawal_depth": [
+   0.0,
+   1.0
+  ],
+  "aeration": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "release_rate": 2.0,
+  "irrigation_allocation": 0.0,
+  "withdrawal_depth": 0.0,
+  "aeration": 1.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null,
+  1.0
+ ],
+ "clip_lo": [
+  0.0,
+  4.01746892437947,
+  0.0,
+  0.6142894477850027
+ ],
+ "clip_hi": [
+  1628.0397467773682,
+  18.806875327644605,
+  25.444723401572006,
+  1.0
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "reservoir_min",
+  "theta": [
+   11.273147888855274,
+   2.1880412579324497,
+   67.87327865991246,
+   0.045406495567192895,
+   0.0018519294542851908,
+   13.182768382448527,
+   0.21695602993440793,
+   0.9399980093989369,
+   0.006946023935909998,
+   2.995378549171776,
+   0.036124247189991465,
+   12.639677842962465
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [
+  {
+   "type": "exo_harmonic",
+   "obs": "inflow",
+   "period": 67.8,
+   "coef": [
+    11.43,
+    2.154,
+    0.293,
+    -0.018,
+    -0.006
+   ]
+  }
+ ],
+ "info": {
+  "model_id": "ode:reservoir_min",
+  "n_runs": 2,
+  "n_ticks": 520,
+  "cost": 104.07570078729944
+ }
+}
