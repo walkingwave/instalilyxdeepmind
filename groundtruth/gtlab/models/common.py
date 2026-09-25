@@ -45,6 +45,12 @@ def soft_clip(spec, runs, margin=None):
 # exact physical constraints per system, applied after the model in the runtime (infer.apply_post)
 POST_RULES = {
     "ad_auction": [{"type": "le_control", "obs": "spend", "control": "budget_cap", "lag": 1, "scale": 1.04}],
+    # inflow is a deterministic season phase-locked to reset (MATH_LOG Fri s10.3). The level
+    # integrator rule (plans/reservoir_integrate_rule.json) is net negative LOO and stays optional.
+    "reservoir": [
+        {"type": "exo_harmonic", "obs": "inflow", "period": 67.8,
+         "coef": [11.43, 2.154, 0.293, -0.018, -0.006]},
+    ],
 }
 
 

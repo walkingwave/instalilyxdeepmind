@@ -801,3 +801,32 @@ traffic, hospital_queue, power_grid, then the rest.
 **Sunday–Monday:** refit every kind on the full data, one-factor public tests on the remaining
 slots, then the Monday 12:00 final upload of the best-of, and keep one slot per system for a
 Tuesday correction.
+
+### 11. Acting on the score audit (Thu 23:40, no credits)
+
+Two runtime/model changes tested leave-one-run-out with clip margin 1×:
+
+| system | l0b_lin | + equilibrium bound | note |
+|---|---:|---:|---|
+| epidemic | 0.484 | 0.537 | |
+| market | 0.770 | 0.805 | |
+| social_contagion | 0.718 | 0.733 | |
+| hospital_queue | 0.638 | 0.650 | |
+| others | tie | tie | |
+
+Equilibrium bound: $W\phi(u)$ is clipped in transformed space to the observed range of $v$ ±25 %
+of that range, so an unseen control corner relaxes to the nearest observed level. On by default
+in l0b (`eq_margin=0.25`, exported as `q_lo`/`q_hi`, runtime clips the same way).
+
+Reservoir, per observable, held-out run:
+
+| rule set | level | inflow | outflow | quality | mean (hold / pulse) |
+|---|---:|---:|---:|---:|---|
+| none | 0.84 / 0.53 | 0.55 / 0.56 | 0.53 / 0.46 | 0.70 / 0.65 | 0.654 / 0.548 |
+| inflow season | same | **0.92 / 0.91** | same | same | 0.746 / 0.634 |
+| + level integrator | 0.70 / 0.57 | | | | 0.710 / 0.646 |
+
+Inflow season (period 67.8, two harmonics, phase from the first tick after reset) is a default
+post rule now: +0.09 on the reservoir mean in both folds. The level integrator is net negative
+(−0.05 mean) and stays optional. u006 rebuilt (v2) with the bound everywhere, clip 1× on the four
+leaking systems, the inflow rule, the spend cap, l2 on wildlife, λ at the known winners.

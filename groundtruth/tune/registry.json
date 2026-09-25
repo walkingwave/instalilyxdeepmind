@@ -280,7 +280,7 @@
   },
   {
    "date": "2026-09-24",
-   "dir": "submissions\\20260924-2326-u006",
+   "dir": "submissions\\20260924-2335-u006v2",
    "id": "u006",
    "phase": "public",
    "scores": {},
@@ -293,12 +293,12 @@
     "epidemic": {
      "data_ticks": 0,
      "kind": "l0b_lin",
-     "lam": 0.35
+     "lam": 0.5
     },
     "hospital_queue": {
      "data_ticks": 0,
      "kind": "l0b_lin",
-     "lam": 0.6
+     "lam": 0.8
     },
     "market": {
      "data_ticks": 0,

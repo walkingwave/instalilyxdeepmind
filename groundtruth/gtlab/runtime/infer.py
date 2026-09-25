@@ -166,6 +166,8 @@ def _roll_l0b(blob, doc, y0, U, ctx):
     tr = blob["tr"]
     F = phi(delay_u(norm_u(doc, U), blob.get("delays")), blob["phi"])
     Q = F @ _arr(blob["W"])                     # [T, p] equilibrium targets
+    if blob.get("q_lo") is not None:
+        Q = np.clip(Q, _arr(blob["q_lo"])[None, :], _arr(blob["q_hi"])[None, :])
     a = _arr(blob["a"])
     oma = 1.0 - a
     v = g_fwd(y0, tr)
@@ -335,6 +337,17 @@ def apply_post(doc, Y, U, y0=None):
             if r.get("lag"):                     # observable may lag the control by one tick
                 cap = np.maximum(cap, np.concatenate([cap[:1], cap[:-1]]))
             Y[:, j] = np.minimum(Y[:, j], cap)
+        elif r.get("type") == "exo_harmonic" and r.get("obs") in obs:
+            # obs_t = c0 + sum_h s_h sin(2 pi h t / P) + c_h cos(2 pi h t / P), t = 0.. (phase locked to reset)
+            j = obs.index(r["obs"])
+            t = np.arange(Y.shape[0], dtype=float)
+            cf = [float(v) for v in r.get("coef", [])]
+            P = float(r["period"])
+            out = np.full(Y.shape[0], cf[0] if cf else 0.0)
+            for h in range((len(cf) - 1) // 2):
+                w = 2.0 * np.pi * (h + 1) * t / P
+                out = out + cf[1 + 2 * h] * np.sin(w) + cf[2 + 2 * h] * np.cos(w)
+            Y[:, j] = out
         elif r.get("type") == "integrate" and r.get("obs") in obs:
             # obs_t = clip(obs_{t-1} + sum_i coef_i * Y[t, src_i] + bias, lo, hi): a capped stock
             j = obs.index(r["obs"])

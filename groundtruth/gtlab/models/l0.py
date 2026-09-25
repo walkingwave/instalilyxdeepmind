@@ -32,8 +32,12 @@ A_GRID = tuple(1.0 - np.geomspace(0.6, 0.0007, 18))
 class L0b(C.DevModel):
     kind = "l0b"
 
-    def __init__(self, spec, a_grid=A_GRID, pairs="auto", delays=None, sq=True, delay_grid=None, **cfg):
+    def __init__(self, spec, a_grid=A_GRID, pairs="auto", delays=None, sq=True, delay_grid=None,
+                 eq_margin=0.25, **cfg):
         super().__init__(spec, **cfg)
+        # equilibrium targets W phi(u) are clipped to the observed transformed range +- eq_margin x
+        # range: an unseen control corner relaxes to the nearest observed level, not past it
+        self.eq_margin = None if eq_margin is None else float(eq_margin)
         self.a_grid = a_grid
         self.phi = C.phi_spec(spec.m, sq=sq, pairs=pairs)
         self.delays = list(delays) if delays else [0] * spec.m
@@ -76,6 +80,13 @@ class L0b(C.DevModel):
         self.a = np.zeros(p)
         self.W = np.zeros((nf, p))
         self.info = dict(self.info or {}, loss=[0.0] * p)
+        Vall = np.vstack([np.vstack([v0[None, :], V]) for _, V, v0, _ in data])
+        if self.eq_margin is not None:
+            rng_v = np.maximum(Vall.max(axis=0) - Vall.min(axis=0), 1e-6)
+            self.q_lo = (Vall.min(axis=0) - self.eq_margin * rng_v).tolist()
+            self.q_hi = (Vall.max(axis=0) + self.eq_margin * rng_v).tolist()
+        else:
+            self.q_lo = self.q_hi = None
         for j in range(p):
             best = None
             for a in self.a_grid:
@@ -106,10 +117,15 @@ class L0b(C.DevModel):
 
     def raw_rollout(self, y0, U):
         Q = self._feats(U) @ self.W
+        if self.q_lo is not None:
+            Q = np.clip(Q, np.asarray(self.q_lo)[None, :], np.asarray(self.q_hi)[None, :])
         v0 = rt.g_fwd(y0, self.tr)
         V = np.column_stack([C.lfilt(self.a[j], Q[:, j], v0[j]) for j in range(self.spec.p)])
         return rt.g_inv(V, self.tr)
 
     def export(self):
-        return {"kind": "l0b", "tr": self.tr, "phi": self.phi, "delays": [int(d) for d in self.delays],
-                "a": self.a.tolist(), "W": self.W.tolist()}
+        out = {"kind": "l0b", "tr": self.tr, "phi": self.phi, "delays": [int(d) for d in self.delays],
+               "a": self.a.tolist(), "W": self.W.tolist()}
+        if self.q_lo is not None:
+            out["q_lo"], out["q_hi"] = list(self.q_lo), list(self.q_hi)
+        return out
