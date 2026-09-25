@@ -949,3 +949,13 @@ Remove-Item Env:GT_ALLOW_SPEND
 
 Order of purchase if we split it: compose first on every system (the composition band and the
 map), then train, then hold_mid.
+
+Addendum (Fri 00:50): p3 is bought in two halves. Half 1, Saturday: `compose` + `train` only
+(641–680 per system, 6,594 total), the two categories with no data at all. Half 2, Sunday:
+the sustained buy sized after the refit and Saturday's public bands: 1,000-tick holds on the
+slow five if the long-horizon residual is the issue, interior holds where the committee
+disagrees otherwise; 300 stays in reserve. `hold_mid` stays materialized in p3 but is not run
+on Saturday. Reason: one 450-tick hold at one level does not answer the "nothing past tick 400"
+gap, and spending 72 % of the balance before u006/u007 land forecloses the adaptive slice.
+Half-1 command (USES 6,594 CREDITS): `collect --all --phase p3 --only compose,train --spend
+--max-steps 700 --yes` with `GT_ALLOW_SPEND=1`.
