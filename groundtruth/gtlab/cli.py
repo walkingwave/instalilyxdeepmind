@@ -247,6 +247,23 @@ def cmd_docs(a):
     return 0
 
 
+def cmd_budget(a):
+    """Free: print server-side remaining steps per system (no steps spent)."""
+    os.environ.setdefault("GT_ALLOW_REAL", "1")
+    gw = _real_gateway(False)
+    try:
+        tot = 0
+        for s in _targets(a) if (a.system or a.all) else systems.SYSTEM_IDS:
+            b = gw.budget(s)
+            n = b.get("simulator_steps_remaining", b.get("remaining"))
+            tot += int(n)
+            print(f"{s:17s} {n}")
+        print(f"{'total':17s} {tot}")
+    finally:
+        gw.close()
+    return 0
+
+
 def cmd_status(a):
     mock = a.mock
     print(f"{'system':<18}{'spent':>6}{'p1':>10}{'p2':>10}{'val':>10}{'res':>10}{'server':>8}  best_val")
@@ -420,6 +437,7 @@ def build_parser():
             sp.add_argument("--n", type=int, default=40)
         sp.set_defaults(fn=fn)
     sp = sub.add_parser("status"); sp.add_argument("--mock", action="store_true"); sp.set_defaults(fn=cmd_status)
+    sp = sub.add_parser("budget"); sysargs(sp); sp.set_defaults(fn=cmd_budget)
     for name, fn in (("fit", cmd_fit), ("validate", cmd_validate), ("mock-bench", cmd_mock_bench)):
         sp = sub.add_parser(name); sysargs(sp)
         sp.add_argument("--real-dir", action="store_true", help="use data/ (default data_mock/)")

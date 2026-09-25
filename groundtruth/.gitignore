@@ -8,3 +8,4 @@ submissions/*/
 !submissions/.keep
 artifacts/
 .pytest_cache/
+*credentials*.json

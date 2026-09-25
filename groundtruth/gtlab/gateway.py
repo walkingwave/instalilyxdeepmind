@@ -58,6 +58,26 @@ def _under_pytest() -> bool:
 
 
 # --------------------------------------------------------------------------- real
+def load_credentials():
+    """Fill GROUNDTRUTH_KEY / GROUNDTRUTH_GATEWAY_URL from a credentials.json kept OUTSIDE the repo
+    (GT_CREDENTIALS path, or credentials.json in the repo's parent folders). Env vars win."""
+    import json as _json
+    cands = [os.environ.get("GT_CREDENTIALS")] + [str(d / "credentials.json") for d in
+                                                   (ROOT.parent, ROOT.parent.parent)]
+    for c in cands:
+        if c and os.path.isfile(c):
+            try:
+                d = _json.loads(open(c, encoding="utf-8").read())
+            except Exception:
+                continue
+            if d.get("gateway_key") and not os.environ.get("GROUNDTRUTH_KEY"):
+                os.environ["GROUNDTRUTH_KEY"] = d["gateway_key"]
+            if d.get("gateway_url") and not os.environ.get("GROUNDTRUTH_GATEWAY_URL"):
+                os.environ["GROUNDTRUTH_GATEWAY_URL"] = d["gateway_url"]
+            return c
+    return None
+
+
 class RealGateway:
     """Wraps kit/client.py Client.
 
@@ -70,6 +90,7 @@ class RealGateway:
     def __init__(self, spend: bool = False, base_url: str | None = None, transport=None):
         if _under_pytest():
             raise SpendError("RealGateway cannot be constructed under pytest")
+        load_credentials()
         key = os.environ.get("GROUNDTRUTH_KEY")
         if not key:
             raise SpendError("GROUNDTRUTH_KEY not set")

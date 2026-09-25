@@ -117,13 +117,52 @@ def available_kinds(ticks, with_ode=False):
     return ks
 
 
+# ----------------------------------------------------------------------------- local screen
+SCREEN_MARGIN = 0.02      # a kind that loses to persistence locally by more than this never gets a slot
+MIN_RUNS_VETO = 4         # below this many runs the leave-one-out screen is too noisy to veto anything
+
+
+def local_screen(sid, kinds, runs, time_budget_s=60):
+    """Leave-one-run-out score of each kind (and l0a) on our own data. Free, noisy, unlimited.
+    Used to order candidates and to veto clear losers before they burn an upload slot."""
+    from gtlab import metric
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from build_from_data import fit_doc
+    from gtlab.runtime import infer as rt
+    if len(runs) < 2:
+        return {}
+    sigma = metric.sigma_proxy(runs)
+    out = {}
+    for k in ["l0a"] + list(kinds):
+        if k == "ode":
+            continue
+        sc = []
+        for i, hold in enumerate(runs):
+            train = [r for j, r in enumerate(runs) if j != i]
+            try:
+                doc = fit_doc(sid, k, train, time_budget_s=time_budget_s)[0]
+                P = rt.rollout_from_blob(doc, hold.y0, hold.U, doc=doc, base_dir=ROOT / "gtlab" / "runtime")
+                sc.append(metric.robust_score(P, hold.Y, sigma))
+            except Exception:
+                sc.append(0.0)
+        out[k] = float(np.mean(sc))
+    out["_n_runs"] = len(runs)
+    return out
+
+
 # ----------------------------------------------------------------------------- policy
 def _best(pairs):
     return max(pairs, key=lambda p: p[1]) if pairs else None
 
 
-def propose_one(hist, kinds, ticks, final=False):
-    """Returns (config, why). config None = keep the live model."""
+def propose_one(hist, kinds, ticks, final=False, screen=None):
+    """Returns (config, why). config None = keep the live model.
+    screen: {kind: local leave-one-run-out score} orders untried kinds and vetoes clear losers."""
+    screen = screen or {}
+    if screen and "l0a" in screen and screen.get("_n_runs", 0) >= MIN_RUNS_VETO:
+        base = screen["l0a"]
+        kinds = sorted([k for k in kinds if k not in screen or screen[k] >= base - SCREEN_MARGIN],
+                       key=lambda k: -screen.get(k, base))
     l0 = [s for c, s in hist if c["kind"] == "l0a"]
     cur = [(c, s) for c, s in hist if c["kind"] != "l0a" and int(c.get("data_ticks", 0)) == ticks]
     if final:
@@ -137,7 +176,8 @@ def propose_one(hist, kinds, ticks, final=False):
     s0 = max(l0)
     for k in kinds:
         if not any(c["kind"] == k and abs(float(c.get("lam", 1)) - 1.0) < 1e-9 for c, _ in cur):
-            return {"kind": k, "lam": 1.0, "data_ticks": ticks}, f"untried kind {k} on {ticks} ticks"
+            loc = f", local {screen[k]:.3f} vs persistence {screen.get('l0a', float('nan')):.3f}" if k in screen else ""
+            return {"kind": k, "lam": 1.0, "data_ticks": ticks}, f"untried kind {k} on {ticks} ticks{loc}"
     full = [(c, s) for c, s in cur if abs(float(c.get("lam", 1)) - 1.0) < 1e-9]
     if not full:
         return None, "no fitted kind available (no data); keep live model"
@@ -197,14 +237,16 @@ def cmd_propose(a):
     picks, plan, cache = {}, {}, {}
     for sid in S.SYSTEM_IDS:
         ticks, runs = data_ticks(sid, a.data_root)
-        cfg, why = propose_one(history(reg, sid), available_kinds(ticks, a.with_ode), ticks, final=a.final)
+        kinds = available_kinds(ticks, a.with_ode)
+        screen = {} if (a.final or a.no_screen) else local_screen(sid, kinds, runs)
+        cfg, why = propose_one(history(reg, sid), kinds, ticks, final=a.final, screen=screen)
         lv = live(reg, sid, "final" if a.final else "public")
-        if cfg is not None and lv is not None and cfg_key(cfg) == cfg_key(lv) and not a.final:
+        if cfg is not None and lv is not None and cfg_key(cfg) == cfg_key(lv):
             cfg, why = None, why + " (already live)"
         used = slots_used(reg, sid)
         if cfg is not None and used >= MAX_UPLOADS_PER_DAY:
             cfg, why = None, f"no slots left today ({used}/3); wanted: {why}"
-        plan[sid] = {"config": cfg, "why": why, "slots_used_today": used}
+        plan[sid] = {"config": cfg, "why": why, "slots_used_today": used, "screen": screen}
         if cfg is not None:
             picks[sid] = _fit_doc(sid, cfg, runs, cache)
     for sid, p in plan.items():
@@ -220,6 +262,7 @@ def cmd_propose(a):
     reg["uploads"].append({"id": uid, "date": toronto_today(), "phase": "final" if a.final else "public",
                            "dir": str(out.relative_to(ROOT)), "systems": {s: plan[s]["config"] for s in picks},
                            "why": {s: plan[s]["why"] for s in picks}, "uploaded": False, "scores": {},
+                           "local": {s: plan[s]["screen"] for s in picks if plan[s]["screen"]},
                            "check": "pass" if ok else "FAIL"})
     save(reg)
     print(f"\n{uid}: {out / 'submission.zip'}  check={'PASS' if ok else 'FAIL'}  systems={len(picks)}")
@@ -304,6 +347,17 @@ def cmd_status(a):
         b = _best(h)
         print(f"{sid:17s} {slots_used(reg, sid)}/3   {b[1] if b else float('nan'):7.4f}  "
               f"{json.dumps(b[0]) if b else '-'} / {json.dumps(live(reg, sid))}")
+    pairs = []
+    for u in reg["uploads"]:
+        for sid, sc in u.get("scores", {}).items():
+            c = u["systems"].get(sid) or {}
+            loc = (u.get("local") or {}).get(sid, {}).get(c.get("kind"))
+            if loc is not None:
+                pairs.append((loc, sc))
+    if len(pairs) >= 3:
+        a_, b_ = np.array(pairs).T
+        print(f"local-vs-public calibration: n={len(pairs)} corr={np.corrcoef(a_, b_)[0, 1]:.2f} "
+              f"mean gap={np.mean(b_ - a_):+.3f}  (low corr = local screen is not predictive, trust public)")
     for u in reg["uploads"]:
         mean = np.mean(list(u["scores"].values())) if u["scores"] else float("nan")
         print(f"  {u['id']} {u['date']} {u.get('phase','public'):6s} up={u['uploaded']!s:5s} "
@@ -316,6 +370,7 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("propose"); p.add_argument("--final", action="store_true")
     p.add_argument("--with-ode", action="store_true"); p.add_argument("--no-check", action="store_true")
+    p.add_argument("--no-screen", action="store_true", help="skip the local leave-one-run-out screen")
     p.set_defaults(fn=cmd_propose)
     p = sub.add_parser("register"); p.add_argument("build"); p.add_argument("--id")
     p.add_argument("--phase", default="public"); p.add_argument("--date"); p.add_argument("--data-ticks", type=int, default=0)

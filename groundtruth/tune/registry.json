@@ -1,0 +1,56 @@
+{
+ "uploads": [
+  {
+   "date": "2026-09-23",
+   "dir": "submissions/20260923-2157-persist",
+   "id": "u001",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.4711,
+    "epidemic": 0.272,
+    "hospital_queue": 0.4428,
+    "market": 0.1849,
+    "power_grid": 0.4867,
+    "reservoir": 0.3471,
+    "social_contagion": 0.3052,
+    "supply_chain": 0.4203,
+    "traffic": 0.2636,
+    "wildlife": 0.2227
+   },
+   "systems": {
+    "ad_auction": {
+     "kind": "l0a"
+    },
+    "epidemic": {
+     "kind": "l0a"
+    },
+    "hospital_queue": {
+     "kind": "l0a"
+    },
+    "market": {
+     "kind": "l0a"
+    },
+    "power_grid": {
+     "kind": "l0a"
+    },
+    "reservoir": {
+     "kind": "l0a"
+    },
+    "social_contagion": {
+     "kind": "l0a"
+    },
+    "supply_chain": {
+     "kind": "l0a"
+    },
+    "traffic": {
+     "kind": "l0a"
+    },
+    "wildlife": {
+     "kind": "l0a"
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  }
+ ]
+}
