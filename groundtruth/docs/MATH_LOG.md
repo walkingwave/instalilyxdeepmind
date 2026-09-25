@@ -959,3 +959,80 @@ on Saturday. Reason: one 450-tick hold at one level does not answer the "nothing
 gap, and spending 72 % of the balance before u006/u007 land forecloses the adaptive slice.
 Half-1 command (USES 6,594 CREDITS): `collect --all --phase p3 --only compose,train --spend
 --max-steps 700 --yes` with `GT_ALLOW_SPEND=1`.
+
+### 14. Minimal grey-box ODE per system (Fri afternoon, no credits)
+
+Question from §10–11: the one-pole map cannot fit its own runs and the sequence categories hold
+70 % of the gap. Does a minimal mechanistic model per system (≤ 12 parameters, ≤ 8 states,
+every observed initial used, RK4 with two substeps) beat it on leave-one-run-out with the data
+we own? Method: one shared harness, `scripts/ode_lab.py`, fits a family with the existing
+`gtlab.ode.fit` (log-space bounds, cauchy least squares, ten Latin-hypercube starts, 240 s),
+scores each held-out run per observable against `l0b_lin` fitted on the same folds (clip 1×,
+equilibrium bound) and persistence, then rolls 4,000 ticks on eval-shaped schedules of all four
+categories. Gates in `scripts/assemble_picks.py`: LOO mean above `l0b_lin` by more than 0.05
+(our $\hat\sigma$ inflates scores, so less is a tie), never below persistence on a fold, finite,
+under 1 s per episode, excursion beyond the observed range under 1× the range (the runtime clip).
+Equations, parameter tables, rejected structures and caveats per system are in
+`plans/<system>_min_notes.md`; families in `gtlab/ode/<system>_min.py`; lab reports and model
+documents in `plans/<system>_<system>_min.json` / `_doc.json`.
+
+| system | states / params | LOO ode | LOO l0b_lin | LOO pers. | in-sample | excursion | gate |
+|---|---|---:|---:|---:|---:|---:|---|
+| ad_auction | 3 / 12 | 0.849 | 0.613 | 0.553 | 0.910 | 0.00 | pass |
+| supply_chain | 7 / 12 | 0.857 | 0.716 | 0.31 | 0.910 | 0.56 | pass (fold 2 tie) |
+| hospital_queue | 6 / 12 | 0.827 | 0.655 | 0.572 | 0.855 | 0.00 | pass |
+| power_grid | 6 / 11 | 0.812 | 0.713 | 0.561 | 0.852 | 0.63 | pass |
+| reservoir | 4 / 12 | 0.810 | 0.601 | 0.42 | 0.903 | 0.12 | pass |
+| traffic | 8 / 12 | 0.788 | 0.626 | 0.41 | 0.823 | 0.20 | pass (all 4 folds) |
+| wildlife | 6 / 10 | 0.772 | 0.691 | 0.39 | 0.918 | 0.04 | pass |
+| market | 5 / 12 | 0.860 | 0.814 | 0.45 | 0.926 | 0.16 | tie (+0.046) |
+| social_contagion | 6 / 12 | 0.769 | 0.739 | 0.70 | 0.915 | 0.08 | tie (+0.03) |
+| epidemic (§12) | 5 / 13 | 0.53 | 0.54 | 0.55 | 0.830 | 0.00 | in-sample only |
+
+What the structures are, one line each (full derivations in the notes files):
+
+- **reservoir**: level = capped integrator of season(t) − head-limited delivery
+  $c_{out}(L/500)^{p}$ (smooth min with release + irrigation) − seepage, hard cap 941.3; outflow =
+  delivery + algebraic spill when full; quality first-order in aeration; irrigation return flow.
+- **supply_chain**: production = effort·(p₀ + committed), two-stage commitment following orders;
+  dispatch = min(order, stock, capacity); two-stage conveyor at rate $k_q/(1 + k_l\,\text{lead})$;
+  arrivals gated by a heat/wear state driven by (1 − maintenance); retail drains at a demand rate;
+  supplier stock capped at 362.
+- **traffic**: per route three first-order stages approach → junction → exit (mean transit
+  ≈ 12 ticks), admission = demand·ramp cut by a finite approach buffer, junction service split by
+  signal timing, exit capacity cut by lane closure and raised by clearance, speed relaxes to
+  $v_{free}/(1 + n/n_{ref})$. Toll and freight fitted to zero effect.
+- **power_grid**: desired demand $d_0 - d_1\,\text{price}$; a price step kicks a damped oscillator
+  (period 62, ζ 0.28, tanh-saturated impulse) = the thermostat rebound; reserve request lags and is
+  delivered ∝ interconnector; frequency = 50 + asymmetric droop on the balance; renewable share
+  ∝ interconnector, suppressed by reserve. Physical clips: rebound ±32, frequency ±2.5 Hz.
+- **wildlife**: per region delayed-logistic prey $P' = rP/(1+P/c) - d_l L P - h\,\text{hunting}\,P$
+  with a lagged density $L$ (gives the overshoot), predators relax to a weakly prey-dependent
+  capacity; south = north scaled. Habitat and corridor fitted to zero effect (never varied alone).
+- **hospital_queue**: waiting → two assessment stages (finite chairs) → treatment (finite beds)
+  → discharges; throughput = staffing·(1 + overtime gain)·(1 − fatigue); arrivals gated at the
+  322 queue cap; wait = filtered W/(admissions); fatigue integrates overtime.
+- **ad_auction**: win probability $w = b^n/(b^n + b_0^n)$, impressions = min(w·audience,
+  cap/price), spend = price·impressions ≤ cap, reachable pool depletes with impressions and
+  returns with τ 48, two-stage purchase queue with a fulfilment ceiling. Reset state is empty
+  (conversions are 0 at t = 0–1 in every run; the observed initial is a reading, not a state).
+- **market**: reset order backlog draining with ratio 0.69/tick (volume), dealer capacity
+  first-order toward $d_0 e^{-a_t \tau - a_r r}$ with asymmetric shrink/refill, price
+  $P' = (m - k_r r)e^{-a_x \tau}$ with momentum $m$ and a floor at 73.4 (tax freezes trading).
+- **social_contagion**: per community loyal / incentive-led / onboarding compartments with a pool;
+  recruitment ∝ seeding·(1 + k·incentive)·share + word of mouth, saturating; incentive-led members
+  churn fast when the incentive stops. Mix half-point fixed at 0.7 (unidentifiable from
+  incentive ∈ {0, 2}); a free half-point drained the community on long low-incentive holds.
+
+All ten documents package through flatpack into predict.py + model.json; the packaged predictors
+reproduce the in-sample scores above and run 0.28–0.38 s per 4,000-tick episode, finite on every
+category. Common limits across the notes: two-run systems have one uninformative fold (the fold
+fit on the recovery hold alone cannot identify control gains), several controls were never varied
+alone (habitat, corridor, followup, charging, toll, freight: fitted to zero), and event-like
+observables (discharges, flows, shipments) cap near 0.6–0.85 under any smooth model. Saturday's
+composition blocks are exactly the data that pins those gains.
+
+Decision: the seven gate passes replace `l0b_lin` as the candidate for their systems in the next
+public upload; market and social_contagion (ties locally) go as public one-factor tests; epidemic
+stays the SIRS. Picks in `plans/picks_ode.json`. Ensembles (median of ODE and l0b) are the fallback
+where the public bands disagree with the LOO.
