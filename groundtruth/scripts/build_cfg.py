@@ -3,7 +3,8 @@
     python scripts/build_cfg.py --tag u006 --cfg plans/u006.json [--include-val]
 
 cfg JSON: {system: {"kind": "l0b_lin"|"l0b"|"l1"|"l2"|"l0a", "cfg": {...model kwargs...},
-                    "lam": 1.0, "clip_margin": 3.0, "post": [rules] or null (null = default rules)}}
+                    "lam": 1.0, "clip_margin": 3.0, "post": [rules] or null (null = default rules)}
+            or {"doc": "plans/<sys>_doc.json", "lam": 1.0}   # a ready model document, verbatim}
 Every system in gtlab.systems.SYSTEM_IDS must be present (all-10 rule). The config is copied
 into the build folder as config.json so the version is reproducible.
 """
@@ -22,6 +23,20 @@ from gtlab.package import build
 
 def fit_system(sid, spec_cfg, include_val=False, time_budget_s=120):
     spec = S.get(sid)
+    if spec_cfg.get("doc"):
+        # a ready model document (e.g. plans/<sys>_doc.json from the grey-box lab), used verbatim;
+        # lam / post overrides still apply
+        doc = json.loads(Path(spec_cfg["doc"]).read_text())
+        if doc.get("system") != sid:
+            raise SystemExit(f"{sid}: doc {spec_cfg['doc']} is for {doc.get('system')}")
+        lam = float(spec_cfg.get("lam", 1.0))
+        if abs(lam - 1.0) > 1e-9 and doc["model"].get("kind") != "l0a":
+            doc["model"] = {"kind": "blend", "lam": lam, "member": doc["model"]}
+        if spec_cfg.get("post") is not None:
+            doc["post"] = spec_cfg["post"]
+        doc.setdefault("post", C.POST_RULES.get(sid, []))
+        doc["info"] = dict(doc.get("info") or {}, model_id=f"doc:{Path(spec_cfg['doc']).name}@{lam:g}")
+        return SEL._jsonable(doc)
     runs = load_runs(spec, Ledger(data_dir(sid, False), sid, False))
     if not include_val:
         runs = [r for r in runs if r.tags.get("split") != "val"]
