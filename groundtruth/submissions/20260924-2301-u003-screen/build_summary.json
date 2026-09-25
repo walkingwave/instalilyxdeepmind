@@ -1,0 +1,52 @@
+{
+  "epidemic": {
+    "kind": "l0a",
+    "runs": 2,
+    "ticks": 520
+  },
+  "market": {
+    "kind": "l0b_lin",
+    "runs": 4,
+    "ticks": 440
+  },
+  "traffic": {
+    "kind": "l0b_lin",
+    "runs": 4,
+    "ticks": 440
+  },
+  "power_grid": {
+    "kind": "l0b_lin",
+    "runs": 3,
+    "ticks": 500
+  },
+  "supply_chain": {
+    "kind": "l0b_lin",
+    "runs": 2,
+    "ticks": 520
+  },
+  "wildlife": {
+    "kind": "l1",
+    "runs": 2,
+    "ticks": 520
+  },
+  "reservoir": {
+    "kind": "l0b_lin",
+    "runs": 2,
+    "ticks": 520
+  },
+  "ad_auction": {
+    "kind": "l1",
+    "runs": 3,
+    "ticks": 500
+  },
+  "social_contagion": {
+    "kind": "l0b_lin",
+    "runs": 2,
+    "ticks": 520
+  },
+  "hospital_queue": {
+    "kind": "l1",
+    "runs": 4,
+    "ticks": 440
+  }
+}

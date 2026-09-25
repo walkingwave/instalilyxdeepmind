@@ -1,0 +1,32 @@
+{
+  "epidemic": {
+    "kind": "l0b_lin",
+    "runs": 1,
+    "ticks": 120
+  },
+  "wildlife": {
+    "kind": "l0b_lin",
+    "runs": 1,
+    "ticks": 120
+  },
+  "social_contagion": {
+    "kind": "l0b_lin",
+    "runs": 1,
+    "ticks": 120
+  },
+  "power_grid": {
+    "kind": "l0b_lin",
+    "runs": 1,
+    "ticks": 120
+  },
+  "reservoir": {
+    "kind": "l0b_lin",
+    "runs": 1,
+    "ticks": 120
+  },
+  "ad_auction": {
+    "kind": "l0b_lin",
+    "runs": 1,
+    "ticks": 120
+  }
+}

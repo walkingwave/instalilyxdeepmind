@@ -1,0 +1,6 @@
+ad_auction    scored    0.6044    #813
+epidemic    scored    0.1562    #814
+power_grid    scored    0.5448    #815
+reservoir    scored    0.4625    #816
+social_contagion    scored    0.3672    #817
+wildlife    scored    0.2785    #818

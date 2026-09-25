@@ -4,7 +4,7 @@ __pycache__/
 .env
 *.key
 data_mock/
-submissions/*/
+submissions/*/checker/
 !submissions/.keep
 artifacts/
 .pytest_cache/

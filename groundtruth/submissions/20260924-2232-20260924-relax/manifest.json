@@ -1,0 +1,39 @@
+{
+  "git_sha": "382bcc9",
+  "stamp": "20260924-2232",
+  "systems": {
+    "ad_auction": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "epidemic": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "power_grid": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "reservoir": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "social_contagion": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "wildlife": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    }
+  },
+  "tag": "20260924-relax",
+  "zip_bytes": 22061,
+  "zip_sha256": "8c777279640af4b99e213578fd681573c6ce91b93d7cce7cb3cfe933cd8eb35a"
+}

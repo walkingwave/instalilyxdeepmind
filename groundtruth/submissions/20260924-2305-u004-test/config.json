@@ -1,0 +1,33 @@
+{
+ "epidemic": {
+  "kind": "l0b_lin",
+  "lam": 0.5
+ },
+ "market": {
+  "kind": "l1"
+ },
+ "wildlife": {
+  "kind": "l0b_lin"
+ },
+ "ad_auction": {
+  "kind": "l0b_lin"
+ },
+ "hospital_queue": {
+  "kind": "l0b_lin"
+ },
+ "traffic": {
+  "kind": "l0b"
+ },
+ "power_grid": {
+  "kind": "l0b"
+ },
+ "supply_chain": {
+  "kind": "l0b"
+ },
+ "reservoir": {
+  "kind": "l0b"
+ },
+ "social_contagion": {
+  "kind": "l0b"
+ }
+}

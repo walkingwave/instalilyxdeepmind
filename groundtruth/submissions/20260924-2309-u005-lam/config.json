@@ -1,0 +1,42 @@
+{
+ "epidemic": {
+  "kind": "l0b_lin",
+  "lam": 0.7
+ },
+ "market": {
+  "kind": "l0b_lin",
+  "lam": 0.8
+ },
+ "power_grid": {
+  "kind": "l0b_lin",
+  "lam": 0.8
+ },
+ "social_contagion": {
+  "kind": "l0b_lin",
+  "lam": 0.8
+ },
+ "hospital_queue": {
+  "kind": "l0b_lin",
+  "lam": 0.8
+ },
+ "wildlife": {
+  "kind": "l0b_lin",
+  "lam": 0.8
+ },
+ "reservoir": {
+  "kind": "l0b_lin",
+  "lam": 0.8
+ },
+ "ad_auction": {
+  "kind": "l1",
+  "lam": 0.8
+ },
+ "traffic": {
+  "kind": "l0b_lin",
+  "lam": 1.2
+ },
+ "supply_chain": {
+  "kind": "l0b_lin",
+  "lam": 1.2
+ }
+}

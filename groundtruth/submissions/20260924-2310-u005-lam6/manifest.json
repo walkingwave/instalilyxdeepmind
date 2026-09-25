@@ -1,0 +1,39 @@
+{
+  "git_sha": "382bcc9",
+  "stamp": "20260924-2310",
+  "systems": {
+    "ad_auction": {
+      "kind": "blend",
+      "model_id": "l1@0.8",
+      "ode": []
+    },
+    "epidemic": {
+      "kind": "blend",
+      "model_id": "l0b_lin@0.7",
+      "ode": []
+    },
+    "power_grid": {
+      "kind": "blend",
+      "model_id": "l0b_lin@0.8",
+      "ode": []
+    },
+    "reservoir": {
+      "kind": "blend",
+      "model_id": "l0b_lin@0.8",
+      "ode": []
+    },
+    "social_contagion": {
+      "kind": "blend",
+      "model_id": "l0b_lin@0.8",
+      "ode": []
+    },
+    "wildlife": {
+      "kind": "blend",
+      "model_id": "l0b_lin@0.8",
+      "ode": []
+    }
+  },
+  "tag": "u005-lam6",
+  "zip_bytes": 24451,
+  "zip_sha256": "141dc902d34344a6bee810a44d45ade91f47d9c363fff1162298d2e18b5c22d4"
+}

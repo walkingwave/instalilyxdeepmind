@@ -1,0 +1,4 @@
+hospital_queue    scored    0.4925    #859
+market    scored    0.3422    #860
+supply_chain    scored    0.6444    #861
+traffic    scored    0.6116    #862

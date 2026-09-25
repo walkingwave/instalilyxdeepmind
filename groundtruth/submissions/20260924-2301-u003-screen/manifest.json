@@ -1,0 +1,59 @@
+{
+  "git_sha": "382bcc9",
+  "stamp": "20260924-2301",
+  "systems": {
+    "ad_auction": {
+      "kind": "l1",
+      "model_id": "l1",
+      "ode": []
+    },
+    "epidemic": {
+      "kind": "l0a",
+      "model_id": "l0a",
+      "ode": []
+    },
+    "hospital_queue": {
+      "kind": "l1",
+      "model_id": "l1",
+      "ode": []
+    },
+    "market": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "power_grid": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "reservoir": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "social_contagion": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "supply_chain": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "traffic": {
+      "kind": "l0b",
+      "model_id": "l0b_lin",
+      "ode": []
+    },
+    "wildlife": {
+      "kind": "l1",
+      "model_id": "l1",
+      "ode": []
+    }
+  },
+  "tag": "u003-screen",
+  "zip_bytes": 41509,
+  "zip_sha256": "13573add299a01e27d99a62f3349158a1dbea4782a2d8b956a60b51b432c768f"
+}
