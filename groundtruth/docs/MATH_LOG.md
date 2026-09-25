@@ -1036,3 +1036,16 @@ Decision: the seven gate passes replace `l0b_lin` as the candidate for their sys
 public upload; market and social_contagion (ties locally) go as public one-factor tests; epidemic
 stays the SIRS. Picks in `plans/picks_ode.json`. Ensembles (median of ODE and l0b) are the fallback
 where the public bands disagree with the LOO.
+
+### 14. u008: grey-box models on all ten systems (Fri 19:30, no credits)
+
+`submissions/20260925-1925-u008-ode`, config `plans/u008.json`: every system's factor against
+u006 is its own minimal grey-box ODE (≤ 12 parameters, fitted in the lab harness, gated on
+leave-one-run-out against l0b_lin with clip 1× and the equilibrium bound, same folds). Seven pass
+the +0.05 gate (ad_auction 0.849 vs 0.613, hospital_queue 0.827 vs 0.655, power_grid 0.812 vs
+0.713, reservoir 0.810 vs 0.601, supply_chain 0.857 vs 0.716, traffic 0.788 vs 0.626, wildlife
+0.772 vs 0.691); market (0.860 vs 0.814) and social_contagion (0.769 vs 0.739) are local ties and
+go in because the public score is the only tie-breaker; epidemic is the SIRS model from u007.
+Runtime rules (spend cap, queue cap, inflow season) stay on top. All 4,000-tick rollouts finite on
+the four categories, none more than half a data range outside the observed range, 0.27–0.37 s per
+episode, 127 s projected for the full evaluation.

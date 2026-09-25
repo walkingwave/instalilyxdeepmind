@@ -1,0 +1,52 @@
+{
+ "ad_auction": {
+  "doc": "plans/ad_auction_ad_auction_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "hospital_queue": {
+  "doc": "plans/hospital_queue_hospital_queue_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "power_grid": {
+  "doc": "plans/power_grid_power_grid_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "reservoir": {
+  "doc": "plans/reservoir_reservoir_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "supply_chain": {
+  "doc": "plans/supply_chain_supply_chain_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "traffic": {
+  "doc": "plans/traffic_traffic_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "wildlife": {
+  "doc": "plans/wildlife_wildlife_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "market": {
+  "doc": "plans/market_market_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "social_contagion": {
+  "doc": "plans/social_contagion_social_contagion_min_doc.json",
+  "lam": 1.0,
+  "_test": "grey-box ODE vs u006 relax model (market/social: local tie, public decides)"
+ },
+ "epidemic": {
+  "doc": "plans/epidemic_sirs_doc.json",
+  "lam": 1.0,
+  "_test": "same as u007"
+ }
+}
