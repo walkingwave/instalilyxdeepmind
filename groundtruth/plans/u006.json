@@ -1,0 +1,83 @@
+{
+ "ad_auction": {
+  "kind": "l1",
+  "lam": 1.0,
+  "_test": "spend <= budget_cap rule (default post rule now on)"
+ },
+ "wildlife": {
+  "kind": "l2",
+  "lam": 1.0,
+  "_test": "state space with 2 complex modes (LOO 0.748 vs 0.706)"
+ },
+ "reservoir": {
+  "kind": "l0b_lin",
+  "lam": 1.0,
+  "post": [
+   {
+    "type": "integrate",
+    "obs": "level",
+    "src": [
+     "inflow",
+     "outflow"
+    ],
+    "coef": [
+     0.9210481953144872,
+     -0.9045479192578221
+    ],
+    "bias": -1.0947608377408435,
+    "lo": 0.0,
+    "hi": 956.0851555048582
+   }
+  ],
+  "_test": "level = capped integral of inflow - outflow"
+ },
+ "epidemic": {
+  "kind": "l0b_lin",
+  "lam": 0.35,
+  "_test": "parabola through lam 0/0.5/1 peaks at 0.37"
+ },
+ "hospital_queue": {
+  "kind": "l0b_lin",
+  "lam": 0.6,
+  "_test": "bracket lam 0.8 (0.4925) from below"
+ },
+ "traffic": {
+  "kind": "l0b_lin",
+  "cfg": {
+   "delays": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+   ]
+  },
+  "lam": 1.0,
+  "_test": "8-tick control delay (chosen on 3/4 folds)"
+ },
+ "supply_chain": {
+  "kind": "l0b_lin",
+  "clip_margin": 1.0,
+  "lam": 1.0,
+  "_test": "clip margin 1x vs 3x (integrators)"
+ },
+ "social_contagion": {
+  "kind": "l0b_lin",
+  "clip_margin": 1.0,
+  "lam": 1.0,
+  "_test": "clip margin 1x vs 3x (saturating)"
+ },
+ "market": {
+  "kind": "l0b_lin",
+  "clip_margin": 10.0,
+  "lam": 1.0,
+  "_test": "clip margin 10x (near hard bounds only)"
+ },
+ "power_grid": {
+  "kind": "l0b_lin",
+  "clip_margin": 10.0,
+  "lam": 1.0,
+  "_test": "clip margin 10x"
+ }
+}

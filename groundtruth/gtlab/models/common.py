@@ -42,6 +42,12 @@ def soft_clip(spec, runs, margin=None):
     return clo, chi
 
 
+# exact physical constraints per system, applied after the model in the runtime (infer.apply_post)
+POST_RULES = {
+    "ad_auction": [{"type": "le_control", "obs": "spend", "control": "budget_cap", "lag": 1, "scale": 1.04}],
+}
+
+
 def make_doc(spec, blob, runs=None, clip=None, info=None):
     hlo, hhi = hard_vectors(spec)
     if clip is None:
@@ -56,6 +62,7 @@ def make_doc(spec, blob, runs=None, clip=None, info=None):
         "hard_lo": hlo, "hard_hi": hhi,
         "clip_lo": list(clip[0]), "clip_hi": list(clip[1]),
         "model": blob,
+        "post": POST_RULES.get(spec.id, []),
         "info": info or {},
     }
 

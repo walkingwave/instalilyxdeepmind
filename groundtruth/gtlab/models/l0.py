@@ -32,16 +32,36 @@ A_GRID = tuple(1.0 - np.geomspace(0.6, 0.0007, 18))
 class L0b(C.DevModel):
     kind = "l0b"
 
-    def __init__(self, spec, a_grid=A_GRID, pairs="auto", delays=None, sq=True, **cfg):
+    def __init__(self, spec, a_grid=A_GRID, pairs="auto", delays=None, sq=True, delay_grid=None, **cfg):
         super().__init__(spec, **cfg)
         self.a_grid = a_grid
         self.phi = C.phi_spec(spec.m, sq=sq, pairs=pairs)
         self.delays = list(delays) if delays else [0] * spec.m
+        # optional search over one global pure delay (ticks) on all controls, chosen by the same
+        # physical-score loss as `a`; None = no search (keeps `delays`)
+        self.delay_grid = tuple(delay_grid) if delay_grid else None
 
     def _feats(self, U):
         return rt.phi(rt.delay_u(rt.norm_u(self.meta, U), self.delays), self.phi)
 
     def fit(self, runs):
+        if self.delay_grid:
+            best = None
+            for d in self.delay_grid:
+                if d >= min(r.T for r in runs) // 4:
+                    continue
+                self.delays = [int(d)] * self.spec.m
+                self._fit(runs)
+                tot = float(sum(self.info["loss"]))
+                if best is None or tot < best[0] - 1e-9:
+                    best = (tot, int(d))
+            self.delays = [best[1]] * self.spec.m
+            self._fit(runs)
+            self.info["delay_grid"] = {"chosen": best[1]}
+            return self
+        return self._fit(runs)
+
+    def _fit(self, runs):
         self._prepare(runs)
         self.tr = C.auto_transform(self.spec, runs)
         p = self.spec.p
@@ -55,6 +75,7 @@ class L0b(C.DevModel):
         nf = data[0][0].shape[1]
         self.a = np.zeros(p)
         self.W = np.zeros((nf, p))
+        self.info = dict(self.info or {}, loss=[0.0] * p)
         for j in range(p):
             best = None
             for a in self.a_grid:
@@ -80,6 +101,7 @@ class L0b(C.DevModel):
                     best = (loss, a, Wj)
             self.a[j] = best[1]
             self.W[:, j] = best[2]
+            self.info["loss"][j] = float(best[0])
         return self
 
     def raw_rollout(self, y0, U):

@@ -1,0 +1,7 @@
+{
+  "ad_auction": {
+    "kind": "l1",
+    "runs": 3,
+    "ticks": 500
+  }
+}

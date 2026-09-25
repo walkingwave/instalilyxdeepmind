@@ -15,7 +15,7 @@ RUNTIME = ROOT / "runtime" / "infer.py"
 ODE_DIR = ROOT / "ode"
 
 KEEP_DOC_KEYS = ("format", "system", "observables", "controls", "bounds", "recovery",
-                 "hard_lo", "hard_hi", "clip_lo", "clip_hi", "model")
+                 "hard_lo", "hard_hi", "clip_lo", "clip_hi", "model", "post")
 
 
 class _Strip(ast.NodeTransformer):

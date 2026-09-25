@@ -1,0 +1,14 @@
+{
+  "git_sha": "9dde2d7",
+  "stamp": "20260924-2321",
+  "systems": {
+    "ad_auction": {
+      "kind": "l1",
+      "model_id": "l1",
+      "ode": []
+    }
+  },
+  "tag": "posttest",
+  "zip_bytes": 5262,
+  "zip_sha256": "2b302dde9a5d948a76d9b9e16066b781d3ea3161fecdb3bc40c347b4afbdc976"
+}

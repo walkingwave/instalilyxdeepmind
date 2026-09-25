@@ -213,10 +213,13 @@ def _roll_l2(blob, doc, y0, U, ctx):
     F = phi(delay_u(norm_u(doc, U), blob.get("delays")), blob["phi"])
     A, B, C = _arr(blob["A"]), _arr(blob["B"]), _arr(blob["C"])
     D, c = _arr(blob["D"]), _arr(blob["c"])
-    E, e0 = _arr(blob["E"]), _arr(blob["e0"])
-    x = E @ g_fwd(y0, tr) + e0
     BF = F @ B.T                                 # [T, n]
     DF = F @ D.T + c                             # [T, p]
+    if blob.get("x0_from_y0"):
+        x = np.linalg.pinv(C) @ (g_fwd(y0, tr) - DF[0])
+    else:
+        E, e0 = _arr(blob["E"]), _arr(blob["e0"])
+        x = E @ g_fwd(y0, tr) + e0
     T = F.shape[0]
     X = np.empty((T, x.size))
     for t in range(T):
@@ -314,7 +317,39 @@ def rollout_from_blob(blob, y0, U, doc=None, base_dir=None, tag="", clip=True):
     Y = np.asarray(Y, dtype=float).reshape(U.shape[0], len(doc["observables"]))
     if not clip:
         return Y
-    return finalize(Y, y0, lo, hi)
+    Y = finalize(Y, y0, lo, hi)
+    return apply_post(doc, Y, U, y0)
+
+
+def apply_post(doc, Y, U, y0=None):
+    """Physical constraints that hold exactly, applied after the model (data-driven rules in
+    doc['post']): le_control: obs <= control value at the same tick (e.g. spend <= budget_cap)."""
+    rules = doc.get("post") or []
+    if not rules:
+        return Y
+    obs, ctrls = list(doc["observables"]), list(doc["controls"])
+    for r in rules:
+        if r.get("type") == "le_control" and r.get("obs") in obs and r.get("control") in ctrls:
+            j, k = obs.index(r["obs"]), ctrls.index(r["control"])
+            cap = U[:, k] * float(r.get("scale", 1.0))
+            if r.get("lag"):                     # observable may lag the control by one tick
+                cap = np.maximum(cap, np.concatenate([cap[:1], cap[:-1]]))
+            Y[:, j] = np.minimum(Y[:, j], cap)
+        elif r.get("type") == "integrate" and r.get("obs") in obs:
+            # obs_t = clip(obs_{t-1} + sum_i coef_i * Y[t, src_i] + bias, lo, hi): a capped stock
+            j = obs.index(r["obs"])
+            flow = np.full(Y.shape[0], float(r.get("bias", 0.0)))
+            for name, cf in zip(r.get("src", []), r.get("coef", [])):
+                if name in obs:
+                    flow = flow + float(cf) * Y[:, obs.index(name)]
+            lo_, hi_ = float(r.get("lo", -np.inf)), float(r.get("hi", np.inf))
+            prev = float(y0[j]) if y0 is not None and np.isfinite(y0[j]) else float(Y[0, j])
+            out = np.empty(Y.shape[0])
+            for t in range(Y.shape[0]):
+                prev = min(max(prev + flow[t], lo_), hi_)
+                out[t] = prev
+            Y[:, j] = out
+    return Y
 
 
 # ----------------------------------------------------------------------------- episode API

@@ -70,9 +70,12 @@ def moesp_eigs(pairs, n, i=10):
 class L2(C.DevModel):
     kind = "l2"
 
-    def __init__(self, spec, n_cplx=2, extra_real=0, r_max=0.9995, l1=None, l1_cfg=None,
-                 max_nfev=40, time_budget_s=None, n4sid_i=10, seed=0, reg=0.03, **cfg):
+    def __init__(self, spec, n_cplx=2, extra_real=0, r_max=1.0, l1=None, l1_cfg=None,
+                 max_nfev=40, time_budget_s=None, n4sid_i=10, seed=0, reg=0.03, anchor=True, **cfg):
         super().__init__(spec, **cfg)
+        # anchor: x0 = pinv(C) (v0 - c - D phi(u0)), the minimum-norm hidden state consistent with
+        # the observed initial; no free E / e0 (they over-fit from a handful of resets).
+        self.anchor = bool(anchor)
         self.n_cplx = int(n_cplx)
         self.extra_real = int(extra_real)
         self.r_max = float(r_max)
@@ -129,7 +132,10 @@ class L2(C.DevModel):
     def _states(self, P, F, v0):
         """X [T, n] (state after each tick), via scalar / complex lfilter per mode."""
         BF = F @ P["B"].T
-        x0 = P["E"] @ v0 + P["e0"]
+        if self.anchor:
+            x0 = np.linalg.pinv(P["C"]) @ (v0 - P["c"] - P["D"] @ F[0])
+        else:
+            x0 = P["E"] @ v0 + P["e0"]
         T = F.shape[0]
         X = np.empty((T, self.n))
         nr = self.n_real
@@ -284,4 +290,5 @@ class L2(C.DevModel):
         P = self.P
         return {"kind": "l2", "tr": self.tr, "phi": self.phi, "delays": [int(d) for d in self.delays],
                 "A": self.A_dense(P).tolist(), "B": P["B"].tolist(), "C": P["C"].tolist(),
-                "D": P["D"].tolist(), "c": P["c"].tolist(), "E": P["E"].tolist(), "e0": P["e0"].tolist()}
+                "D": P["D"].tolist(), "c": P["c"].tolist(), "E": P["E"].tolist(), "e0": P["e0"].tolist(),
+                "x0_from_y0": bool(self.anchor)}

@@ -582,3 +582,56 @@ market 0.4806 l0b_lin · social_contagion 0.4404 l0b_lin · epidemic 0.3265 l0b_
 
 The action-by-action account with the mathematics of each effect is in
 `docs/study/actions_and_effects_2026-09-24.md`.
+
+### 8. Architecture work (Fri 00:30–01:30, no credits)
+
+Question: does hidden state help on the data we have? Leave-one-run-out, robust score:
+
+| system | l0b_lin | l2 (modal state space) | l0b_lin + delay search |
+|---|---:|---:|---:|
+| market | 0.770 | 0.757 | 0.770 (delay 0) |
+| traffic | 0.605 | 0.549 | 0.625 (delay 8 on 3 of 4 folds) |
+| power_grid | 0.707 | 0.551 | 0.707 |
+| supply_chain | 0.715 | 0.560 | 0.721 (delay inconsistent) |
+| wildlife | 0.706 | **0.748** | |
+| reservoir | 0.597 | 0.442 | |
+| ad_auction | 0.609 | 0.627 (± 0.17) | |
+| social_contagion | 0.707 | 0.597 | 0.707 |
+| hospital_queue | 0.631 | 0.593 | 0.645 (inconsistent) |
+| epidemic | 0.484 | 0.552 | |
+
+Generic hidden state (2 complex modes + 3 real per observable, rollout-error fit) loses to the
+first-order relax model on 7 of 10 with four short runs: more parameters than the data can pin.
+It wins on wildlife, the one system with a measured cycle. A global pure delay on the controls
+gains ≤ 0.02 and is only consistent on traffic (8 ticks). Conclusion: on the current data the
+model class is not the bottleneck; long-horizon and history data are (Saturday's purchase).
+
+Changes made anyway, all tested, parity to $10^{-8}$:
+- l2 initial hidden state now $x_0 = C^{+}(v_0 - c - D\phi(u_0))$, the minimum-norm state
+  consistent with the observed initial, replacing a free $E v_0 + e_0$; pole radius cap 1.0.
+- Runtime "post" rules, exact physics after the model: `le_control` (ad_auction spend ≤ 1.04 ×
+  max(budget_cap$_t$, budget_cap$_{t-1}$); the fitted model violated the cap on 73 % of ticks on a
+  sustained schedule) and `integrate` (capped stock: reservoir level$_{t}$ = clip(level$_{t-1}$
+  + 0.921 inflow − 0.905 outflow − 1.10, 0, 956); pooled fit of Δlevel, residual ≈ measurement
+  noise). The reservoir rule is mixed leave-one-run-out (hold 0.84 → 0.64, pulse 0.53 → 0.58) so
+  it ships as a public hypothesis, not a default. Inflow has no season at any period 200–730 and
+  no trend: forecast its mean.
+- `scripts/build_cfg.py`: build from an explicit per-system JSON (kind, cfg, λ, clip margin,
+  post rules), copied into the build folder for reproducibility.
+
+### 9. u006 prepared for Friday's first slot (`submissions/20260924-2326-u006`, config in `plans/u006.json`)
+
+One factor per system against the best-of:
+
+| system | change | basis |
+|---|---|---|
+| ad_auction | spend ≤ 1.04·max(cap$_t$, cap$_{t-1}$) rule on top of l1 | exact physics; model broke it on 73 % of ticks |
+| wildlife | l2 modal state space | only system where hidden state won LOO (0.748 vs 0.706) |
+| reservoir | level = capped integral of inflow − outflow | mass balance holds in data; mixed LOO |
+| epidemic | λ = 0.35 | parabola through λ ∈ {0, 0.5, 1} peaks at 0.37 |
+| hospital_queue | λ = 0.6 | bracket the 0.8 winner from below |
+| traffic | 8-tick control delay | chosen on 3 of 4 folds, +0.02 LOO |
+| supply_chain, social_contagion | clip margin 1× (was 3×) | integrators: does the tighter box help or hurt? |
+| market, power_grid | clip margin 10× (near hard bounds only) | same question, other direction |
+
+Rollouts finite on all four categories; cap rule holds with zero violations; full evaluation 14 s.

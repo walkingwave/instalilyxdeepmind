@@ -40,6 +40,7 @@ def main():
     ap.add_argument("--kinds", default="l0b_lin,l1")
     ap.add_argument("--budget", type=float, default=60)
     ap.add_argument("--systems", default=",".join(S.SYSTEM_IDS))
+    ap.add_argument("--out", default="docs/study/screen.json")
     a = ap.parse_args()
     kinds = a.kinds.split(",")
     out = {}
@@ -71,7 +72,7 @@ def main():
         print(f"{sid:<17} n={len(runs)} " + " ".join(f"{k}={row[k]['mean']:.3f}({row[k]['diff']:+.3f}±{row[k]['se']:.3f})" for k in row)
               + f" best={best} [{time.time()-t0:.0f}s]", flush=True)
     Path("docs/study").mkdir(parents=True, exist_ok=True)
-    Path("docs/study/screen.json").write_text(json.dumps(out, indent=1))
+    Path(a.out).write_text(json.dumps(out, indent=1))
 
 
 if __name__ == "__main__":
