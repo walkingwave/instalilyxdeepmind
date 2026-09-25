@@ -2,10 +2,11 @@
  "system": "power_grid",
  "total": 2000,
  "phases": {
-  "p1": 1000,
-  "p2": 500,
-  "val": 250,
-  "reserve": 250
+  "p1": 120,
+  "p2": 380,
+  "p3": 1200,
+  "val": 0,
+  "reserve": 300
  },
  "floor": 0
 }

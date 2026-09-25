@@ -2,10 +2,11 @@
  "system": "hospital_queue",
  "total": 2000,
  "phases": {
-  "p1": 1000,
-  "p2": 500,
-  "val": 250,
-  "reserve": 250
+  "p1": 120,
+  "p2": 320,
+  "p3": 1260,
+  "val": 0,
+  "reserve": 300
  },
  "floor": 0
 }

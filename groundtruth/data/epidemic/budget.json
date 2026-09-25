@@ -2,10 +2,11 @@
  "system": "epidemic",
  "total": 2000,
  "phases": {
-  "p1": 1000,
-  "p2": 500,
-  "val": 250,
-  "reserve": 250
+  "p1": 120,
+  "p2": 400,
+  "p3": 1180,
+  "val": 0,
+  "reserve": 300
  },
  "floor": 0
 }
