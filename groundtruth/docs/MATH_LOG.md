@@ -847,3 +847,48 @@ Power_grid, state space with fewer modes: l2 with one lag bank and one complex m
 complex modes 0.613, two banks and one mode 0.709, against l0b_lin 0.707. The rebound is real
 (poles near $r = 0.97$–$0.99$ with rotation appear in every fit) but the extra freedom costs as
 much as it gains with three runs. Parked until Saturday's long holds.
+
+### 12. Epidemic: minimal SIRS + hospital grey box (Fri 00:00, no credits), u007
+
+Question: §10 showed the one-pole map cannot produce the wave; can a five-state compartment model
+fit the 520 ticks we own and stay sane over 4,000? Family `gtlab/ode/epidemic_sirs.py`
+(numpy-only, inlined into predict.py by flatpack; fit script `scripts/fit_epidemic_sirs.py`).
+
+States $S, E, I, R$ (fractions) and $H$ (beds), one population, RK4 with two substeps per tick:
+
+$$\lambda = \beta\,(1 - c_s\,u_{\text{closure}})(1 - c_m\,u_{\text{mask}})\,I,\qquad
+v = k_v\,u_{\text{vac}} \big/ (1 + k_c H / h_{\text{ref}})$$
+$$\dot S = -\lambda S - vS + R/\tau_w,\quad \dot E = \lambda S - \sigma E,\quad
+\dot I = \sigma E - \gamma I,\quad \dot R = \gamma I + vS - R/\tau_w,\quad
+\dot H = f_h\,N\,\gamma I - H/L$$
+$$\text{daily\_cases} = N\sigma E,\qquad \text{hospital\_load} = H.$$
+
+Reset rule: $E_0 = \text{cases}_0/(N\sigma)$, $I_0 = E_0\sigma/\gamma$, $R_0 = r_0$ fixed,
+$S_0 = 1 - E_0 - I_0 - R_0$, $H_0$ = observed. Thirteen parameters, log-space bounds, cauchy
+least squares with ten Latin-hypercube starts (existing `gtlab.ode.fit`), 200 s budget.
+
+| fit on | scored on | cases | hospital | persistence |
+|---|---|---:|---:|---|
+| pulse120_280 (400) | hold_rec (120), held out | 0.712 | 0.621 | 0.42 / 0.47 |
+| hold_rec (120) | pulse120_280 (400), held out | 0.458 | 0.377 | 0.79 / 0.53 |
+| both (520) | hold_rec | 0.871 | 0.687 | |
+| both (520) | pulse120_280 | 0.877 | 0.886 | |
+
+Own $\hat\sigma$ = (86, 33). The one-pole `l0b_lin` in-sample was 0.49 / 0.45 and 0.81 / 0.60
+(§10). The wave, the crash and the endemic plateau are reproduced; the 120-tick unrestricted
+wave alone cannot identify the intervention gains (second row), so both runs are used.
+
+Fitted values: $N = 23{,}434$, $\beta = 2.37$, $\sigma = 0.281$, $\gamma = 1.5$ (upper bound),
+$\tau_w = 72.7$, $c_s = 0.079$, $c_m = 0.094$, $k_v = 0$, $f_h = 0.0233$, $L = 29.4$,
+$r_0 = 0.069$; the clinic term is inactive ($k_v = 0$). Caveats: $\gamma$ on its bound and the
+small intervention gains say the restricted wave in our data is explained mostly by its lower
+initial cases, not by the controls; the recovery category (repeated closure + mask + vaccination
+pulses) is where this model is least trusted. That is what u007 measures.
+
+4,000-tick rollouts on all four categories: finite, cases within 32–456, hospital 27–190,
+0.3 s per episode. Packaged predict.py reproduces the in-sample scores above to three decimals.
+
+u007 = u006 v3 (nine systems unchanged, `submissions/20260924-2341-u006v3`) + epidemic as this
+ODE at $\lambda = 1$: `submissions/20260924-2346-u007`, registered. One factor (epidemic) against
+u006. Next for epidemic: a second restricted run of 200+ ticks from a different initial in
+Saturday's purchase, so the control gains are pinned by data rather than by the initial cases.

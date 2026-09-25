@@ -338,6 +338,67 @@
    },
    "uploaded": true,
    "why": {}
+  },
+  {
+   "date": "2026-09-24",
+   "dir": "submissions\\20260924-2346-u007",
+   "id": "u007",
+   "phase": "public",
+   "scores": {},
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "l1",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode:epidemic_sirs",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "blend",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "l0b",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "l2",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
   }
  ]
 }
