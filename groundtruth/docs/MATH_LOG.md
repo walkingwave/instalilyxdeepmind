@@ -892,3 +892,60 @@ u007 = u006 v3 (nine systems unchanged, `submissions/20260924-2341-u006v3`) + ep
 ODE at $\lambda = 1$: `submissions/20260924-2346-u007`, registered. One factor (epidemic) against
 u006. Next for epidemic: a second restricted run of 200+ ticks from a different initial in
 Saturday's purchase, so the control gains are pinned by data rather than by the initial cases.
+
+### 13. Hospital queue capacity rule (Fri 00:00, no credits)
+
+Queue never exceeds 333 in 440 ticks across three runs (top values 332.3–333.0), and the brief says
+overflow is referred elsewhere: a hard bed capacity. Runtime rule `le_const` (queue ≤ 333) as the
+hospital_queue default. Leave-one-run-out on l0b_lin (clip 1×, bound): 0.650 → 0.667, no fold
+worse. Not in u006/u007 (built earlier); it is the hospital factor for u008.
+
+### 13. Saturday purchase design, phase `p3` (Fri 00:30; materialized, NOT bought)
+
+Target: the two bands of §11. Sequence transfer (75 % of the score) needs history and
+composition data; sustained needs held levels we own. Generator `scripts/make_p3.py` (seed 3),
+schedules in `plans/p3.json`, materialized into `data/<sys>/plan.json`; `p3` added to
+`design.PHASES`; `data/<sys>/budget.json` now caps `p3` at balance − 300 and keeps 300 in reserve.
+
+Per system, three runs from three resets:
+
+| run | schedule | category | ticks |
+|---|---|---|---:|
+| `p3.compose` | each control alone at $\alpha = 0.85$ (recovery + 0.85·(pulse − recovery)) for $D$, recovery $D/2$; then the joint $\alpha = 0.85$ level for $D$, recovery $D$. $D$ = 60 (2–3 controls), 45 (3), 40 (4), 30 (6) | composition | 291–330 |
+| `p3.train` | recovery baseline, 6 pulses with $\alpha \sim U(0.7, 1)$ per control, lengths 10–30, log-uniform gaps 10–150, lead 20 | recovery | 350 |
+| `p3.hold_mid` | one hold at $\alpha = 0.5$ | sustained | 450 slow (reservoir, supply_chain, social_contagion, wildlife, epidemic), 400 others |
+
+Why these: the composition run gives $m + 1$ new control vectors on the same reset, so the
+additivity of the equilibrium map (§10 finding 2) is tested directly and the map gets its first
+interior single-control levels; the train has gaps spanning the $\tau$ range we measured (2–150),
+which is what the recovery category scores; the interior hold gives one level between recovery
+and pulse for the sustained band and, at 450 ticks, the first look past tick 400 on the slow
+systems. Rejected: a 1,000-tick hold per slow system (would leave < 150 in reserve on five
+systems); $\alpha = 1$ single-control blocks (the tests use 0.7–1, and 1 is already in p2).
+
+Cost (server balance after p2 → after p3):
+
+| system | compose | train | hold | total | balance | left |
+|---|---:|---:|---:|---:|---:|---:|
+| epidemic | 291 | 350 | 450 | 1,091 | 1,480 | 389 |
+| market | 300 | 350 | 400 | 1,050 | 1,560 | 510 |
+| traffic | 330 | 350 | 400 | 1,080 | 1,560 | 480 |
+| power_grid | 320 | 350 | 400 | 1,070 | 1,500 | 430 |
+| supply_chain | 330 | 350 | 450 | 1,130 | 1,480 | 350 |
+| wildlife | 291 | 350 | 450 | 1,091 | 1,480 | 389 |
+| reservoir | 320 | 350 | 450 | 1,120 | 1,480 | 360 |
+| ad_auction | 291 | 350 | 400 | 1,041 | 1,500 | 459 |
+| social_contagion | 291 | 350 | 450 | 1,091 | 1,480 | 389 |
+| hospital_queue | 330 | 350 | 400 | 1,080 | 1,560 | 480 |
+
+Total 10,844 credits; 4,236 stay in reserve for Sunday/Monday. Command, once approved
+(USES 10,844 CREDITS):
+
+```powershell
+$env:GT_ALLOW_SPEND = "1"
+python -m gtlab.cli collect --all --phase p3 --spend --max-steps 1200 --yes
+Remove-Item Env:GT_ALLOW_SPEND
+```
+
+Order of purchase if we split it: compose first on every system (the composition band and the
+map), then train, then hold_mid.
