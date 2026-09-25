@@ -830,3 +830,20 @@ Inflow season (period 67.8, two harmonics, phase from the first tick after reset
 post rule now: +0.09 on the reservoir mean in both folds. The level integrator is net negative
 (−0.05 mean) and stays optional. u006 rebuilt (v2) with the bound everywhere, clip 1× on the four
 leaking systems, the inflow rule, the spend cap, l2 on wildlife, λ at the known winners.
+
+### 12. Traffic transport delay; power_grid second order (Thu 23:50, no credits)
+
+Traffic, l0b_lin with one global control delay $d$ (clip 1×, equilibrium bound), leave-one-run-out:
+
+| $d$ | 0 | 8 | 16 | 24 | 32 | 40 |
+|---|---:|---:|---:|---:|---:|---:|
+| LOO | 0.623 | 0.625 | 0.663 | **0.690** | 0.659 | 0.583 |
+
+At $d = 24$ all four observables improve (flows 0.63 → 0.70/0.71, speed_a 0.55 → 0.65). This is the
+pipeline the brief describes: vehicles admitted now exit 20–40 ticks later. u006 rebuilt (v3) with
+$d = 24$ on traffic. A per-observable delay (flows vs speeds) is the next refinement.
+
+Power_grid, state space with fewer modes: l2 with one lag bank and one complex mode 0.654, two
+complex modes 0.613, two banks and one mode 0.709, against l0b_lin 0.707. The rebound is real
+(poles near $r = 0.97$–$0.99$ with rotation appear in every fit) but the extra freedom costs as
+much as it gains with three runs. Parked until Saturday's long holds.

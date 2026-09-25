@@ -1,0 +1,59 @@
+{
+  "git_sha": "830d28c",
+  "stamp": "20260924-2341",
+  "systems": {
+    "ad_auction": {
+      "kind": "l1",
+      "model_id": "l1@1",
+      "ode": []
+    },
+    "epidemic": {
+      "kind": "blend",
+      "model_id": "l0b_lin@0.5",
+      "ode": []
+    },
+    "hospital_queue": {
+      "kind": "blend",
+      "model_id": "l0b_lin@0.8",
+      "ode": []
+    },
+    "market": {
+      "kind": "l0b",
+      "model_id": "l0b_lin@1",
+      "ode": []
+    },
+    "power_grid": {
+      "kind": "l0b",
+      "model_id": "l0b_lin@1",
+      "ode": []
+    },
+    "reservoir": {
+      "kind": "l0b",
+      "model_id": "l0b_lin@1",
+      "ode": []
+    },
+    "social_contagion": {
+      "kind": "l0b",
+      "model_id": "l0b_lin@1",
+      "ode": []
+    },
+    "supply_chain": {
+      "kind": "l0b",
+      "model_id": "l0b_lin@1",
+      "ode": []
+    },
+    "traffic": {
+      "kind": "l0b",
+      "model_id": "l0b_lin@1",
+      "ode": []
+    },
+    "wildlife": {
+      "kind": "l2",
+      "model_id": "l2@1",
+      "ode": []
+    }
+  },
+  "tag": "u006v3",
+  "zip_bytes": 48549,
+  "zip_sha256": "a7b08dc761edfe213ce483257fff8da67b6150e59aaff9932887385d1e265a84"
+}
