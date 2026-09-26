@@ -4,7 +4,8 @@
 
 cfg JSON: {system: {"kind": "l0b_lin"|"l0b"|"l1"|"l2"|"l0a", "cfg": {...model kwargs...},
                     "lam": 1.0, "clip_margin": 3.0, "post": [rules] or null (null = default rules)}
-            or {"doc": "plans/<sys>_doc.json", "lam": 1.0}   # a ready model document, verbatim}
+            or {"doc": "plans/<sys>_doc.json", "lam": 1.0}   # a ready model document, verbatim
+            or {"members": [spec_cfg, spec_cfg, ...]}        # per-tick median ensemble of picks}
 Every system in gtlab.systems.SYSTEM_IDS must be present (all-10 rule). The config is copied
 into the build folder as config.json so the version is reproducible.
 """
@@ -23,6 +24,19 @@ from gtlab.package import build
 
 def fit_system(sid, spec_cfg, include_val=False, time_budget_s=120):
     spec = S.get(sid)
+    if spec_cfg.get("members"):
+        # per-tick median ensemble of several picks (each a normal spec_cfg); doc-level clip/post
+        # from the first member, unless overridden here
+        docs = [fit_system(sid, m, include_val, time_budget_s) for m in spec_cfg["members"]]
+        doc = json.loads(json.dumps(docs[0]))
+        doc["model"] = {"kind": "ensemble", "members": [d["model"] for d in docs]}
+        if spec_cfg.get("post") is not None:
+            doc["post"] = spec_cfg["post"]
+        lam = float(spec_cfg.get("lam", 1.0))
+        if abs(lam - 1.0) > 1e-9:
+            doc["model"] = {"kind": "blend", "lam": lam, "member": doc["model"]}
+        doc["info"] = dict(doc.get("info") or {}, model_id="ensemble[" + ",".join(d["info"].get("model_id", "?") for d in docs) + "]")
+        return SEL._jsonable(doc)
     if spec_cfg.get("doc"):
         # a ready model document (e.g. plans/<sys>_doc.json from the grey-box lab), used verbatim;
         # lam / post overrides still apply

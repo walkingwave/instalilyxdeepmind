@@ -405,7 +405,18 @@
    "dir": "submissions\\20260925-1925-u008-ode",
    "id": "u008",
    "phase": "public",
-   "scores": {},
+   "scores": {
+    "ad_auction": 0.8304,
+    "epidemic": 0.4779,
+    "hospital_queue": 0.6047,
+    "market": 0.4228,
+    "power_grid": 0.7535,
+    "reservoir": 0.7819,
+    "social_contagion": 0.5176,
+    "supply_chain": 0.7526,
+    "traffic": 0.7556,
+    "wildlife": 0.6297
+   },
    "systems": {
     "ad_auction": {
      "data_ticks": 0,
@@ -440,6 +451,67 @@
     "social_contagion": {
      "data_ticks": 0,
      "kind": "doc:social_contagion_social_contagion_min_doc.json@1",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "doc:supply_chain_supply_chain_min_doc.json@1",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "doc:traffic_traffic_min_doc.json@1",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "doc:wildlife_wildlife_min_doc.json@1",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-26",
+   "dir": "submissions\\20260926-0031-u009",
+   "id": "u009",
+   "phase": "public",
+   "scores": {},
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "doc:ad_auction_ad_auction_min_doc.json@1",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "doc:epidemic_sirs_doc.json@1",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ensemble[doc:hospital_queue_hospital_queue_min_doc.json@1,l0b_lin@1]",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ensemble[doc:market_market_min_doc.json@1,l0b_lin@1]",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "doc:power_grid_power_grid_min_doc.json@1",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "doc:reservoir_reservoir_min_doc.json@1",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ensemble[doc:social_contagion_social_contagion_min_doc.json@1,l0b_lin@1]",
      "lam": 1.0
     },
     "supply_chain": {

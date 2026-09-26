@@ -1,0 +1,82 @@
+{
+ "ad_auction": {
+  "doc": "plans/ad_auction_ad_auction_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged from u008"
+ },
+ "hospital_queue": {
+  "members": [
+   {
+    "doc": "plans/hospital_queue_hospital_queue_min_doc.json",
+    "lam": 1.0
+   },
+   {
+    "kind": "l0b_lin",
+    "clip_margin": 1.0,
+    "lam": 1.0
+   }
+  ],
+  "lam": 1.0,
+  "_test": "median ensemble ODE + l0b_lin (u008 ODE vs u006 relax: market 0.423/0.481, social 0.518/?, hospital 0.605/?)"
+ },
+ "power_grid": {
+  "doc": "plans/power_grid_power_grid_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged from u008"
+ },
+ "reservoir": {
+  "doc": "plans/reservoir_reservoir_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged from u008"
+ },
+ "supply_chain": {
+  "doc": "plans/supply_chain_supply_chain_min_doc.json",
+  "lam": 1.0,
+  "_test": "v6 doc: retail cap + level-dependent sales"
+ },
+ "traffic": {
+  "doc": "plans/traffic_traffic_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged from u008"
+ },
+ "wildlife": {
+  "doc": "plans/wildlife_wildlife_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged: ensemble across phases would damp the cycle (Sep 24 \u00a716 D)"
+ },
+ "market": {
+  "members": [
+   {
+    "doc": "plans/market_market_min_doc.json",
+    "lam": 1.0
+   },
+   {
+    "kind": "l0b_lin",
+    "clip_margin": 1.0,
+    "lam": 1.0
+   }
+  ],
+  "lam": 1.0,
+  "_test": "median ensemble ODE + l0b_lin (u008 ODE vs u006 relax: market 0.423/0.481, social 0.518/?, hospital 0.605/?)"
+ },
+ "social_contagion": {
+  "members": [
+   {
+    "doc": "plans/social_contagion_social_contagion_min_doc.json",
+    "lam": 1.0
+   },
+   {
+    "kind": "l0b_lin",
+    "clip_margin": 1.0,
+    "lam": 1.0
+   }
+  ],
+  "lam": 1.0,
+  "_test": "median ensemble ODE + l0b_lin (u008 ODE vs u006 relax: market 0.423/0.481, social 0.518/?, hospital 0.605/?)"
+ },
+ "epidemic": {
+  "doc": "plans/epidemic_sirs_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged from u008"
+ }
+}
