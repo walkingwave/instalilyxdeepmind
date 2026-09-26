@@ -54,6 +54,8 @@ def main():
     ap.add_argument("--no-loo", action="store_true")
     ap.add_argument("--tag", default="")
     ap.add_argument("--theta0", default=None, help="json file with a theta list to start from")
+    ap.add_argument("--sigma-cal", type=float, default=None,
+                    help="fit and score at the calibrated organizer scale: sigma = sigma_cal-multiplier x the calibrated sigma in plans/sigma_calibrated.json (1.0 = as calibrated)")
     a = ap.parse_args()
     spec = S.get(a.system)
     mod = importlib.import_module(f"gtlab.ode.{a.family}")
@@ -62,6 +64,9 @@ def main():
     n_sub = int(getattr(mod, "N_SUB", 2))
     runs = load_runs(spec, Ledger(data_dir(a.system, False), a.system, False))
     sigma = metric.sigma_proxy(runs)
+    if a.sigma_cal is not None:
+        cal = json.loads(Path("plans/sigma_calibrated.json").read_text())[a.system]
+        sigma = np.asarray(cal["sigma"], float) * a.sigma_cal
     free = a.free.split(",") if a.free else None
     theta0 = json.loads(Path(a.theta0).read_text())["theta"] if a.theta0 else None
     kw = dict(n_starts=a.starts, max_nfev=a.nfev, n_sub=n_sub, early_T=None, spread=0.5, free=free, theta0=theta0)

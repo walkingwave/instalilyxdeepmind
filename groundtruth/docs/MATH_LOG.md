@@ -1261,3 +1261,36 @@ Credit questions this search leaves, each a small discriminating run (needs the 
 market rate-only hold (r = 0.1, tax 0, 200 ticks) for the long-hold price level; wildlife
 corridor-only on/off (150) for settlement; social bridge-only (150) for A vs C; hospital
 staffing step without overtime (150) for fatigue vs orientation. About 650 credits in total.
+
+### 20. Value-of-information simulations and the organizer's scale (Sat 03:00–05:00, no credits)
+
+**Scale calibration** (`scripts/calibrate_sigma.py`, `plans/sigma_calibration.md`). Every scored
+upload's shipped predictor replayed on our ledger runs; the factor $k$ in
+$\sigma_{org} = k\,\hat\sigma_{proxy}$ fitted so the run-based score matches the public score:
+
+| system | $k$ | public | system | $k$ | public |
+|---|---:|---:|---|---:|---:|
+| market | 0.085 | 0.50 | power_grid | 0.43 | 0.75 |
+| epidemic | 0.13 | 0.55 | reservoir | 0.43 | 0.78 |
+| social_contagion | 0.155 | 0.55 | ad_auction | 0.52 | 0.83 |
+| wildlife | 0.17 | 0.64 | supply_chain | 0.57 | 0.82 |
+| hospital_queue | 0.23 | 0.69 | traffic | 0.57 | 0.75 |
+
+The weakest systems are scored on the tightest scales, and every fit so far used $\hat\sigma_{proxy}$,
+4–12× too loose there: errors of 5–10 units looked free to the fitter and cost the most on the
+board. Out-of-sample anchors put $k$ 1.5–2× higher (fitted uploads are partly scored on their own
+runs), so we fit at $1.5\,k$. The lab takes `--sigma-cal`; the weak five are refitting at that scale.
+
+**Value of information per weak system** (`scripts/voi_<sys>.py`, `plans/voi_<sys>.md`): a
+committee of every validated model per system, rolled on 40 test-shaped schedules; experiments
+valued by the committee's disagreement on them, weighted by how often the test visits that regime.
+
+| system | where the models disagree | best buy | credits | best free change |
+|---|---|---|---:|---|
+| epidemic | long joint restriction holds (>150 ticks): three members settle at ~40, ~80, 0 cases | joint hold α = 0.85, 300 ticks | 300 | median of the three ODE members |
+| market | price under long rate holds: floor models 79, mechanism models 37–43 | rate 0.1 hold (tax 0) | 200–300 | median(gate, AC, l0b_lin) |
+| social_contagion | long interior holds; the linear half of the public blend drifts | three 100-tick interior holds | 300 | median(BC, AB, l0b_lin) |
+| wildlife | prey after releases and at unseen middle levels | corridor 0.5 / 1.0, then habitat 0.5 | 300 | re-level recovery equilibrium; pulse level from AB |
+| hospital_queue | wait during long recoveries (tail to 300–400) | pulse 40, recovery 260 | 300 | wait from the median of five ODE members, rest from p3 |
+
+Brief-suggested mechanism tests rank low everywhere: the test rarely visits those regimes.
