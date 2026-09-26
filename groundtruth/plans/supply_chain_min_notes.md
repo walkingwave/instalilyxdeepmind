@@ -115,3 +115,61 @@ but needs 2 more states than the 7-state budget).
 - The 30-tick production jump is a step in the data, a two-stage cascade in the model.
 - Wear is a threshold identified from one event; tau_heat and kcool rest on one drop and one
   recovery.
+
+## 2026-09-26: v7 after the interior hold (p3.hold_mid)
+
+New run: 450 ticks at the midpoint action (order 40, lead 0.6, mix 0.65, production 1.25,
+receiving 0.925, maintenance 0.5), y0 (33, 83, 95). Sigma proxy is now [15.9, 173.6, 415.5].
+
+What it shows, tick by tick:
+- Supplier empties in 2 ticks and reads exactly 0 for 385 ticks, then climbs 0 -> 117 at
+  ~2.3/tick. v6 used D = smin(order, S), which lets S hover near the production level
+  (~40 in v6's rollout); the data say the stock is drained at a rate, not to a level.
+- Shipments ramp 0 -> 32 by tick 7 and sit at 34.6 (ticks 13-210), then alternate 29/46
+  (mean ~37.5) from tick 236. The terminal passes 46/tick at receiving 0.925 but only
+  19.5 at 0.35 in the pulse run: the arrival cap scales with receiving effort.
+- Retail drains 67 -> 0 in 4 ticks (27.5/tick, same as both older runs), then rises at
+  ~7.5/tick, slowing to ~2.3/tick by tick 450 (1,108, still rising). Sales therefore grow
+  with stock: arrivals 34.6 minus net gain gives ~27 sold at R ~ 100 and ~32 at R ~ 1,000,
+  i.e. $\approx 27 + 0.008 R$. No retail cap.
+
+Changes (v7, 8 states, 12 parameters):
+$$D = \min_\epsilon\big(\min_\epsilon(o,\ d_0 + d_1 r),\ P + 1.5\,S\big),\qquad
+A = \min_\epsilon\big(k_q Q_2,\ g\, a_0\, r\big)$$
+$$\dot R_A = (1-\text{mix})A - \min_\epsilon\big((1-f_b)\,dem + k_d R_A,\ 1.5 R_A\big),\quad
+\dot R_B = \text{mix}\,A - \min_\epsilon\big(f_b\,dem + k_d R_B,\ 1.5 R_B\big)$$
+Two retail classes follow the brief (mix selects new production and dispatch; initial stocks
+split into fixed shares, we use 1/2). $\tau_{heat} = 100$ and $w_{loss} = 0.5$ are now fixed
+constants (one event pins them); that freed two parameters for $d_1$ and $f_b$.
+inventory_retail $= R_A + R_B$. We tried a single-class variant (`supply_chain_min2`, 11
+params) alongside.
+
+| version | LOO hold_rec | LOO pulse | LOO hold_mid | LOO mean | in-sample (rec / pulse / mid) | mean |
+|---|---|---|---|---|---|---|
+| v6 uncapped (p3b) | 0.972 | 0.647 | 0.435 | 0.685 | 0.979 / 0.831 / 0.783 | 0.865 |
+| v7 two-class, d0 free | 0.974 | 0.834 | 0.438 | 0.749 | 0.989 / 0.923 / 0.882 | 0.932 |
+| v7 one-class, d0 free | 0.976 | 0.910 | 0.443 | 0.776 | 0.990 / 0.915 / 0.880 | 0.929 |
+| v7b one-class, d0 = 0 | 0.971 | 0.891 | 0.485 | 0.782 | 0.990 / 0.915 / 0.895 | 0.933 |
+| **v7b two-class, d0 = 0 (kept)** | 0.971 | 0.902 | 0.503 | **0.792** | 0.990 / 0.923 / 0.897 | **0.937** |
+
+Persistence on the hold_mid fold is 0.645, l0b_lin 0.379.
+
+v7b per observable in-sample on hold_mid: shipments 0.816, supplier 0.964, retail 0.912.
+Fitted theta: p0 10.25, kc 0.444, tau_c 2.78, d0 0 (bound, held), d1 55.7, kq0 1.50 (bound =
+our rate ceiling), kl 9.28, a0 49.2, dem 32.5, fb 0.420, kd 0.00884, kcool 0.0145.
+
+Eval sanity (4,000 ticks): all finite, 0.3-0.4 s each. Retail max: sustained 563, order
+5,670, recovery 257, composition 1,310. The order-category climb averages 1.4/tick over
+4,000 ticks, below the 2.3/tick the interior hold still showed at tick 450, so it is what the
+data imply, not a blow-up. Supplier never passes 362.
+
+What still limits it:
+- The hold_mid fold (0.503) stays below persistence: fitted without that run, the model has
+  seen receiving only at 0.35 and 1.5 (and at 1.5 with orders 0), so the receiving slopes of
+  the dispatch and terminal caps are extrapolated. With hold_mid in the fit they are pinned.
+- tau_c dropped from 20 to 2.8: the hold_mid ramp (32 shipped by tick 7) wins over the
+  pulse run's 30-tick supplier refill delay; pulse supplier refills at tick ~10 instead of 30.
+- The 29/46 shipment alternation from tick 236 and the supplier rise from tick 385 are not
+  modeled; we match the mean (37.5) only in the late phase, and shipments in-sample 0.816.
+- Sales $dem + k_d R$ has no ceiling: under long order holds retail grows for thousands of
+  ticks. Only the next interior or long-hold run can say whether it levels off.

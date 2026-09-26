@@ -1,0 +1,18 @@
+hospital_queue / hospital_queue_min: runs [('p1.hold_rec', 120), ('p2.pulse40', 80), ('p2.mid40', 40), ('p2.multilevel200', 200), ('p3.compose', 330)] sigma [100.031 120.099   5.273]
+  LOO p1.hold_rec          ode [0.803 0.808 0.797] mean 0.803 | l0b_lin [0.786 0.444 0.9  ] mean 0.710 | pers 0.768 [75s]
+  LOO p2.pulse40           ode [0.797 0.835 0.696] mean 0.776 | l0b_lin [0.853 0.658 0.688] mean 0.733 | pers 0.503 [75s]
+  LOO p2.mid40             ode [0.979 0.957 0.588] mean 0.841 | l0b_lin [0.886 0.44  0.516] mean 0.614 | pers 0.603 [75s]
+  LOO p2.multilevel200     ode [0.714 0.897 0.732] mean 0.781 | l0b_lin [0.582 0.424 0.642] mean 0.549 | pers 0.444 [76s]
+  LOO p3.compose           ode [0.704 0.77  0.724] mean 0.733 | l0b_lin [0.655 0.502 0.665] mean 0.607 | pers 0.615 [75s]
+  full fit cost 266.1 [150s]
+  in-sample p1.hold_rec          [0.912 0.907 0.826] mean 0.882
+  in-sample p2.pulse40           [0.812 0.847 0.708] mean 0.789
+  in-sample p2.mid40             [0.973 0.937 0.591] mean 0.834
+  in-sample p2.multilevel200     [0.763 0.939 0.768] mean 0.823
+  in-sample p3.compose           [0.894 0.895 0.744] mean 0.844
+  theta {'lam0': 10.39754, 'c_a': 0.82853, 'c_t': 0.92416, 'chairs': 33.3699, 'beds': 11.23151, 'ot_gain': 0.5068, 'k_l': 0.01357, 'tau_w': 7.97087, 'q_e': 258.7611, 'k_s': 0.00191, 'g_z': 5.83119, 'w_th': 39.55164}
+  eval[sustained  ] finite=True 0.3s outside=0.00 min=[ 5.6 76.1  0.3] max=[164.9 326.3   2.4]
+  eval[order      ] finite=True 0.3s outside=0.00 min=[ 3.1 25.3  2.3] max=[ 85.6 327.3  21.1]
+  eval[recovery   ] finite=True 0.3s outside=0.00 min=[ 3.1 25.3  1.8] max=[435.1 323.6  11.1]
+  eval[composition] finite=True 0.3s outside=0.07 min=[ 4.6 25.2  0.7] max=[537.6 326.   16.7]
+VERDICT ship: LOO ode 0.787 vs l0b_lin 0.643; in-sample 0.834 -> plans\hospital_queue_hospital_queue_min_v3.json
