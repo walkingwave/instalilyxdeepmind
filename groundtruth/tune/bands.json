@@ -486,6 +486,69 @@
    "overall": 0.755,
    "sustained": 0.583,
    "sequence": 0.812
+  },
+  {
+   "receipt": 1444,
+   "upload": "u010b",
+   "system": "epidemic",
+   "day": "2026-09-26",
+   "overall": 0.545,
+   "sustained": 0.587,
+   "sequence": 0.531
+  },
+  {
+   "receipt": 1445,
+   "upload": "u010b",
+   "system": "hospital_queue",
+   "day": "2026-09-26",
+   "overall": 0.69,
+   "sustained": 0.677,
+   "sequence": 0.694
+  },
+  {
+   "receipt": 1446,
+   "upload": "u010b",
+   "system": "market",
+   "day": "2026-09-26",
+   "overall": 0.505,
+   "sustained": 0.472,
+   "sequence": 0.516
+  },
+  {
+   "receipt": 1449,
+   "upload": "u010b",
+   "system": "social_contagion",
+   "day": "2026-09-26",
+   "overall": 0.553,
+   "sustained": 0.418,
+   "sequence": 0.597
+  },
+  {
+   "receipt": 1450,
+   "upload": "u010b",
+   "system": "supply_chain",
+   "day": "2026-09-26",
+   "overall": 0.824,
+   "sustained": 0.759,
+   "sequence": 0.845
+  },
+  {
+   "receipt": 1451,
+   "upload": "u010b",
+   "system": "traffic",
+   "day": "2026-09-26",
+   "overall": 0.751,
+   "sustained": 0.633,
+   "sequence": 0.79
+  },
+  {
+   "receipt": 1452,
+   "upload": "u010b",
+   "system": "wildlife",
+   "day": "2026-09-26",
+   "overall": 0.636,
+   "sustained": 0.611,
+   "sequence": 0.644
   }
  ]
 }

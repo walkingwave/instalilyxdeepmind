@@ -610,7 +610,18 @@
    "dir": "submissions\\20260926-0135-u010b",
    "id": "u010b",
    "phase": "public",
-   "scores": {},
+   "scores": {
+    "ad_auction": 0.8304,
+    "epidemic": 0.5451,
+    "hospital_queue": 0.6896,
+    "market": 0.5047,
+    "power_grid": 0.7535,
+    "reservoir": 0.7819,
+    "social_contagion": 0.5527,
+    "supply_chain": 0.824,
+    "traffic": 0.751,
+    "wildlife": 0.6355
+   },
    "systems": {
     "ad_auction": {
      "data_ticks": 0,

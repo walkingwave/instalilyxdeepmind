@@ -1211,3 +1211,23 @@ on hospital and wildlife, disagreed on market (public median 0.500 > ODE 0.423):
 never hold a long interest-rate hold, so they cannot see the floor failure. The bigger epidemic
 template (§9) under pairs AB / BC fits in-sample 0.90 / 0.91 with LOO 0.60 / 0.59 against the
 SIRS 0.53; pair AC fails (0.23). Both refit on the new data now.
+
+### 18. u010b: refits on purchase-3 data (Sat 02:00)
+
+| system | factor | before | u010b (sust / seq) | Δ |
+|---|---|---:|---:|---:|
+| supply_chain | v7 two-class retail, receiving-scaled arrivals, on hold_mid | 0.755 | **0.824** (0.759 / 0.845) | +0.07 |
+| hospital_queue | old pipeline refit on 5 runs (incl. compose) | 0.605 | **0.690** (0.677 / 0.694) | +0.09 |
+| epidemic | full template, mechanism pair BC, on compose | 0.478 | **0.545** (0.587 / 0.531) | +0.07 |
+| social_contagion | v2 (conversion, spillover) median with l0b_lin | 0.518 | **0.553** (0.418 / 0.597) | +0.04 |
+| wildlife | v7 habitat sets K, shelters north; corridor | 0.630 | 0.636 (0.611 / 0.644) | +0.01 |
+| market | median of refits on 5 runs | 0.500 | 0.505 (0.472 / 0.516) | +0.01 |
+| traffic | refit incl. hold_mid | 0.756 | 0.751 (0.633 / 0.790) | −0.005 |
+
+Mean 0.687 (best-of 0.687), from 0.661. Readings: data on the right question moves the
+system (supply_chain sustained 0.58 → 0.76 from one interior hold; hospital +0.09 from one
+compose run). Traffic's interior hold fixed the local fold (0.848) but not the public sustained
+band (0.633): the test holds levels other than α = 0.5, so the sustained map, not one level, is
+what traffic lacks. Wildlife and market barely moved despite large local gains: local LOO with
+three to five runs no longer predicts public changes of ±0.05. Social's sustained band (0.42)
+is the lowest band anywhere.
