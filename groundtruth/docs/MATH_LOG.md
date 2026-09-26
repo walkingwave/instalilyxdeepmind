@@ -1294,3 +1294,18 @@ valued by the committee's disagreement on them, weighted by how often the test v
 | hospital_queue | wait during long recoveries (tail to 300–400) | pulse 40, recovery 260 | 300 | wait from the median of five ODE members, rest from p3 |
 
 Brief-suggested mechanism tests rank low everywhere: the test rarely visits those regimes.
+
+### 21. Purchase 4: five value-of-information runs (Sat, 1,400 credits)
+
+Schedules from the §20 simulations (`plans/p4.json`, phase `p4`). Balances after: 11,327
+(epidemic, social, wildlife 889; hospital 930; market 1,060). What each answered:
+
+| system | run | result | consequence |
+|---|---|---|---|
+| market | rate 0.1, tax 0, 200 ticks | price 102 → 81 (t=50) → 76 → 74, flattening | the floor models were right (mechanism models' 37–43 wrong); floor ≈ 74, not 79 |
+| epidemic | joint restriction α = 0.85, 300 | cases 106 → 188 → 44 (t=150) → 60, beds → 40 | pair BC's suppressed plateau (≈ 43) with a mild rebound; not elimination, not the AB rebound to 80 |
+| hospital_queue | pulse 40, recovery 260 | wait 65 → 4.5, queue 332 → 92, discharges 11 | **no wait tail**: p3 was right, the cohort members wrong; the planned wait-median fix is dropped |
+| social_contagion | three 100-tick interior joint holds | a/b → 150/103, 135/97, 191/137 | first interior equilibria; the sustained map is now pinned at three levels |
+| wildlife | corridor 0.5 / 1.0, habitat 0.5 | corridor 0.5: 177 overshoot → 123/102; corridor 1: 113/80; habitat 0.5: 92/79 | middle levels observed for both controls |
+
+All seven candidates refit on every run including these, at the calibrated scale ($1.5k\,\hat\sigma$).
