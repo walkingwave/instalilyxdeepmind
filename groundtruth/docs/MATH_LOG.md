@@ -1231,3 +1231,33 @@ band (0.633): the test holds levels other than α = 0.5, so the sustained map, n
 what traffic lacks. Wildlife and market barely moved despite large local gains: local LOO with
 three to five runs no longer predicts public changes of ±0.05. Social's sustained band (0.42)
 is the lowest band anywhere.
+
+### 19. Mechanism-pair search on the weak four (Sat 02:00–03:00, no credits)
+
+Each brief names three candidate mechanisms, exactly two active. One family per system with the
+three as switchable terms (`gtlab/ode/<sys>_mech.py`), each pair fitted through the lab on all
+runs we own; equations and tables in `plans/<sys>_mech_notes.md`.
+
+| system | AB | AC | BC | current model | reading |
+|---|---:|---:|---:|---:|---|
+| social_contagion | 0.786 | 0.677 | **0.828** | 0.698 | incentive-expectation churn (B) is active: without it the post-incentive collapse cannot be fitted (AC cost ×9); bridge ties (C) fit to zero, so A vs C is open |
+| wildlife | **0.842** (0.844 adults-only) | 0.834 | 0.818 | 0.843 | food renewal (B) is supported (slow-then-sharp decline under habitat loss); juvenile stage collapses to instant crowding; settlement unidentified. AB gets the pulse level right (7 vs v7's 16) |
+| market | 0.816–0.828 | **0.843–0.847** | 0.812–0.821 | 0.839 | tie; tax has a threshold at 0.047 above which trading freezes (all fits agree); where price stops under a long high rate is unobserved (min 73.6 and falling): models disagree by 45 points on long holds |
+| hospital_queue | 0.801 | 0.804 | 0.811 | **0.822** | tie; fatigue and orientation are confounded (every staffing rise follows overtime); returns never seen; the post-overtime wait spike predates overtime (a cohort, not fatigue) |
+
+Leave-one-run-out means across all folds; fold-to-fold noise between multistart draws is ≈ 0.05
+on a single fold, so only social's +0.13 is a clear local result. Public decides the ties.
+
+Decision for Sunday's first slot, one new factor per system:
+- social_contagion: pair BC alone (the largest local gain we have measured on a weak system).
+- wildlife: pair AB (adults-only prey) alone: public is stuck at 0.64 with v7 against 0.84 local,
+  and the pulse level is v7's largest systematic miss.
+- market: the tax threshold ported into the median members (free, all fits agree).
+- hospital_queue: per-observable pick, wait_time from pair BC (best compose fold), queue and
+  discharges from p3.
+- supply_chain v7b; epidemic pair AB (the other top pair) as its factor.
+
+Credit questions this search leaves, each a small discriminating run (needs the go):
+market rate-only hold (r = 0.1, tax 0, 200 ticks) for the long-hold price level; wildlife
+corridor-only on/off (150) for settlement; social bridge-only (150) for A vs C; hospital
+staffing step without overtime (150) for fatigue vs orientation. About 650 credits in total.
