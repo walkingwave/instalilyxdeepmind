@@ -13,7 +13,7 @@ terminal throughput gate g = 1 - wloss * sigmoid((W - 1) / 0.05) drops (the puls
 shipments at tick 101 after 100 ticks without maintenance and recovers within ~10 ticks of
 maintenance). Retail stock R sells at dem + kd * R (smooth-min with R so it stops at zero;
 the real drain is ~17/tick at low stock and 24-30/tick at 130-210 units) and is hard-capped at
-RCAP = SCAP as a backstop, so long holds saturate. shipments = A.
+RCAP = 5000.0   # interior hold (p3.hold_mid) showed retail stock past 1,100 and still rising: no 362 cap on retail
 
 x0: S = inventory_supplier, R = inventory_retail, Q1 = shipments (initial in-transit content),
 C1 = C2 = Q2 = W = 0.
@@ -38,7 +38,7 @@ SCAP = 362.0
 STATE = ["S", "C1", "C2", "Q1", "Q2", "R", "W"]
 _NS = len(STATE)
 STATE_LO = np.zeros(_NS)
-RCAP = SCAP
+RCAP = 5000.0   # interior hold (p3.hold_mid) showed retail stock past 1,100 and still rising: no 362 cap on retail
 STATE_HI = np.array([SCAP, 1e4, 1e4, 1e6, 1e6, RCAP, 1.5])
 
 PARAMS = [
