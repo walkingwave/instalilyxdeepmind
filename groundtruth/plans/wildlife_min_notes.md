@@ -116,3 +116,109 @@ linear relaxation reproduces (predator_south 0.70-0.78); (3) the overshoot after
 $P = 7$ (peak 206) is larger than after reset from $P = 86$ (peak 199), which a fixed reset state cannot
 produce; (4) habitat and corridor have no effect in the model, so any test episode that moves them
 alone is predicted as a recovery hold.
+
+## 2026-09-26: revision on the compose run (v5-v7)
+
+New data: `p3.compose`, 291 ticks from $y_0 = (87, 8.5, 90, 12.2)$: each control alone at 85 % of pulse
+for 45 ticks with 22-tick recovery blocks between, then the joint action for 45 and recovery for 45.
+Three runs, 811 ticks. Same fitter (`--budget 240 --starts 10 --nfev 60`), `sigma_proxy` now
+[54.3, 1.10, 44.8, 1.48]. The old v4 structure refitted on the three runs: LOO 0.783 vs l0b_lin 0.793
+(compose fold 0.768 vs 0.822), in-sample 0.866 (`plans/wildlife_wildlife_min_p3.json`).
+
+### What the compose run says
+
+- Hunting 5.95 at habitat 1: north $87 \to 92$ (t=15) $\to 65$ (t=44), i.e. flat for 15 ticks then
+  $-0.01$/head; south $88 \to 26$ at $-0.015$ to $-0.045$/head from tick 0. Under the joint block
+  (habitat 0.2) both regions fall at the same $-0.10$/head from tick 1, and under the old pulse
+  (habitat 0.1) both landed at 7. So the asymmetry exists only when habitat is protected:
+  **habitat shelters the north from hunting**, not the south ("especially in the north" in the brief).
+- Habitat 0.235 alone from $144/124$: slow decline for ~15 ticks ($-0.012$/head), then sharp
+  ($-0.044$ at t=81-90), then a settle at $75/71$, half the protected level. A lagged response, not
+  an instantaneous change of the death rate: the habitat acts through the lag state.
+- Corridor 0.85 alone from $115/93$: north $\to 108 \to 113$, south $\to 79 \to 81$, predators
+  $2.4 \to 1.8$ with a time constant of ~7 ticks, back to 2.3 within 16 ticks of closing. The
+  decay of predators from 8.5 and 12.2 at reset is ~0.06 per unit gap, the corridor response ~0.15.
+- Predators stayed at 2.4-2.5 while prey halved under habitat loss: $q_1 \cdot 70 < 0.1$, so the
+  prey dependence of the predator capacity is below 0.0015 and the pulse-run level (1.6 at prey 7)
+  is the corridor, not the prey.
+
+### Model (v7 = final)
+
+Per region $i \in \{N, S\}$, north scale 1, south scale $k_s$ ($c \to k_s c$, $d_l \to d_l/k_s$):
+
+$$\dot P_i = \frac{r P_i}{1 + P_i/c_i} - d_{l,i} L_i P_i - h_q u_{hunt} (1 - e_i u_{hab}) P_i - m_i u_{cor} P_i,
+\qquad \dot L_i = \rho\left(\frac{P_i}{g(u_{hab})} - L_i\right),\qquad g(h) = k_h + (1-k_h) h$$
+
+$$\dot Q_i = s\,(q_0 - q_c u_{cor} - Q_i)$$
+
+with $e_N = e_n$, $e_S = 0$ (shelter only in the north), $m_N = 0$, $m_S = m_c$ (emigration only from the
+south; the north neither gains nor loses measurably, so arrivals are not modelled). Reset: $P, Q$
+from $y_0$, $L = 0$. 6 states, 12 parameters, RK4 with 2 substeps. Habitat sets the carrying
+capacity through the lag target: at $u_{hab} = 0.2$ the food stock "feels" $P/g = 1.63 P$, so the
+death term doubles over ~26 ticks and the prey settle where $r/(1+P/c) = d_l P / g$.
+
+### Versions on the three runs
+
+| version | change | LOO hold_rec | LOO pulse | LOO compose | LOO mean | in-sample | at bound |
+|---|---|---|---|---|---|---|---|
+| l0b_lin | | 0.739 | 0.819 | 0.822 | 0.793 | | |
+| v4 refit (p3) | old structure | 0.821 | 0.760 | 0.768 | 0.783 | 0.866 | none |
+| v5 | + habitat lag target $g$, north shelter $e_n$, predator capacity $-q_c u_{cor}$, rate $s/(1+Q/q_h)$, $q_1$ dropped | 0.849 | 0.838 | 0.827 | 0.838 | 0.892 | $q_h$ = 100 (upper) |
+| v6 = v7 | v5 with linear predator rate ($q_h$ out) and south emigration $m_c$ in | **0.855** | **0.848** | **0.827** | **0.843** | **0.897** | none |
+
+v5 pushed $q_h$ to its bound, i.e. the fitter wants a plain linear relaxation for the predators,
+which freed the slot for $m_c$. v6 was run as `wildlife_min2` and then installed as
+`wildlife_min` (v7, identical theta). Per observable, compose fold held out (ode / l0b_lin):
+prey_north 0.697 / 0.749, predator_north 0.919 / 0.872, prey_south 0.741 / 0.761,
+predator_south 0.951 / 0.905. The prey deficit on that fold is expected: $k_h$, $e_n$, $m_c$, $q_c$
+are identified by the compose run alone, so with it held out they sit at their hand-set inits.
+In-sample compose 0.899 (0.879 / 0.920 / 0.849 / 0.949); per block the weakest are the
+habitat-loss block (north settles at 88 in the model vs 75 observed) and the last recovery
+(model peak 147 vs 137, settle 147 vs 123 at t=291).
+
+### Fitted parameters (v7)
+
+| name | value | bounds | meaning |
+|---|---|---|---|
+| $r$ | 0.2515 | 0.05-1.5 | max per-capita prey birth per tick |
+| $c$ | 53.2 | 3-500 | nursery-crowding scale |
+| $d_l$ | 6.4e-4 | 1e-5-0.1 | death per head per unit lagged density |
+| $\rho$ | 0.0382 | 0.005-0.5 | lag rate (time constant 26 ticks) |
+| $h_q$ | 0.0262 | 0.001-1 | per-capita take per unit quota, unsheltered |
+| $k_s$ | 0.833 | 0.3-1.5 | south density scale |
+| $k_h$ | 0.516 | 0.05-1 | capacity fraction left at habitat 0 |
+| $e_n$ | 0.501 | 0-0.95 | north shelter from hunting at habitat 1 |
+| $s$ | 0.0641 | 0.003-0.5 | predator relaxation rate (time constant 16 ticks) |
+| $m_c$ | 0.0191 | 0-0.3 | south emigration per head at corridor 1 |
+| $q_0$ | 2.446 | 0.1-20 | predator capacity, corridor closed |
+| $q_c$ | 0.759 | 0-3 | predator capacity lost at corridor 1 |
+
+None at a bound. Implied equilibria (model / observed): recovery 121 / 100, $Q^* = 2.45$
+(observed 122 / 99, 2.4-2.5); quota 6 at habitat 1: 61 / 20 (observed 65 / 26, still falling);
+habitat 0.2: 90 / 75 (observed 75 / 71); corridor 0.85: 121 / 88, $Q^* = 1.80$ (observed 113 / 81,
+1.8 / 1.7); joint: 26 / 14, $Q^* = 1.84$ (observed 20 / 15, 2.1 / 1.8); pulse: 16 / 8, $Q^* = 1.69$
+(observed 7 / 7.5, 1.6). Take per head at quota 6: north 0.078 sheltered vs 0.157 unsheltered.
+
+### Eval sanity (4,000-tick rollouts, from `p1.hold_rec` $y_0$)
+
+| category | finite | seconds | frac outside | min | max |
+|---|---|---|---|---|---|
+| sustained | yes | 0.4 | 0.00 | 16.5, 1.8, 8.9, 1.8 | 142, 8.3, 118, 11.9 |
+| order | yes | 0.4 | 0.00 | 7.3, 1.7, 3.3, 1.7 | 191, 8.3, 168, 12.0 |
+| recovery | yes | 0.3 | 0.00 | 18.7, 1.8, 10.3, 1.8 | 191, 8.3, 168, 12.0 |
+| composition | yes | 0.3 | 0.00 | 11.6, 1.7, 5.4, 1.7 | 163, 8.3, 141, 12.0 |
+
+### Verdict
+
+`ode_lab` verdict: **ship** (LOO 0.843 vs l0b_lin 0.793; every fold above the baseline, the compose
+fold by 0.005 only, carried by the predators). Files: `plans/wildlife_wildlife_min_v7.json` and
+`_v7_doc.json` (the `_v5`, `_min2_v6` files are the two iterations). `gtlab/ode/wildlife_min2.py`
+is the v6 variant module, identical in structure to the final `wildlife_min.py`.
+
+What limits it: (1) the four new parameters are pinned by one 45-tick block each, so their
+transfer to other levels (e.g. habitat 0.5, corridor 0.3) is an interpolation we have not seen;
+(2) the north's 6 % dip under the corridor and the north settling at 75 rather than 90 under
+habitat loss are not reproduced; (3) the overshoot after the last release (peak 137, settle 123)
+is over-predicted (147), the reset-independent lag state again; (4) predators fall a little slow
+from 8-12 at reset with one linear rate; (5) hold_rec predator_south stays the weak observable
+(0.78-0.83).

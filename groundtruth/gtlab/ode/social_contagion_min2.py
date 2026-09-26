@@ -1,16 +1,17 @@
-"""Grey-box ODE: social_contagion, loyal / incentive-expecting / onboarding / initial-leaver classes.
+"""Grey-box ODE: social_contagion, alternate v3 (capped conversion share rho, no bridge). See social_contagion_min.py.
 NUMPY + math only (ships verbatim).
 
 Per community i in {a, b}: L_i loyal members, M_i incentive-expecting members, W_i onboarding
 queue, X_i initial members who leave regardless (the dip every run starts with, incentive or not).
 pool_i = N_i - L_i - M_i - W_i - X_i. Everyone joins through W (lag tau_on). Recruitment per
 pool member = seeding share + word of mouth q * A_i / N_i, saturating at R_MAX. Seeding goes to
-both communities: a gets s_a s (1 - k_br beta), b gets s_b s (1 + k_br beta) (b receives
-recruits even at bridge 0; bridge only shifts the split). Recruits leaving W are split by the
-incentive at that moment: phi = inc / (inc + PHI_HALF) into M, the rest into L. While the
-incentive is paid it also converts loyal members into incentive-expecting ones at k_conv * inc
-(they stay while paid, churn at k_M / (1 + k_ret inc) -> k_M once it stops). Loyal members churn
-at c_L. X churns at k_M. Churned members return to the pool.
+both communities at fixed rates s_a s and s_b s (b receives recruits even at bridge 0; a bridge
+split fitted to exactly zero on the compose run, so bridge is not used). Recruits leaving W are
+split by the incentive at that moment: phi = inc / (inc + PHI_HALF) into M, the rest into L.
+While the incentive is paid it also converts loyal members into incentive-expecting ones at
+k_conv * inc * (1 - M / (rho N))_+ : at most a share rho of the community is incentive-led.
+M stays while paid (churn k_M / (1 + k_ret inc)) and churns at k_M once it stops. Loyal members
+churn at c_L. X churns at k_M. Churned members return to the pool.
 Initial members: fraction m0 in X, the rest in L; M and W start empty (brief).
 
 Mechanism letters are accepted for interface compatibility but every term is always active.
@@ -19,7 +20,7 @@ import math
 
 import numpy as np
 
-FAMILY = "social_contagion_min"
+FAMILY = "social_contagion_min2"
 OBS = ["adopters_a", "adopters_b"]
 CTRL = ["seeding", "incentive", "bridge_outreach"]
 MECHS = {"A": "onboarding queue (always on)", "B": "incentive expectation + churn (always on)", "C": "unused"}
@@ -45,7 +46,7 @@ PARAMS = [
     ("k_ret", 15.0, 0.0, 50.0, False),
     ("k_conv", 0.01, 0.0, 0.2, False),
     ("m0", 0.25, 0.0, 0.9, False),
-    ("k_br", 0.3, 0.0, 1.0, False),
+    ("rho", 0.8, 0.3, 1.0, False),
 ]
 
 
@@ -106,7 +107,7 @@ def _community(M, L, Mm, W, X, N, seed_term, th, inc):
     on = W / th["tau_on"]
     phi = inc / (inc + PHI_HALF)
     chM = th["k_M"] / (1.0 + th["k_ret"] * inc)
-    conv = th["k_conv"] * inc * L
+    conv = th["k_conv"] * inc * L * _pos(M, 1.0 - Mm / (th["rho"] * N), 0.02)
     dW = inflow - on
     dL = (1.0 - phi) * on - th["c_L"] * L - conv
     dM = phi * on + conv - chM * Mm
@@ -118,8 +119,8 @@ def f(x, u, th, mech):
     M, s, uu = _unpack(x, u)
     seed, inc, br = uu
     La, Ma, Wa, Xa, Lb, Mb, Wb, Xb = s
-    sa = th["s_a"] * seed * (1.0 - th["k_br"] * br)
-    sb = th["s_b"] * seed * (1.0 + th["k_br"] * br)
+    sa = th["s_a"] * seed
+    sb = th["s_b"] * seed
     dLa, dMa, dWa, dXa = _community(M, La, Ma, Wa, Xa, th["N_a"], sa, th, inc)
     dLb, dMb, dWb, dXb = _community(M, Lb, Mb, Wb, Xb, th["N_b"], sb, th, inc)
     return _pack(M, [dLa, dMa, dWa, dXa, dLb, dMb, dWb, dXb])

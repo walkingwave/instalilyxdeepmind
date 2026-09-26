@@ -1,0 +1,15 @@
+wildlife / wildlife_min: runs [('p1.hold_rec', 120), ('p2.pulse200_200', 400), ('p3.compose', 291)] sigma [54.288  1.095 44.806  1.479]
+  LOO p1.hold_rec          ode [0.885 0.825 0.901 0.784] mean 0.849 | l0b_lin [0.604 0.853 0.687 0.812] mean 0.739 | pers 0.429 [109s]
+  LOO p2.pulse200_200      ode [0.778 0.862 0.82  0.891] mean 0.838 | l0b_lin [0.796 0.874 0.786 0.821] mean 0.819 | pers 0.325 [70s]
+  LOO p3.compose           ode [0.697 0.92  0.741 0.949] mean 0.827 | l0b_lin [0.749 0.872 0.761 0.905] mean 0.822 | pers 0.420 [109s]
+  full fit cost 113.2 [95s]
+  in-sample p1.hold_rec          [0.917 0.863 0.921 0.821] mean 0.880
+  in-sample p2.pulse200_200      [0.897 0.885 0.939 0.91 ] mean 0.908
+  in-sample p3.compose           [0.869 0.92  0.812 0.948] mean 0.887
+  theta {'r': 0.23787, 'c': 58.71046, 'dl': 0.00065, 'rho': 0.03721, 'hq': 0.02656, 'ks': 0.82149, 'kh': 0.53291, 'en': 0.51293, 's': 0.06861, 'qh': 100.0, 'q0': 2.44828, 'qc': 0.75499}
+  AT BOUND: ['qh']
+  eval[sustained  ] finite=True 0.3s outside=0.00 min=[14.7  1.8  9.3  1.8] max=[144.8   8.3 132.4  12. ]
+  eval[order      ] finite=True 0.3s outside=0.00 min=[4.9 1.7 4.1 1.7] max=[193.5   8.3 168.6  12. ]
+  eval[recovery   ] finite=True 0.3s outside=0.00 min=[16.7  1.8 11.6  1.8] max=[193.5   8.3 168.6  12. ]
+  eval[composition] finite=True 0.3s outside=0.00 min=[9.5 1.7 6.3 1.7] max=[167.    8.3 141.3  12. ]
+VERDICT ship: LOO ode 0.838 vs l0b_lin 0.793; in-sample 0.892 -> plans\wildlife_wildlife_min_v5.json

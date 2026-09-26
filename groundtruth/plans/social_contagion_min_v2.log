@@ -1,0 +1,15 @@
+social_contagion / social_contagion_min: runs [('p1.hold_rec', 120), ('p2.pulse200_200', 400), ('p3.compose', 291)] sigma [59.577 32.413]
+  LOO p1.hold_rec          ode [0.801 0.689] mean 0.745 | l0b_lin [0.758 0.665] mean 0.712 | pers 0.835 [121s]
+  LOO p2.pulse200_200      ode [0.717 0.58 ] mean 0.648 | l0b_lin [0.523 0.547] mean 0.535 | pers 0.534 [121s]
+  LOO p3.compose           ode [0.741 0.661] mean 0.701 | l0b_lin [0.717 0.696] mean 0.707 | pers 0.525 [120s]
+  full fit cost 30.7 [213s]
+  in-sample p1.hold_rec          [0.9  0.84] mean 0.870
+  in-sample p2.pulse200_200      [0.916 0.912] mean 0.914
+  in-sample p3.compose           [0.888 0.914] mean 0.901
+  theta {'N_a': 249.90199, 'N_b': 229.48913, 's_a': 0.00449, 's_b': 0.00105, 'q': 0.0124, 'tau_on': 8.40845, 'c_L': 0.00445, 'k_M': 0.08634, 'k_ret': 3.56102, 'k_conv': 0.01771, 'm0': 0.16489, 'k_br': 0.0}
+  AT BOUND: ['k_br']
+  eval[sustained  ] finite=True 0.3s outside=0.00 min=[49.  20.5] max=[189.8 137.4]
+  eval[order      ] finite=True 0.3s outside=0.29 min=[47.2 20.1] max=[223.2 182.2]
+  eval[recovery   ] finite=True 0.3s outside=0.12 min=[47.2 20.1] max=[186.9 143. ]
+  eval[composition] finite=True 0.3s outside=0.26 min=[17.9 16.5] max=[221.8 180.3]
+VERDICT ship: LOO ode 0.698 vs l0b_lin 0.651; in-sample 0.895 -> plans\social_contagion_social_contagion_min_v2.json

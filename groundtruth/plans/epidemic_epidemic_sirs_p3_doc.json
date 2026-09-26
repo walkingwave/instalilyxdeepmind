@@ -1,0 +1,79 @@
+{
+ "format": 1,
+ "system": "epidemic",
+ "observables": [
+  "daily_cases",
+  "hospital_load"
+ ],
+ "controls": [
+  "school_closure",
+  "mask_mandate",
+  "vaccination_rate"
+ ],
+ "bounds": {
+  "school_closure": [
+   0.0,
+   1.0
+  ],
+  "mask_mandate": [
+   0.0,
+   1.0
+  ],
+  "vaccination_rate": [
+   0.0,
+   0.003
+  ]
+ },
+ "recovery": {
+  "school_closure": 0.0,
+  "mask_mandate": 0.0,
+  "vaccination_rate": 0.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  1014.8549182978304,
+  293.94873573196696
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "epidemic_sirs",
+  "theta": [
+   43736.20418546123,
+   4.999937525227162,
+   0.11836791956828292,
+   0.7494071325501087,
+   325.6327095800155,
+   0.06858984474195128,
+   0.3418759505247217,
+   29.997771571698575,
+   18.34216409597611,
+   52.47853040231834,
+   0.024653125660473466,
+   26.253821373115805,
+   0.6439379923189006
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:epidemic_sirs",
+  "n_runs": 3,
+  "n_ticks": 811,
+  "cost": 100.54764445607975
+ }
+}

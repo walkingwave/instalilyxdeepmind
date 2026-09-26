@@ -1,0 +1,10 @@
+{
+ "ad_auction": "plans\\ad_auction_ad_auction_min_v1_doc.json",
+ "epidemic": "plans\\epidemic_epidemic_p3BC_doc.json",
+ "hospital_queue": "plans\\hospital_queue_hospital_queue_min_v3_doc.json",
+ "power_grid": "plans\\power_grid_power_grid_min_v1_doc.json",
+ "reservoir": "plans\\reservoir_reservoir_min2_doc.json",
+ "supply_chain": "plans\\supply_chain_supply_chain_min_v5_doc.json",
+ "traffic": "plans\\traffic_traffic_min_v1_doc.json",
+ "wildlife": "plans\\wildlife_wildlife_min_v4_doc.json"
+}

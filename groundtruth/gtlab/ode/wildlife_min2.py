@@ -1,11 +1,9 @@
-"""Grey-box ODE: wildlife, minimal two-region prey / lagged density / predator. NUMPY + math only.
+"""Grey-box ODE (variant 2: linear predator relaxation, south corridor emigration): wildlife, minimal two-region prey / lagged density / predator. NUMPY + math only.
 
 Per region (north scale 1, south scale ks on the density scale):
     P' = r P / (1 + P/c) - dl L P - hq * hunting * (1 - e_i * habitat) * P
     L' = rho (P / g(habitat) - L),      g(h) = kh + (1 - kh) h
-    Q' = s (q0 - qc * corridor - Q)
-South prey additionally lose mc * corridor * P (emigration through the corridor; the north
-neither gains nor loses measurably, so arrivals are not modelled).
+    Q' = s (q0 - qc * corridor - Q)          (south prey also lose mc * corridor * P: emigration)
 Prey birth is crowded by nursery competition 1/(1+P/c); death dl*L follows a lagged density L
 (exhausted food / depleted cover renewing at rate rho), a delayed logistic that gives the single
 overshoot seen after every release. Habitat protection sets the carrying capacity through the
@@ -14,8 +12,7 @@ slow at first and then sharp, and the settle is at half the protected level. Hab
 shelters prey from hunting, in the north only (e_n = en, e_s = 0): at habitat 1 the north loses
 a quarter under quota 6 while the south loses two thirds; at habitat 0.2 both regions fall at
 the same -0.10 per head. Predators relax toward a capacity that the corridor lowers (they follow
-the animals out) at a single linear rate s (a Q-dependent rate s/(1+Q/qh) fitted qh to its
-upper bound, i.e. linear).
+the animals out); the relaxation rate falls with Q (slow decay from 8-12, fast settle near 2).
 Prey do not depend on predators and predators no longer depend on prey (q1 fitted below 0.0015
 once the corridor term carried the pulse-run level).
 
@@ -26,7 +23,7 @@ import math
 
 import numpy as np
 
-FAMILY = "wildlife_min"
+FAMILY = "wildlife_min2"
 OBS = ["prey_north", "predator_north", "prey_south", "predator_south"]
 CTRL = ["hunting_quota", "habitat_protection", "corridor_access"]
 MECHS = {"A": "finite food stock (always on)", "B": "sheltered hunting exposure (always on)",
@@ -39,18 +36,18 @@ STATE_LO = np.zeros(_NS)
 STATE_HI = np.array([1e4, 1e4, 1e3, 1e4, 1e4, 1e3])
 
 PARAMS = [
-    ("r", 0.25, 0.05, 1.5, True),
-    ("c", 53.0, 3.0, 500.0, True),
-    ("dl", 6.4e-4, 1e-5, 0.1, True),
-    ("rho", 0.038, 0.005, 0.5, True),
-    ("hq", 0.026, 0.001, 1.0, True),
-    ("ks", 0.83, 0.3, 1.5, False),
-    ("kh", 0.52, 0.05, 1.0, True),
-    ("en", 0.5, 0.0, 0.95, False),
-    ("s", 0.064, 0.003, 0.5, True),
-    ("mc", 0.019, 0.0, 0.3, False),
-    ("q0", 2.45, 0.1, 20.0, True),
-    ("qc", 0.76, 0.0, 3.0, False),
+    ("r", 0.19, 0.05, 1.5, True),
+    ("c", 100.0, 3.0, 500.0, True),
+    ("dl", 7.2e-4, 1e-5, 0.1, True),
+    ("rho", 0.045, 0.005, 0.5, True),
+    ("hq", 0.018, 0.001, 1.0, True),
+    ("ks", 0.82, 0.3, 1.5, False),
+    ("kh", 0.4, 0.05, 1.0, True),
+    ("en", 0.4, 0.0, 0.95, False),
+    ("s", 0.2, 0.003, 0.5, True),
+    ("mc", 0.02, 0.0, 0.3, False),
+    ("q0", 2.3, 0.1, 20.0, True),
+    ("qc", 0.65, 0.0, 3.0, False),
 ]
 
 

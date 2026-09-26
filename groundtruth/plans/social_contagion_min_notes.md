@@ -123,3 +123,102 @@ model that behaves at every control level.
   structure.
 - `b`'s pulse response comes out mostly as word of mouth plus churn suppression ($s_b$ small);
   a sustained seeding with zero incentive would move `b` little in this model.
+
+## 2026-09-26: v2 structure on three runs (p3.compose added)
+
+Data: 3 runs, 811 ticks (`p1.hold_rec` 120, `p2.pulse200_200` 400, `p3.compose` 291: each
+control alone at 85% of the pulse for 45 ticks with 22-tick recoveries between, then the joint
+pulse 45, recovery 45). `sigma_proxy` = (59.6, 32.4). Lab: `scripts/ode_lab.py --budget 240
+--starts 10 --nfev 60`, tags `p3` (old structure), `v2`, `v3`.
+
+### What the compose run told us that the first two runs could not
+
+- Seeding alone (7.65, incentive 0, bridge 0): `a` 37 -> 193 in 45 ticks with a 6-tick
+  onboarding delay, and **`b` 30 -> 83 at bridge 0**. The old model routed all of `b`'s
+  seeding through the bridge, so it gave `b` nothing here (in-sample compose 0.71 on `b`).
+- After seeding stops the recruits **stay**: `a` drains its queue to 207 at t=54, then drifts
+  down at 0.7%/tick (207 -> 190 by t=66). Seeding recruits at zero incentive are loyal.
+- Incentive alone (1.7, t 67-112): `a` keeps the same slow drift (190 -> 144), `b` flat at
+  93-95. Nothing joins, nothing visibly leaves. But when the incentive stops, `a` 140 -> 79 and
+  `b` 93 -> 48 in 22 ticks: log-excess slope $0.07$-$0.09$/tick, the same rate as the
+  post-pulse collapse in `pulse200_200`. So a paid incentive **converts** existing loyal
+  members into incentive-expecting ones (about half in 45 ticks at 1.7, i.e.
+  $k_{conv} c \approx \ln 2 / 45 = 0.015$/tick), and they leave when it ends. This is the
+  brief's "incentive expectations retain history".
+- Bridge alone (0.51, t 134-179): `a` 78 -> 64, `b` 47 -> 43, i.e. the tail of the collapse
+  above; no bridge effect is visible. The per-seeding recruit rates at bridge 0 (compose),
+  0.51 (joint) and 0.6 (pulse) agree within noise for both communities.
+- Incentive does not boost seeding: the joint segment recruits at the same per-seeding rate
+  as seeding alone (old $k_{inc}$ went to 0 as well).
+- Every run starts with a dip (hold_rec 23% by t=15, compose and pulse 9% by t=5) **even under
+  incentive 2**, so it is not the incentive-led class of the old model (whose churn the
+  incentive suppresses). It is a class of initial members that leaves regardless.
+
+### Model v2 (8 states, 12 parameters, `gtlab/ode/social_contagion_min.py`)
+
+Per community $i$: loyal $L_i$, incentive-expecting $M_i$, onboarding queue $W_i$, initial
+leavers $X_i$; pool $P_i = \max(N_i - L_i - M_i - W_i - X_i, 0)$ (smooth); observed
+$A_i = L_i + M_i + X_i$. Controls: seeding $s$, incentive $c$; bridge $\beta$ only through
+$k_{br}$.
+
+$$
+\text{seed}_a = s_a\, s\,(1 - k_{br}\beta), \quad \text{seed}_b = s_b\, s\,(1 + k_{br}\beta), \quad
+r_i = \frac{\rho_i}{1 + \rho_i/1.5},\ \rho_i = \text{seed}_i + q A_i/N_i
+$$
+$$
+\dot W_i = r_i P_i - W_i/\tau_{on}, \qquad \phi = \frac{c}{c + 0.7}, \qquad
+\text{conv}_i = k_{conv}\, c\, L_i
+$$
+$$
+\dot L_i = (1-\phi) W_i/\tau_{on} - c_L L_i - \text{conv}_i, \quad
+\dot M_i = \phi W_i/\tau_{on} + \text{conv}_i - \frac{k_M}{1 + k_{ret} c} M_i, \quad
+\dot X_i = -k_M X_i
+$$
+
+Initial state $L_i = (1 - m_0) y_{0,i}$, $X_i = m_0 y_{0,i}$, $M_i = W_i = 0$. RK4, 2 substeps,
+states clipped to $[0, 10^4]$. Changes vs the old structure: `b` gets seeding at any bridge;
+$\phi_{max}$ dropped (it sat at 1); $k_{inc}$ dropped (it sat at 0); conversion $L \to M$ under
+incentive added; initial-leaver class $X$ added (churn shares $k_M$).
+
+### Fits (same 3 runs, same lab settings)
+
+| version | LOO hold_rec | LOO pulse | LOO compose | LOO mean | in-sample hold / pulse / compose | mean | at bound |
+|---|---|---|---|---|---|---|---|
+| old (`p3`) | 0.818 | 0.538 | 0.712 | 0.689 | 0.881 / 0.917 / 0.736 | 0.845 | $k_{inc}$, $\phi_{max}$, $m_0$ |
+| v2 (kept) | 0.745 | 0.648 | 0.701 | 0.698 | 0.870 / 0.914 / 0.901 | 0.895 | $k_{br}$ = 0 |
+| v3 (`min2`) | 0.751 | 0.622 | 0.695 | 0.689 | 0.871 / 0.887 / 0.900 | 0.886 | $\rho$ = 1 |
+| l0b_lin | 0.712 | 0.535 | 0.707 | 0.651 | | | |
+
+v2 theta: $N_a$ 249.9, $N_b$ 229.5, $s_a$ 0.00449, $s_b$ 0.00105, $q$ 0.0124, $\tau_{on}$ 8.41,
+$c_L$ 0.00445, $k_M$ 0.0863, $k_{ret}$ 3.56, $k_{conv}$ 0.0177, $m_0$ 0.165, $k_{br}$ 0 (cost 30.7).
+$k_{br}$ at 0 is the data speaking: no bridge effect between 0 and 0.6. Compose in-sample
+0.888 / 0.914: the model tracks the seeding rise, the hold at ~190, the post-incentive collapse
+(69 vs 78 at t=134) and the joint pulse (170 vs 170 at t=245); it misses the 6-tick onboarding
+delay (first-order lag starts rising at once) and is ~10 high on `a` during the incentive-alone
+drift.
+
+v3 tried a cap on the incentive-led share, $\text{conv}_i = k_{conv} c L_i (1 - M_i/(\rho N_i))_+$,
+with the bridge removed. The fit pushed $\rho$ to 1 and the cost rose to 38.8: the 200-tick
+pulse run wants nearly every member convertible (78% left after the stop). Rejected; kept as
+`social_contagion_min2.py` with its lab json (`_v3`).
+
+Eval-shaped 4,000-tick rollouts, v2: finite, 0.3 s each; fraction outside the observed range
+$\pm 5\%$: sustained 0.00, order 0.29, recovery 0.12, composition 0.26. The excursions are
+extrapolations the data cannot check: 400 ticks of seeding at zero incentive send `b` to 180
+(loyal recruits with $c_L = 0.0045$ fill $N_b = 229$; we only saw `b` at 131 under the pulse
+and still rising), and 400 ticks of incentive then a stop empty $L$ through conversion, so
+`a` bottoms at 18 before word of mouth regrows it (the data floor after 200 incentive ticks was
+43). v3 gave 146 and 29 for the same schedules because its $N_b$ landed at 180, not because
+of the cap.
+
+### Verdict
+
+Ship v2 as the ODE member for social_contagion: LOO 0.698 vs l0b_lin 0.651 (+0.05), in-sample
+0.895 vs 0.845 for the old structure, compose 0.901 vs 0.736. The LOO gain over the old
+structure is only +0.01 because the folds that hold out compose or pulse train on runs that
+cannot identify $k_{conv}$, $s_b$ at bridge 0 or the plateau, so those folds score the initial
+values as much as the structure. Limits: $N_b$ and the long-seeding plateau of `b` are
+unobserved; onboarding in the data is a pure ~6-tick delay while the model uses a first-order lag; bridge has no
+identified effect; the disappointed-pool delay in the brief is not modelled (regrowth after the
+compose collapse was 0.12/tick vs 0.25/tick after the pulse at the same `a`, which a
+slow-returning pool would explain, but it needs 2 more states).
