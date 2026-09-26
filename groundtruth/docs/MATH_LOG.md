@@ -1166,3 +1166,48 @@ most ticks (market: the ODE's floor undershoots, l0b_lin overshoots). Where one 
 better (hospital) the median halves its lead. Rule from here: ensembles per observable and only
 where the local fold predictions of the members straddle the truth; otherwise the better member
 alone. Best-of after u009: mean 0.661.
+
+### 17. Purchase 3, half 1 (Sat 00:50): 2,353 credits, what the composition blocks showed
+
+Bought, from the §13 design, by yield per credit: `p3.compose` on the five both-band-limited
+systems (epidemic 291, social_contagion 291, wildlife 291, hospital_queue 330, market 300) and
+`p3.hold_mid` (α = 0.5 interior hold) on the two sustained-limited strong systems (supply_chain
+450, traffic 400). Server balances after: 12,727 total (epidemic, social, wildlife 1,189; market
+1,260; hospital 1,230; traffic 1,160; supply_chain 1,030; power_grid, ad_auction 1,500;
+reservoir 1,480). Nothing else bought; the rest waits for the post-refit bands.
+
+What each block showed (first → last of the block; every control alone at 85 % of its pulse
+level for 30–60 ticks, recovery between):
+
+- **epidemic**: closure alone 162 → 469 (peak) → 201 cases, hospital 27 → 156; mask alone 73 → 21;
+  vaccination alone 55 → 144 (a rebound after the mask block, not a vaccination effect); joint
+  119 → 26. The controls have large effects; the §12 fit ($c_s = 0.08$, $c_m = 0.09$) was set by
+  the initial cases of the one restricted run, as feared. Refit will move them.
+- **social_contagion**: seeding alone 37 → 193 in 45 ticks; incentive alone (after that) 190 → 144;
+  bridge alone 78 → 64; joint 66 → 170; release 164 → 63. Seeding is the driver; incentive
+  alone does not hold members.
+- **wildlife**: hunting alone prey 87/88 → 65/26 (south hit harder), predators 8 → 2.8;
+  habitat 0.1 alone prey 144/124 → 75/71 (habitat loss halves prey: the §14 fit had it at zero);
+  corridor alone mild (115 → 113, south 93 → 81); joint → 20/15; recovery 25 → 124.
+- **hospital_queue**: staffing 5 alone queue 49 → 193; elective alone 170 → 261; diagnostic alone
+  250 → 306; urgent alone 283 → 199 (urgent priority drains); overtime alone queue 161 → 23 but
+  **wait_time 26 → 254 and still climbing 90 ticks later (→ 396) with the queue at 23**: the
+  reported wait is not a function of the current queue; a fatigue / deterioration state the
+  §14 model lacks. Only the joint pulse reset it (370 → 60). New structure needed; delegated.
+- **market**: interest alone price 94 → 77 in 60 ticks, depth stable; tax alone depth 84 → 44,
+  price 82 → 91; joint price 92 → 74, depth → 44; release: price recovers to 85, depth to 90.
+  Interest moves price, tax moves depth: the §14 structure is right, the floor is not.
+- **supply_chain** interior hold (orders 40, receiving 0.9, production 1.25): retail stock climbs
+  to 1,108 at tick 450 and is still rising; supplier stock oscillates 0–117 (never at the 362
+  cap). The §14 family capped retail at 362: wrong. Cap lifted (`RCAP` 5,000), refit running.
+- **traffic** interior hold: flows settle at 10/11, speeds 32/33 after a 44 overshoot. Smooth;
+  the sustained gap was the unseen level, now seen.
+
+Also run tonight, no credits: per-observable leave-one-run-out of ODE vs `l0b_lin` vs their
+per-tick median (`scripts/perobs_loo.py`, results `plans/<sys>_perobs_loo.json`, four-run data):
+the ODE wins every observable on hospital, market, wildlife; the median wins social
+(0.778/0.767 vs 0.750/0.766) and epidemic hospital_load (0.615 vs 0.471). Public u009 agreed
+on hospital and wildlife, disagreed on market (public median 0.500 > ODE 0.423): the local folds
+never hold a long interest-rate hold, so they cannot see the floor failure. The bigger epidemic
+template (§9) under pairs AB / BC fits in-sample 0.90 / 0.91 with LOO 0.60 / 0.59 against the
+SIRS 0.53; pair AC fails (0.23). Both refit on the new data now.
