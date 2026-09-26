@@ -543,6 +543,67 @@
    },
    "uploaded": true,
    "why": {}
+  },
+  {
+   "date": "2026-09-26",
+   "dir": "submissions\\20260926-0134-u010",
+   "id": "u010",
+   "phase": "public",
+   "scores": {},
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "doc:ad_auction_ad_auction_min_doc.json@1",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "doc:epidemic_epidemic_p3BC_doc.json@1",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "doc:hospital_queue_hospital_queue_min_p3_doc.json@1",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ensemble[doc:market_market_min_p3_doc.json@1,l0b_lin@1]",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "doc:power_grid_power_grid_min_doc.json@1",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "doc:reservoir_reservoir_min_doc.json@1",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ensemble[doc:social_contagion_social_contagion_min_v2_doc.json@1,l0b_lin@1]",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "doc:supply_chain_supply_chain_min_v7_doc.json@1",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "doc:traffic_traffic_min_p3_doc.json@1",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "doc:wildlife_wildlife_min_v7_doc.json@1",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
   }
  ]
 }

@@ -1,0 +1,63 @@
+{
+ "epidemic": {
+  "doc": "plans/epidemic_epidemic_p3BC_doc.json",
+  "_test": "full template, mechanism pair BC, refit on 5 runs (LOO 0.811 vs 0.571)"
+ },
+ "market": {
+  "members": [
+   {
+    "doc": "plans/market_market_min_p3_doc.json"
+   },
+   {
+    "kind": "l0b_lin",
+    "clip_margin": 1.0,
+    "lam": 1.0
+   }
+  ],
+  "_test": "median of refit ODE + l0b_lin (u009 median won publicly)"
+ },
+ "social_contagion": {
+  "members": [
+   {
+    "doc": "plans/social_contagion_social_contagion_min_v2_doc.json"
+   },
+   {
+    "kind": "l0b_lin",
+    "clip_margin": 1.0,
+    "lam": 1.0
+   }
+  ],
+  "_test": "median of v2 ODE + l0b_lin (0.698 vs 0.651)"
+ },
+ "wildlife": {
+  "doc": "plans/wildlife_wildlife_min_v7_doc.json",
+  "_test": "v7 with habitat term (0.843 vs 0.793)"
+ },
+ "traffic": {
+  "doc": "plans/traffic_traffic_min_p3_doc.json",
+  "_test": "refit on 5 runs incl. hold_mid (0.794 vs 0.522)"
+ },
+ "hospital_queue": {
+  "doc": "plans/hospital_queue_hospital_queue_min_p3_doc.json",
+  "_test": "old structure refit on 5 runs (0.822 vs 0.643)"
+ },
+ "supply_chain": {
+  "doc": "plans/supply_chain_supply_chain_min_v7_doc.json",
+  "_test": "v7 (0.749 vs 0.495, in-sample 0.932)"
+ },
+ "ad_auction": {
+  "doc": "plans/ad_auction_ad_auction_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged (all-10 rule)"
+ },
+ "reservoir": {
+  "doc": "plans/reservoir_reservoir_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged (all-10 rule)"
+ },
+ "power_grid": {
+  "doc": "plans/power_grid_power_grid_min_doc.json",
+  "lam": 1.0,
+  "_test": "unchanged (all-10 rule)"
+ }
+}
