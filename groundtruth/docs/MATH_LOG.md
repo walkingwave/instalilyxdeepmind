@@ -1151,3 +1151,18 @@ No-credit factors for today's second slot (u009, built by the build lane): marke
 hospital as a per-tick median of the ODE and `l0b_lin` (the two disagree most where the ODE
 extrapolates), supply_chain on the v6 family (retail cap), wildlife unchanged (averaging a cycle
 damps its amplitude; §16 D).
+
+### 16. u009: medians of ODE and l0b_lin (Sat 01:00)
+
+| system | u008 ODE (sust / seq) | u009 median (sust / seq) | verdict |
+|---|---|---|---|
+| market | 0.423 (0.367 / 0.441) | **0.500** (0.485 / 0.505) | median beats both members on both bands |
+| social_contagion | 0.518 (0.444 / 0.542) | 0.500 (0.485 / 0.505) | sustained up, sequence down; ODE stays |
+| hospital_queue | 0.605 (0.574 / 0.615) | 0.538 (0.468 / 0.561) | median loses both bands; ODE stays |
+| supply_chain v6 | 0.753 (0.577 / 0.811) | 0.755 (0.583 / 0.812) | tie; v6 keeps the retail cap |
+
+Reading: the per-tick median of two members pays only where their errors have opposite signs on
+most ticks (market: the ODE's floor undershoots, l0b_lin overshoots). Where one member is simply
+better (hospital) the median halves its lead. Rule from here: ensembles per observable and only
+where the local fold predictions of the members straddle the truth; otherwise the better member
+alone. Best-of after u009: mean 0.661.

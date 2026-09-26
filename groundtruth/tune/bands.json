@@ -450,6 +450,42 @@
    "overall": 0.63,
    "sustained": 0.646,
    "sequence": 0.624
+  },
+  {
+   "receipt": 1431,
+   "upload": "u009",
+   "system": "hospital_queue",
+   "day": "2026-09-26",
+   "overall": 0.538,
+   "sustained": 0.468,
+   "sequence": 0.561
+  },
+  {
+   "receipt": 1432,
+   "upload": "u009",
+   "system": "market",
+   "day": "2026-09-26",
+   "overall": 0.5,
+   "sustained": 0.485,
+   "sequence": 0.505
+  },
+  {
+   "receipt": 1435,
+   "upload": "u009",
+   "system": "social_contagion",
+   "day": "2026-09-26",
+   "overall": 0.5,
+   "sustained": 0.485,
+   "sequence": 0.505
+  },
+  {
+   "receipt": 1436,
+   "upload": "u009",
+   "system": "supply_chain",
+   "day": "2026-09-26",
+   "overall": 0.755,
+   "sustained": 0.583,
+   "sequence": 0.812
   }
  ]
 }

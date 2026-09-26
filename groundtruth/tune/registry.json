@@ -477,7 +477,18 @@
    "dir": "submissions\\20260926-0031-u009",
    "id": "u009",
    "phase": "public",
-   "scores": {},
+   "scores": {
+    "ad_auction": 0.8304,
+    "epidemic": 0.4779,
+    "hospital_queue": 0.5381,
+    "market": 0.5,
+    "power_grid": 0.7535,
+    "reservoir": 0.7819,
+    "social_contagion": 0.5002,
+    "supply_chain": 0.7549,
+    "traffic": 0.7556,
+    "wildlife": 0.6297
+   },
    "systems": {
     "ad_auction": {
      "data_ticks": 0,
