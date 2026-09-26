@@ -1309,3 +1309,23 @@ Schedules from the §20 simulations (`plans/p4.json`, phase `p4`). Balances afte
 | wildlife | corridor 0.5 / 1.0, habitat 0.5 | corridor 0.5: 177 overshoot → 123/102; corridor 1: 113/80; habitat 0.5: 92/79 | middle levels observed for both controls |
 
 All seven candidates refit on every run including these, at the calibrated scale ($1.5k\,\hat\sigma$).
+
+### 22. Refits at the organizer's scale (Sat evening, no credits)
+
+All candidates refit on every run (including purchase 4) with residuals in units of
+$1.5\,k\,\hat\sigma_{proxy}$ (§20). Scored in-sample on all runs at $k\,\hat\sigma_{proxy}$, where the
+old fits reproduce their public scores to about 0.01 (hospital 0.678 vs 0.690, wildlife 0.643 vs
+0.636, market 0.497 vs 0.505), so these numbers are a forecast of public:
+
+| system | public | old fit | recalibrated | pick |
+|---|---:|---:|---:|---|
+| epidemic | 0.545 | 0.579 (p3BC) | **0.668** | full template, pair AB |
+| social_contagion | 0.553 | 0.574 (mech BC) | **0.652** | mechanism family, pair AB, alone |
+| market | 0.505 | 0.497 (gate) | **0.524** | tax-threshold floor model, alone |
+| wildlife | 0.636 | 0.643 (v7) | **0.660** | mechanism family AB, adults-only prey |
+| hospital_queue | 0.690 | 0.678 (p3) | **0.693** | p3 structure |
+
+Refitting at the right scale changes which mechanism pair wins (epidemic and social: AB over
+BC once small errors count), because a loose scale let the fitter trade many small misses for a
+few large ones. These five form Sunday's first upload (u011); the strong five refit the same
+way for the second.
