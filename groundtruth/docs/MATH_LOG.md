@@ -1049,3 +1049,105 @@ go in because the public score is the only tie-breaker; epidemic is the SIRS mod
 Runtime rules (spend cap, queue cap, inflow season) stay on top. All 4,000-tick rollouts finite on
 the four categories, none more than half a data range outside the observed range, 0.27–0.37 s per
 episode, 127 s projected for the full evaluation.
+
+## 2026-09-26 (Sat, early)
+
+### 1. u008 public scores and u009 design
+
+| system | best before | u008 (grey-box) | Δ |
+|---|---:|---:|---:|
+| ad_auction | 0.6283 | 0.8304 | +0.202 |
+| reservoir | 0.5286 | 0.7819 | +0.253 |
+| traffic | 0.6259 | 0.7556 | +0.130 |
+| power_grid | 0.5932 | 0.7535 | +0.160 |
+| supply_chain | 0.7016 | 0.7526 | +0.051 |
+| wildlife | 0.5550 | 0.6297 | +0.075 |
+| hospital_queue | 0.4925 | 0.6047 | +0.112 |
+| social_contagion | 0.4404 | 0.5176 | +0.077 |
+| epidemic | 0.3265 | 0.4779 | +0.151 |
+| market | 0.4806 | 0.4228 | −0.058 |
+
+Mean 0.537 → **0.653**. Structure from the briefs with ≤ 12 parameters beat the data-driven
+ladder on nine of ten. Market is the exception: its grey box loses to the relax model.
+
+u009 (`submissions/20260926-0031-u009`, `plans/u009.json`), one factor per changed system:
+market, social_contagion, hospital_queue → per-tick median of {grey box, l0b_lin (clip 1×,
+bound)}; supply_chain → grey box v6 (retail cap, level-dependent sales); wildlife stays on the
+grey box alone (a two-member median is a mean, and a mean across phases damps a cycle, which the
+metric penalises: Sep 24 §16 D). Others unchanged.
+
+### 2. u008 category bands (portal: sustained / sequence transfer)
+
+| system | sustained | sequence | gap |
+|---|---:|---:|---:|
+| ad_auction | 0.826 | 0.832 | 0 |
+| reservoir | 0.833 | 0.765 | +0.07 |
+| traffic | 0.647 | 0.792 | −0.15 |
+| power_grid | 0.715 | 0.767 | −0.05 |
+| supply_chain | 0.577 | 0.811 | −0.23 |
+| wildlife | 0.646 | 0.624 | +0.02 |
+| hospital_queue | 0.574 | 0.615 | −0.04 |
+| social_contagion | 0.444 | 0.542 | −0.10 |
+| epidemic | 0.469 | 0.481 | −0.01 |
+| market | 0.367 | 0.441 | −0.07 |
+
+Friday sweep: #1 0.7693, #10 0.7081; 0.653 sits about 13th. Sequence transfer (order, recovery,
+composition) is now level with or above sustained on the strong five, so the remaining hole is
+sustained on supply_chain, traffic, market, social_contagion, epidemic: held levels we have never
+observed (nothing past tick 400, interior levels only from the short multilevel segments).
+Decision: the Saturday purchase includes the interior hold (`hold_mid`, 400–450 ticks at α = 0.5)
+on those five, on top of composition blocks and pulse trains everywhere. Total ≈ 8,800.
+
+## 2026-09-26 (Sat) — u008 scored; strategy from the bands
+
+### 15. u008 public result and the per-system plan
+
+u008 (grey box on all ten, §14) scored Sat 00:20. Bands from the receipts (sustained / sequence),
+previous best-of in brackets:
+
+| system | u008 | sustained | sequence | before | Δ |
+|---|---:|---:|---:|---:|---:|
+| ad_auction | 0.830 | 0.826 | 0.832 | 0.628 | +0.20 |
+| reservoir | 0.782 | 0.833 | 0.765 | 0.529 | +0.25 |
+| traffic | 0.756 | 0.647 | 0.792 | 0.626 | +0.13 |
+| power_grid | 0.754 | 0.715 | 0.767 | 0.593 | +0.16 |
+| supply_chain | 0.753 | 0.577 | 0.811 | 0.702 | +0.05 |
+| wildlife | 0.630 | 0.646 | 0.624 | 0.555 | +0.08 |
+| hospital_queue | 0.605 | 0.574 | 0.615 | 0.493 | +0.11 |
+| social_contagion | 0.518 | 0.444 | 0.542 | 0.440 | +0.08 |
+| epidemic | 0.478 | 0.469 | 0.481 | 0.327 | +0.15 |
+| market | 0.423 | 0.367 | 0.441 | 0.481 | −0.06 |
+
+Mean 0.653 (best-of 0.658), from 0.537. Friday's sweep: #1 0.7693, #10 0.7081; we sit near 13th.
+The mechanistic models transferred: nine of ten up, and the sequence band (75 % of the score) is
+now 0.77–0.83 on the five systems whose data covered their controls. The local LOO ordering held
+everywhere except market, where the price floor (73.4) that the fit chose from one multilevel run
+is wrong on long holds (sustained 0.37).
+
+Where the remaining points are, by band:
+
+1. **Sustained on supply_chain (0.58 vs 0.81 sequence), traffic (0.65 vs 0.79), power_grid
+   (0.72 vs 0.77)**: the model is right after changes and wrong at held levels we never
+   observed. The interior hold (`p3.hold_mid`, α = 0.5) is the direct fix; every model's
+   equilibrium at interior controls is currently set by structure, not data.
+2. **Both bands low on market, social_contagion, epidemic, hospital_queue**: the notes for all
+   four say the same thing: controls never varied alone (incentive, bridge, closure, mask,
+   followup, interest rate at interior levels) fitted to zero or to a guess. The composition
+   blocks and the pulse train pin those.
+3. **wildlife (0.65 / 0.62)**: habitat and corridor fitted to zero effect (never moved alone);
+   both bands suffer equally. Composition blocks.
+4. **Strong five**: ad_auction is at 0.83 both bands; reservoir's sequence 0.77 is the
+   irrigation / withdrawal-depth attribution (never varied alone); traffic and power_grid are
+   sustained-limited as above.
+
+Decision (Saturday buy, needs the go): compose + train on all ten (6,594) plus `hold_mid` on the
+seven systems that are sustained-limited or both-band-limited (supply_chain, traffic,
+power_grid, market, social_contagion, epidemic, hospital_queue: 450/400 each, 3,000), total
+≈ 9,600, reserve ≥ 300 per system. After the buy: refit all ten families through the lab,
+compare LOO with and without the new runs, rebuild as the day's third slot. Sunday: the reserve
+goes to whichever system's post-refit bands still lag, one run each.
+
+No-credit factors for today's second slot (u009, built by the build lane): market, social,
+hospital as a per-tick median of the ODE and `l0b_lin` (the two disagree most where the ODE
+extrapolates), supply_chain on the v6 family (retail cap), wildlife unchanged (averaging a cycle
+damps its amplitude; §16 D).
