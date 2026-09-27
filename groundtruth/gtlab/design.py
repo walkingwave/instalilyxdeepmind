@@ -238,7 +238,7 @@ def shop_choice(candidates, bought=(), mode="spread", target=None, scale=None):
 
 
 # --------------------------------------------------------------------------- plans
-PHASES = ("p1", "p2", "p3", "p4", "p5", "val", "reserve")
+PHASES = ("p1", "p2", "p3", "p4", "p5", "p6", "val", "reserve")
 
 
 def _exp(spec, eid, U, category, shop=None, note=""):
@@ -291,6 +291,8 @@ def default_experiments(spec, phase, seed=0):
         for i in (1, 2):
             ex.append(_exp(spec, f"val.val{i}", eval_like(spec, "mixed", 125, rng), "mixed",
                            note="held out; never trained on until final refit"))
+    elif phase == "p6":
+        pass                       # round-2 value-of-information buys and exams: plans/p6.json
     elif phase == "p5":
         pass                       # test-shaped long runs: from plans/p5.json
     elif phase == "p4":
