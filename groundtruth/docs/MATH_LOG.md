@@ -1378,3 +1378,39 @@ no post rule. Forecast by delta (public + calibrated in-sample gain over the mod
 ad 0.88, supply 0.83, reservoir 0.85, power 0.81, traffic 0.79, hospital 0.76, social 0.72, epidemic
 0.72, wildlife 0.70, market 0.69: mean ≈ 0.775. u012 supersedes u011 as Sunday's first upload
 (each system is still a single factor against its own public score).
+
+## 2026-09-27 (Sun) — u012 scored; what transferred and what did not
+
+### 25. u012 public result against the forecast
+
+Mean **0.731** (from 0.687); board after the sweep: #1 0.783, #5 0.751, #8 0.736.
+
+| system | before | forecast | u012 | sustained (before) | sequence (before) | share of forecast gain realised | how the model was fitted |
+|---|---:|---:|---:|---|---|---:|---|
+| wildlife | 0.636 | 0.70 | 0.697 | 0.656 (0.611) | 0.711 (0.644) | 92 % | lab fit |
+| epidemic | 0.545 | 0.72 | 0.685 | 0.660 (0.587) | 0.694 (0.531) | 82 % | lab fit |
+| reservoir | 0.782 | 0.85 | 0.831 | 0.870 (0.833) | 0.818 (0.765) | 73 % | polished |
+| traffic | 0.751 | 0.79 | 0.776 | 0.635 (0.633) | 0.823 (0.790) | 62 % | polished |
+| ad_auction | 0.830 | 0.88 | 0.857 | 0.846 (0.826) | 0.860 (0.832) | 54 % | polished |
+| market | 0.505 | 0.69 | 0.588 | 0.491 (0.472) | 0.620 (0.505) | 44 % | polished |
+| social_contagion | 0.553 | 0.72 | 0.621 | 0.571 (0.418) | 0.637 (0.597) | 40 % | lab fit at 1.0 |
+| supply_chain | 0.824 | 0.83 | 0.822 | 0.754 (0.759) | 0.844 (0.845) | 0 % | polished |
+| power_grid | 0.754 | 0.81 | 0.758 | **0.698 (0.715)** | 0.778 (0.767) | 7 % | polished |
+| hospital_queue | 0.690 | 0.76 | 0.679 | **0.628 (0.677)** | 0.696 (0.694) | < 0 | polished |
+
+Readings:
+1. **Sequence transferred almost everywhere** (nine of ten up, +0.01 to +0.16): the structural
+   fixes to transients were real.
+2. **Sustained is where the forecast failed.** It fell on hospital (−0.05) and power_grid (−0.02)
+   and stayed flat on traffic and supply_chain. Our runs are at most 450 ticks; the sustained
+   category holds for thousands. hospital's fatigue never recovers in v8f ($\tau_f$ at its 5,000
+   bound, flagged as a risk in §23): on long holds after any overtime it under-serves forever.
+3. **Direct polishing on the in-sample score over-fits.** Models whose parameters were polished
+   directly on the calibrated in-sample score realised 0–73 % of their forecast gain; the two fitted
+   by the lab (robust loss, multistart) realised 82–92 %. With 2–6 runs, the in-sample score is not
+   a forecast once the parameters were chosen on it; the leave-one-run-out gain is the better guide
+   (hospital's lab LOO gain was +0.01, power_grid's +0.03).
+
+Rules from here: forecast with the LOO gain, not the in-sample gain; polishing only inside the
+LOO loop; every model must be checked for plausible 4,000-tick holds at interior and extreme levels
+(states that never recover, levels that drift) before it ships.
