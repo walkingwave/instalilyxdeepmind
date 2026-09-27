@@ -1414,3 +1414,23 @@ Readings:
 Rules from here: forecast with the LOO gain, not the in-sample gain; polishing only inside the
 LOO loop; every model must be checked for plausible 4,000-tick holds at interior and extreme levels
 (states that never recover, levels that drift) before it ships.
+
+### 26. Purchase 5, stage 1: three test-shaped runs (Sun 00:30, 1,200 credits)
+
+One 400-tick run per system shaped like a test episode (`eval_like(..., "mixed")`: a sustained,
+an order, a recovery and a composition quarter), on the three worst sustained bands: market,
+social_contagion, traffic. Balances after: 10,127 (market 660, social 489, traffic 760). Purpose:
+a final exam on data shaped like the test before a model ships (u012's forecast failed because
+nothing we owned looked like a test episode).
+
+Every distinct uploaded predictor scored on its system's new run (calibrated scale):
+
+| system | exam ranking (score) | public ranking agrees? |
+|---|---|---|
+| traffic | u012 0.682 > u008 0.661 > u010b 0.654 > u005 0.568 > u003 0.554 > u004 0.504 | yes, all six in order |
+| social_contagion | u012 0.550 > u009 0.502 > u008 0.498 > u003 0.487 > u004 0.467 > u010b 0.432 > u002 0.302 | yes except u010b |
+| market | u010b 0.496 > u012 0.466 > u003 0.453 > u008 0.447 > u009 0.437 > u004 0.348 > u005 0.203 | partly: public has u012 first |
+
+One 400-tick run ranks traffic and social the way the public does, so it is a usable exam there;
+market's is noisier (price scores 0.25–0.36 for every model on it, the weak spot). Stage 2 only if
+these runs change a pick. The rebuild teams use them as held-out exams.
