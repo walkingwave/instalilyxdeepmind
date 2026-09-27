@@ -1479,3 +1479,19 @@ by a single run. Each team named the runs that would pin it (in its notes).
 u013 = u012 with these six (`submissions/20260927-0233-u013`); ad_auction, reservoir, supply_chain,
 traffic unchanged. Every predictor verified (reproduces its lab score, 4,000-tick finite, ≤ 0.71 s).
 Forecast by discounted held-out gains: ≈ 0.74 (0.735–0.75).
+
+### 29. u013 result (Sun)
+
+Mean **0.739** (forecast 0.74 from discounted held-out gains: the new forecasting rule held).
+Best-of per system across all uploads: **0.741**.
+
+| system | u012 | u013 | sustained u012 → u013 | sequence u012 → u013 | verdict |
+|---|---:|---:|---|---|---|
+| market | 0.588 | **0.627** | 0.491 → 0.526 | 0.620 → 0.661 | x4 + price blend transfers both bands |
+| wildlife | 0.697 | **0.724** | 0.656 → 0.655 | 0.711 → 0.748 | sequence gain from sheltered prey |
+| power_grid | 0.758 | **0.769** | 0.698 → **0.715** | 0.778 → 0.787 | sign fix restored sustained, kept sequence |
+| social_contagion | 0.621 | 0.626 | 0.571 → 0.561 | 0.637 → 0.648 | small |
+| epidemic | 0.686 | 0.687 | 0.660 → **0.700** | 0.694 → 0.682 | two-stage latent helps long holds, costs a little on transients |
+| hospital_queue | 0.679 | 0.672 | 0.628 → 0.649 | 0.696 → 0.680 | worse than p3 (u010b 0.690: 0.677 / 0.694); p3 stays best |
+
+Board: #1 0.783, #5 0.751, #6 0.742.
