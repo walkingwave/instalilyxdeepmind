@@ -1434,3 +1434,25 @@ Every distinct uploaded predictor scored on its system's new run (calibrated sca
 One 400-tick run ranks traffic and social the way the public does, so it is a usable exam there;
 market's is noisier (price scores 0.25–0.36 for every model on it, the weak spot). Stage 2 only if
 these runs change a pick. The rebuild teams use them as held-out exams.
+
+### 27. Long-hold audit (Sun 01:00, no credits; `scripts/longhold_audit.py`, `plans/longhold_audit.md`)
+
+Every distinct scored predictor per system rolled on 4,000-tick holds (20 sustained-style schedules,
+10 random constant holds, monotone control sweeps, low vs high initial states). The public
+sustained band is our only evidence about truth past tick 450; two checks use it: (i) if predictor
+P were the truth, what would persistence score, against u001's real band; (ii) does P as truth rank
+the other uploads the way their public bands do. No predictor is unstable (drift < 0.03 σ);
+every sustained loss is a wrong steady-state level or map. Required long-hold properties, ranked
+by expected gain:
+
+| system | defect in the u012 model | required property |
+|---|---|---|
+| market (0.491) | price frozen at its initial value on 4 of 6 holds | settles within 450–1,000 ticks to a control-set level independent of the start: ≈ 95–100 at (0, 0), ≈ 72 once rate ≥ 0.05, +10–40 with tax 0.05 |
+| social_contagion (0.571) | zero-control hold grows adopters (49, 36) → (105, 101) | no large spontaneous growth at seeding 0; adopters rise with incentive at steady state (sign wrong now) |
+| hospital_queue (0.628) | overtime a permanent gain (wait 30, discharges 6.7 at overtime 1, staffing 8) | overtime ≈ neutral at steady state (p3: 51 / 4.6, sustained 0.677); discharges ≥ 1.2 under stress |
+| power_grid (0.698) | reserve lowers steady frequency at interconnector 0 (49.88 vs 50.25) | reserve raises frequency at every interconnector setting, ≈ +0.3 / +1.1 / +2.0 Hz at 0 / 0.5 / 1 for 150 units (u008, sustained 0.715) |
+| traffic (0.635) | route-B speed 2.5 above A under the pulse hold; long-hold speeds ≈ 2 km/h high | weak evidence; symmetric routes |
+| wildlife, epidemic, supply_chain, reservoir, ad_auction | none visible | keep |
+
+Each property is now a check the next candidate for that system must pass; forwarded to the
+market, social, hospital teams and a power_grid fix (v9).
