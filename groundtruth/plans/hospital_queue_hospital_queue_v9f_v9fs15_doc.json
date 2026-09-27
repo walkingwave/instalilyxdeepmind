@@ -1,0 +1,110 @@
+{
+ "format": 1,
+ "system": "hospital_queue",
+ "observables": [
+  "wait_time",
+  "queue",
+  "discharges"
+ ],
+ "controls": [
+  "staffing",
+  "elective_scheduling",
+  "diagnostic_allocation",
+  "urgent_priority",
+  "overtime",
+  "followup_capacity"
+ ],
+ "bounds": {
+  "staffing": [
+   1.0,
+   20.0
+  ],
+  "elective_scheduling": [
+   0.0,
+   20.0
+  ],
+  "diagnostic_allocation": [
+   0.1,
+   0.8
+  ],
+  "urgent_priority": [
+   0.0,
+   1.0
+  ],
+  "overtime": [
+   0.0,
+   1.0
+  ],
+  "followup_capacity": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "staffing": 20.0,
+  "elective_scheduling": 0.0,
+  "diagnostic_allocation": 0.4,
+  "urgent_priority": 0.6,
+  "overtime": 0.0,
+  "followup_capacity": 1.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  792.7387357425987,
+  646.7059345437494,
+  64.04763763392626
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "hospital_queue_v9f",
+  "theta": [
+   10.996842934272754,
+   0.8022449079119734,
+   0.9679029842024012,
+   1.117101135417749,
+   81.85807934871386,
+   12.524289443979644,
+   0.8066928726671145,
+   0.015176565487445136,
+   36.203733894922756,
+   317.9527634534518,
+   0.016856616266059454,
+   7.098668552521143,
+   99.99974089042843,
+   2.252717959026139,
+   1.2343827950747255
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [
+  {
+   "type": "le_const",
+   "obs": "queue",
+   "value": 333.0
+  }
+ ],
+ "info": {
+  "model_id": "ode:hospital_queue_v9f",
+  "n_runs": 6,
+  "n_ticks": 1070,
+  "cost": 1063.8651053321794
+ }
+}
