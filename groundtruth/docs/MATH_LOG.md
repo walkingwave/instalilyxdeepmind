@@ -1495,3 +1495,25 @@ Best-of per system across all uploads: **0.741**.
 | hospital_queue | 0.679 | 0.672 | 0.628 → 0.649 | 0.696 → 0.680 | worse than p3 (u010b 0.690: 0.677 / 0.694); p3 stays best |
 
 Board: #1 0.783, #5 0.751, #6 0.742.
+
+### 30. Two purchase simulations and purchase 6 (Sun, 2,300 credits)
+
+**Exam value** (`scripts/exam_value.py`, `plans/exam_value.md`): every scored predictor replayed on
+every owned run; pairwise-order agreement with the public board. The three exams we own averaged
++0.06 over the mean of owned runs; their value is being held out (every other run becomes training
+data). Owned runs already rank epidemic, supply_chain, wildlife, reservoir like public; hospital
+(coin flip on its ten close pairs), ad_auction and power_grid (no held-out run at all) need exams.
+
+**Round-2 value of information** (`scripts/voi_round2.py`, `plans/voi_round2.md`): validated
+committees for the five weakest systems, preposterior value of each candidate run on the
+test-shaped distribution. The proposed five runs (1,730 credits) were worth 0.383 committee units;
+the optimal 1,100-credit set 0.572 (+0.014 expected on the public mean). Value saturates past
+≈ 1,100 credits (the last 700 of a 2,500 budget buy 0.004 per 100). Data alone cannot close the gap
+to the top three; the model structure must.
+
+Bought (phase `p6`, `plans/p6.json`): social joint hold (9.03, 0.135, 0.673) 300; market hold
+(0.05, 0.025) 200; hospital pulse 40 + recovery 260 from a new start 300; epidemic mask 100 then
+vaccination 200, 300; exams (400-tick test-shaped, held out of every fit) for hospital_queue,
+ad_auction, power_grid. Balances after: 7,827 (social 189, hospital 230, market 460, epidemic 589,
+traffic 760, wildlife 889, supply 1,030, power 1,100, ad 1,100, reservoir 1,480), kept as reserve for
+the Final days.
