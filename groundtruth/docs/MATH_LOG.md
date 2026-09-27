@@ -1456,3 +1456,26 @@ by expected gain:
 
 Each property is now a check the next candidate for that system must pass; forwarded to the
 market, social, hospital teams and a power_grid fix (v9).
+
+### 28. Rebuild round (Sun 00:00–02:30, no credits beyond §26) and upload u013
+
+Rebuild teams on the weak systems and two long-hold fixes, all judged by lab leave-one-run-out at
+the calibrated scale (fold noise ≈ 0.02), the 4,000-tick hold check, and for market/social the new
+test-shaped exam. Notes: `plans/<sys>_x_notes.md`, `hospital_queue_v9_notes.md`,
+`power_grid_v9_notes.md`.
+
+| system | pick | LOO (current → pick) | what changed |
+|---|---|---|---|
+| epidemic | x11, pair AC | 0.593 → 0.656 | two-stage latent period (every control acts two ticks late); gathering debt speeds the release rebound; masks do the work, closure ≈ 0; vaccination bounds stop die-out on long holds |
+| wildlife | x13 | 0.621 → 0.653 | prey split into exposed and sheltered (shelter ∝ habitat): the pulse floor; nursery crowding against the food stock; equilibrium patch occupancy (explicit relocation rates sat at the RK4 stability edge and shaped the fit) |
+| social_contagion | x7 | 0.593 → 0.619; exam 0.550 → 0.582 | incentive-led audience; incentive now raises the steady level; no finite workforce found (every fit put it far above the observed totals) |
+| market | x4 + price median(x4, l0b_lin) | 0.582 → 0.591; exam 0.467 → 0.534 (x4), price on the exam 0.330 → 0.417 with the blend | price settles to a control-set level independent of the start (≈ 89 at zero controls, ≈ 74.5 under rate); freeze at tax ≈ 0.043; orders keep executing in a freeze |
+| hospital_queue | v9g | 0.713 → 0.716 | fatigue relaxes to the overtime level with $k_{fat} = g/(1+g)$, so full overtime nets to 1 at steady state (long-hold map of the best-sustained model); reported discharges not discounted under stress |
+| power_grid | v9c | 0.726 → 0.731 | storage refill over the same interconnector as delivery: reserve raises steady frequency at every setting (+0.38 / +1.15 / +1.41 Hz vs u008's +0.30 / +1.14 / +1.98) |
+
+The rebuilds all fell short of their +0.08 targets on held-out runs: every remaining leak is pinned
+by a single run. Each team named the runs that would pin it (in its notes).
+
+u013 = u012 with these six (`submissions/20260927-0233-u013`); ad_auction, reservoir, supply_chain,
+traffic unchanged. Every predictor verified (reproduces its lab score, 4,000-tick finite, ≤ 0.71 s).
+Forecast by discounted held-out gains: ≈ 0.74 (0.735–0.75).
