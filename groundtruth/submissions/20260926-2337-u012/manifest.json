@@ -1,0 +1,79 @@
+{
+  "git_sha": "8e60fd1",
+  "stamp": "20260926-2337",
+  "systems": {
+    "ad_auction": {
+      "kind": "ode",
+      "model_id": "ode:ad_auction_v8b",
+      "ode": [
+        "ad_auction_v8b"
+      ]
+    },
+    "epidemic": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "epidemic_v8g"
+      ]
+    },
+    "hospital_queue": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "hospital_queue_v8f"
+      ]
+    },
+    "market": {
+      "kind": "ode",
+      "model_id": "ode:market_v9g",
+      "ode": [
+        "market_v9g"
+      ]
+    },
+    "power_grid": {
+      "kind": "ode",
+      "model_id": "ode:power_grid_v8g",
+      "ode": [
+        "power_grid_v8g"
+      ]
+    },
+    "reservoir": {
+      "kind": "ode",
+      "model_id": "ode:reservoir_v8",
+      "ode": [
+        "reservoir_v8"
+      ]
+    },
+    "social_contagion": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "social_contagion_v8o"
+      ]
+    },
+    "supply_chain": {
+      "kind": "ode",
+      "model_id": "ode:supply_chain_v8b",
+      "ode": [
+        "supply_chain_v8b"
+      ]
+    },
+    "traffic": {
+      "kind": "ode",
+      "model_id": "ode:traffic_v8d",
+      "ode": [
+        "traffic_v8d"
+      ]
+    },
+    "wildlife": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "wildlife_v8h"
+      ]
+    }
+  },
+  "tag": "u012",
+  "zip_bytes": 56514,
+  "zip_sha256": "8d07056fed555cd730ec3b5dc2cc5ad320750e835d36fb0fe51ec59b945b8361"
+}

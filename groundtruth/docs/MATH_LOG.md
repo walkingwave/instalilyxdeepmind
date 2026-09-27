@@ -1353,3 +1353,28 @@ from one segment.
 u011 = these five plus the strong five unchanged from u010b (`submissions/20260926-2120-u011`).
 Every packaged predictor reproduces the forecast above, runs 4,000 ticks finite on all four
 categories in ≤ 0.5 s. Forecast mean 0.753 (strong five at their public scores).
+
+### 24. Structural pass on the strong five and a second pass on market (Sat night, no credits)
+
+Same method as §23 (error budget at the calibrated scale, fixes aimed at the largest leaks, keep only
+if calibrated in-sample rises and leave-one-run-out does not drop; parameters polished directly on
+the calibrated score). Notes per system in `plans/<sys>_v8_notes.md` (`market_v9_notes.md`).
+
+| system | before | after | LOO before → after | what fixed it |
+|---|---:|---:|---|---|
+| ad_auction | 0.851 | **0.900** | 0.788 → 0.820 | rival capital leaving depleted audiences (win rate rises), a preparation state that starts empty (same conversion ramp in hold and pulse), idle fulfilment capacity (burst at pulse start, plateau after) |
+| reservoir | 0.829 | **0.896** | 0.726 → 0.785 | the default inflow post rule removed (it overwrote the model's inflow with a formula fitted on one run and dropped the return flow: +0.02); bank storage; inflow-proportional loss at full pool; slow quality deficit |
+| power_grid | 0.737 | **0.796** | 0.696 → 0.726 | slow governor (≈ 40 ticks); reserve partly from storage recharged through charging_allowance (explains the dip after release); frequency ceiling +1.56 Hz; renewable share following the reserve request |
+| traffic | 0.777 | **0.817** | 0.746 → 0.812 | speed target from a lagged occupancy (second time constant) with approach vehicles weighted by the signal's junction share (a starved route slows at once) |
+| supply_chain | 0.876* | **0.903*** | 0.785 → 0.830 | congested transport: dispatch throttles when the conveyor is full (the 30-tick refill delay, the post-pulse backlog, the interior-hold retail climb in one mechanism) |
+| market | 0.645 | **0.687** | 0.650 → 0.661 | depth rebuilt: one fast pool (τ ≈ 8) toward a tax-set target plus reset-burst stock on dealer books that clears slower under tax (separates post-reset drain from mid-run steps) |
+
+\* supply_chain at its per-observable calibrated scale (the only system where that fit was
+identifiable); at the single-factor scale it is a tie (0.920 → 0.920).
+
+u012 = u011 with these six (`submissions/20260926-2337-u012`): all ten predictors reproduce their
+calibrated in-sample, 4,000-tick finite on four categories, ≤ 0.5 s per episode; reservoir ships with
+no post rule. Forecast by delta (public + calibrated in-sample gain over the model that earned it):
+ad 0.88, supply 0.83, reservoir 0.85, power 0.81, traffic 0.79, hospital 0.76, social 0.72, epidemic
+0.72, wildlife 0.70, market 0.69: mean ≈ 0.775. u012 supersedes u011 as Sunday's first upload
+(each system is still a single factor against its own public score).
