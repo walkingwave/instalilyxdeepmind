@@ -1329,3 +1329,27 @@ Refitting at the right scale changes which mechanism pair wins (epidemic and soc
 BC once small errors count), because a loose scale let the fitter trade many small misses for a
 few large ones. These five form Sunday's first upload (u011); the strong five refit the same
 way for the second.
+
+### 23. Structural pass on the five systems below 0.7, at the organizer's scale (Sat evening, no credits)
+
+One worker per system: error budget at the calibrated scale (loss by observable, run and
+constant-control segment), structural fixes aimed at the three largest leaks, a change kept only if
+calibrated in-sample rose and leave-one-run-out did not drop. Full equations and tables in
+`plans/<sys>_v8_notes.md`. Calibrated in-sample on all runs (a forecast of public, §22):
+
+| system | before | after | LOO before → after | what fixed it |
+|---|---:|---:|---|---|
+| epidemic | 0.668 | **0.749** | 0.478 → 0.604 | initial state anchored on both observables; two-stage referral delay to beds; waning always on; per-capita, age-targeted vaccination (the fixed-count form eliminated cases on long vaccination holds, rejected) |
+| hospital_queue | 0.693 | **0.746** | 0.659 → 0.704 | long-memory fatigue after overtime (holds the queue at 92 after a pulse), orientation lag on staff increases, discharges reported ≈ 0 at low treatment work (0 on 70 % of ticks in data), asymmetric wait filter |
+| social_contagion | 0.652 | **0.742** | 0.532 → 0.658 | organic adoption toward ≈ 65, Erlang-3 onboarding (the ≈ 7-tick delay), disappointed pool returning after ≈ 15 ticks, credibility eroded by paid promises to waiting cohorts |
+| wildlife | 0.660 | **0.709** | 0.645 → 0.694 | predators relax to a prey-set level with a 63-tick lag, transit pools losing ≈ 25 %, harvest as a fixed quota with a floor, fast habitat effect (north stronger) |
+| market | 0.524 | **0.645** | 0.499 → 0.650 | price follows a moving anchor that drops toward ≈ 70 above a rate threshold (fast down, slow up), tax freeze at 0.0452, volume from price velocity, depth loses risk capacity when price falls |
+
+Market stays below 0.7: depth under tax mid-run settles in 25 ticks while right after a reset it
+drains slowly, and no structure separated the two. Known risks: hospital's fatigue never recovers
+(τ at 5,000; the data only show none within 260 ticks); market's floor with an interior tax is fitted
+from one segment.
+
+u011 = these five plus the strong five unchanged from u010b (`submissions/20260926-2120-u011`).
+Every packaged predictor reproduces the forecast above, runs 4,000 ticks finite on all four
+categories in ≤ 0.5 s. Forecast mean 0.753 (strong five at their public scores).

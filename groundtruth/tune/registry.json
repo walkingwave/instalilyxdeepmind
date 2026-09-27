@@ -676,6 +676,67 @@
    },
    "uploaded": true,
    "why": {}
+  },
+  {
+   "date": "2026-09-26",
+   "dir": "submissions\\20260926-2120-u011",
+   "id": "u011",
+   "phase": "public",
+   "scores": {},
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode:epidemic_v8g",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode:hospital_queue_v8f",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode:market_v8t2",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_v8o",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode:wildlife_v8h",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
   }
  ]
 }
