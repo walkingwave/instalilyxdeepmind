@@ -1625,3 +1625,17 @@ converged there; hospital, market, social still running.
 u016 (`submissions/20260928-1430-u016`) = u015 with wildlife, traffic, social, reservoir changed.
 All ten predictors verified (4,000-tick finite, ≤ 1.94 s per episode). Forecast by 0.6 × held-out
 gain: wildlife ≈ 0.742, traffic ≈ 0.795, social ≈ 0.648, reservoir ≈ 0.845; mean ≈ **0.754**.
+
+### 37. u016 result (Mon 14:35)
+
+Mean **0.7552** (forecast 0.754). Best-of per system: 0.7555.
+
+| system | u015 | u016 | forecast | verdict |
+|---|---:|---:|---:|---|
+| traffic | 0.776 | **0.8385** | 0.795 | toll-elastic demand plus the long-hold fit: +0.063, the largest single-system gain since u012; the discovery run paid for itself |
+| wildlife | 0.724 | **0.738** | 0.742 | v8h refit with the long hunting hold transfers |
+| social_contagion | 0.634 | **0.645** | 0.648 | z20 transfers; recovery-fold rule holds again |
+| reservoir | 0.831 | 0.829 | 0.845 | test-mix weighting did not transfer (−0.003); keep the unweighted fit |
+
+Deep fits (4× budget, 3× starts): social z20 0.607 vs 0.603 standard, epidemic 0.680 vs 0.683: the
+standard fits are converged; deeper search is not a lever.
