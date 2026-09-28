@@ -1562,3 +1562,11 @@ fold shaped like the recovery category. social y13 lost its pulse fold (0.535 â†
 average rose; the public recovery band is where it fell. Rule from here: a candidate must not lose
 the pulse or recovery-shaped fold, whatever its mean gain. Hospital: p3 stays the best evidence; no
 further structural attempts without new data that separates the candidates.
+
+## 2026-09-28 (Mon)
+
+### 33. u015: best evidence per system (Mon 00:10)
+
+Mean **0.7467** (forecast 0.748). hospital back on p3: 0.6896; social_contagion on y10 BC (kept the
+recovery-shaped fold): **0.634**, its best so far (x7 0.626, y13 0.605): the recovery-fold rule held.
+Board: the top three are all above 0.785.

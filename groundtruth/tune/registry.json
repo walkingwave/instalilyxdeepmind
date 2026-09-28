@@ -959,7 +959,18 @@
    "dir": "submissions\\20260927-2151-u015",
    "id": "u015",
    "phase": "public",
-   "scores": {},
+   "scores": {
+    "ad_auction": 0.8656,
+    "epidemic": 0.7166,
+    "hospital_queue": 0.6896,
+    "market": 0.6339,
+    "power_grid": 0.7745,
+    "reservoir": 0.8311,
+    "social_contagion": 0.6342,
+    "supply_chain": 0.8217,
+    "traffic": 0.7757,
+    "wildlife": 0.7244
+   },
    "systems": {
     "ad_auction": {
      "data_ticks": 0,
