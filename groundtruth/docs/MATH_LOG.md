@@ -1570,3 +1570,26 @@ further structural attempts without new data that separates the candidates.
 Mean **0.7467** (forecast 0.748). hospital back on p3: 0.6896; social_contagion on y10 BC (kept the
 recovery-shaped fold): **0.634**, its best so far (x7 0.626, y13 0.605): the recovery-fold rule held.
 Board: the top three are all above 0.785.
+
+### 34. Fitting-procedure study and purchase 7, discovery (Mon 01:00, 2,400 credits)
+
+**Fitting procedures** (`scripts/fitproc.py`, `plans/fitproc.md`), nested leave-one-run-out on all
+ten systems against the standard robust fit: weighting data by the test's category mix is the only
+change that helps broadly (recovery-shaped fold up on 8 of 10; wins reservoir +0.024, wildlife
++0.021; hurts market, supply_chain, power_grid, so it needs a per-system check); fold bagging pays
+only with many runs and unstable fits (social +0.014); a score-shaped loss with a ridge pull does
+nothing systematic; denoising the initial observation is worth nothing (reset spread is 10–100× the
+noise). Model and fitting improvements on the current data are nearly exhausted.
+
+**Discovery purchase** (phase `p7`, `plans/p7.json`): one sustained-style run per system
+(`eval_like(..., "sustained")`, holds of hundreds of ticks), our first data past tick 450: supply 800,
+wildlife 700, traffic 600, market 300. Balance after ≈ 5,400. Every past predictor scored on them:
+
+| system | what the long hold showed | best past predictor | newest model |
+|---|---|---|---|
+| traffic | harsh hold (signal 0.2, lane 0.5, ramp 0.9, clearance 0.1): speeds collapse to 7 / 16 by t300 | 0.552 (u012) | every model predicts speeds ≈ 30: the sustained leak |
+| market | rate 0.1, tax 0 for 300 ticks: price settles at 83, depth drains to 27 | 0.330 (u008) | 0.293; depth predicted 44–49 |
+| wildlife | hunting 5.9, habitat 0.3, corridor 0.9 for 566 ticks: prey 11 / 11 | 0.760 (u008), 0.734 (v8h) | x13 0.591, z9 0.623 (prey 27 / 23: the collapse is too shallow) |
+| supply_chain | nothing new | 0.98 for all | |
+
+The traffic and market teams now fit on these runs; a wildlife team refits with p7 as a fold.
