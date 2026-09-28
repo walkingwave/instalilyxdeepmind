@@ -1658,3 +1658,24 @@ past predictor scored on them:
 
 One leak in four runs (traffic's round found three in four). A power_grid refit on p8 is running,
 alongside a control-effect audit across all ten systems and a market depth push.
+
+### 39. Power_grid on the long run; control-effect audit (Mon afternoon, no credits)
+
+**power_grid w5** (`plans/power_grid_w_notes.md`): the p8 leak is three effects, not a slow decay:
+reserve delivery saturates at a limit that grows with the interconnector ($\min(c_r R, p_l + p_r\,ic)$,
+$p_l = 22$, $p_r = 82$); the interconnector delivers power even with no reserve ($g_i(ic - 1)$,
+$g_i = 13.7$); demand is curved in price ($D = d_0 - d_1 p + d_2 (p - 0.8)^2$, $d_2 = -7.7$). LOO 0.696 →
+0.710 on the same runs, pulse fold +0.015, exam 0.657 → 0.685, p8 end 48.91 Hz vs 48.89 true. One
+family replaces the per-observable doc. Forecast ≈ 0.79.
+
+**Control-effect audit** (`scripts/control_audit.py`, `plans/control_audit.md`): controls the models
+ignore (authority < 0.05 σ) include traffic freight_priority and clearance_effort, power_grid
+charging_allowance, hospital urgent_priority and followup_capacity, supply_chain lead_time_buy. Adding
+them never paid on held-out runs (seven fixes, all ties or losses; hospital's follow-up staff term
++0.013 but loses the exam and the recovery-shaped fold). In our runs these controls move for only
+3–10 ticks, so no fit can pin them; toll worked for traffic because the long hold gave it a sustained
+footprint. The largest single miss anywhere remains hospital's post-overtime wait (up to +16.7 σ).
+
+Reading after this round: on the data we own, structure and fitting are close to exhausted; the
+gains of the last two days came from runs in regimes nobody had observed (traffic +0.063,
+wildlife, power_grid).
