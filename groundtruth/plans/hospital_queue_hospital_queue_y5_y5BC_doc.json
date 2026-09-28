@@ -1,0 +1,119 @@
+{
+ "format": 1,
+ "system": "hospital_queue",
+ "observables": [
+  "wait_time",
+  "queue",
+  "discharges"
+ ],
+ "controls": [
+  "staffing",
+  "elective_scheduling",
+  "diagnostic_allocation",
+  "urgent_priority",
+  "overtime",
+  "followup_capacity"
+ ],
+ "bounds": {
+  "staffing": [
+   1.0,
+   20.0
+  ],
+  "elective_scheduling": [
+   0.0,
+   20.0
+  ],
+  "diagnostic_allocation": [
+   0.1,
+   0.8
+  ],
+  "urgent_priority": [
+   0.0,
+   1.0
+  ],
+  "overtime": [
+   0.0,
+   1.0
+  ],
+  "followup_capacity": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "staffing": 20.0,
+  "elective_scheduling": 0.0,
+  "diagnostic_allocation": 0.4,
+  "urgent_priority": 0.6,
+  "overtime": 0.0,
+  "followup_capacity": 1.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  792.7387357425987,
+  646.7059345437494,
+  64.04763763392626
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "hospital_queue_y5",
+  "theta": [
+   9.910211560858105,
+   1.7120057753877096,
+   1.1544411638022825,
+   1.4698165428240668,
+   26.146833795990112,
+   55.67231044503931,
+   0.5955699797342608,
+   0.011152321448135114,
+   38.237987728303594,
+   323.6839532930969,
+   0.22300097376412367,
+   7.323150550634729,
+   4.999724205261123,
+   0.12749600853247076,
+   -0.8033852719494685,
+   0.1712466996285895,
+   30.000000000000004,
+   17.75886191211282,
+   0.7465196534758868,
+   0.993760756341592,
+   16.099326576947814,
+   0.44583631014025454,
+   194.7541767516221,
+   5.144387978248775
+  ],
+  "mech": [
+   "B",
+   "C"
+  ],
+  "n_sub": 2
+ },
+ "post": [
+  {
+   "type": "le_const",
+   "obs": "queue",
+   "value": 333.0
+  }
+ ],
+ "info": {
+  "model_id": "ode:hospital_queue_y5",
+  "n_runs": 7,
+  "n_ticks": 1370,
+  "cost": 1601.1066560504119
+ }
+}
