@@ -729,6 +729,96 @@
    "overall": 0.724,
    "sustained": 0.655,
    "sequence": 0.748
+  },
+  {
+   "receipt": 2608,
+   "upload": "u014",
+   "system": "ad_auction",
+   "day": "2026-09-27",
+   "overall": 0.866,
+   "sustained": 0.853,
+   "sequence": 0.87
+  },
+  {
+   "receipt": 2609,
+   "upload": "u014",
+   "system": "epidemic",
+   "day": "2026-09-27",
+   "overall": 0.717,
+   "sustained": 0.77,
+   "sequence": 0.699
+  },
+  {
+   "receipt": 2610,
+   "upload": "u014",
+   "system": "hospital_queue",
+   "day": "2026-09-27",
+   "overall": 0.666,
+   "sustained": 0.638,
+   "sequence": 0.676
+  },
+  {
+   "receipt": 2611,
+   "upload": "u014",
+   "system": "market",
+   "day": "2026-09-27",
+   "overall": 0.634,
+   "sustained": 0.582,
+   "sequence": 0.651
+  },
+  {
+   "receipt": 2612,
+   "upload": "u014",
+   "system": "power_grid",
+   "day": "2026-09-27",
+   "overall": 0.775,
+   "sustained": 0.72,
+   "sequence": 0.793
+  },
+  {
+   "receipt": 2613,
+   "upload": "u014",
+   "system": "reservoir",
+   "day": "2026-09-27",
+   "overall": 0.831,
+   "sustained": 0.87,
+   "sequence": 0.818
+  },
+  {
+   "receipt": 2614,
+   "upload": "u014",
+   "system": "social_contagion",
+   "day": "2026-09-27",
+   "overall": 0.605,
+   "sustained": 0.578,
+   "sequence": 0.614
+  },
+  {
+   "receipt": 2615,
+   "upload": "u014",
+   "system": "supply_chain",
+   "day": "2026-09-27",
+   "overall": 0.822,
+   "sustained": 0.754,
+   "sequence": 0.844
+  },
+  {
+   "receipt": 2616,
+   "upload": "u014",
+   "system": "traffic",
+   "day": "2026-09-27",
+   "overall": 0.776,
+   "sustained": 0.635,
+   "sequence": 0.823
+  },
+  {
+   "receipt": 2617,
+   "upload": "u014",
+   "system": "wildlife",
+   "day": "2026-09-27",
+   "overall": 0.724,
+   "sustained": 0.655,
+   "sequence": 0.748
   }
  ]
 }

@@ -1542,3 +1542,23 @@ u014 = u013 with these six (`submissions/20260927-2139-u014`). Every predictor v
 finite on four categories, ≤ 1.73 s per episode (ad_auction; ≈ 70 s for 40 episodes). Forecast by
 0.6 × held-out gain: epidemic 0.72, hospital 0.72, market 0.66, social 0.66, ad 0.862, power 0.776:
 mean ≈ **0.754**.
+
+### 32. u014 result (Sun night)
+
+Mean **0.7415** (forecast 0.754). Best-of per system across all uploads: **0.746**. Board: #1 0.790,
+#3 0.781, #5 0.768, #8 0.752.
+
+| system | u013 | u014 | forecast | sustained | sequence | verdict |
+|---|---:|---:|---:|---|---|---|
+| epidemic | 0.687 | **0.717** | 0.72 | 0.700 → 0.770 | 0.682 → 0.699 | reporting delay transfers in full |
+| ad_auction | 0.857 | **0.866** | 0.862 | 0.846 → 0.853 | 0.860 → 0.870 | library pick transfers |
+| power_grid | 0.769 | **0.775** | 0.776 | 0.715 → 0.720 | 0.787 → 0.793 | library pick transfers |
+| market | 0.627 | 0.634 | 0.66 | 0.526 → 0.582 | 0.661 → 0.651 | sustained up, sequence slightly down |
+| hospital_queue | 0.672 | 0.666 | 0.72 | 0.649 → 0.638 | 0.680 → 0.676 | fifth attempt below p3 (0.690) |
+| social_contagion | 0.626 | 0.605 | 0.66 | 0.561 → 0.578 | 0.648 → **0.614** | sequence fell 0.034 |
+
+Why the forecast missed on social and hospital: the mean leave-one-run-out gain hid a loss on the
+fold shaped like the recovery category. social y13 lost its pulse fold (0.535 → 0.476) while the
+average rose; the public recovery band is where it fell. Rule from here: a candidate must not lose
+the pulse or recovery-shaped fold, whatever its mean gain. Hospital: p3 stays the best evidence; no
+further structural attempts without new data that separates the candidates.
