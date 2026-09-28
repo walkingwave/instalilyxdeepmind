@@ -1639,3 +1639,22 @@ Mean **0.7552** (forecast 0.754). Best-of per system: 0.7555.
 
 Deep fits (4× budget, 3× starts): social z20 0.607 vs 0.603 standard, epidemic 0.680 vs 0.683: the
 standard fits are converged; deeper search is not a lever.
+
+### 38. Final tab and purchase 8, discovery round 2 (Mon afternoon, 2,500 credits)
+
+Final slot 1: `submissions/20260928-1440-final1` = u016 with reservoir back on u015's fit (best
+public evidence on every system, ≈ 0.7555).
+
+Discovery round 2 (phase `p8`, `plans/p8.json`), sustained-style long runs on the systems that still
+had credits: reservoir 700, power_grid 700, ad_auction 700, epidemic 400 (balance after 2,927). Every
+past predictor scored on them:
+
+| system | best shipped model on the long run | reading |
+|---|---:|---|
+| power_grid | 0.64 (frequency 0.49) | **leak**: frequency keeps sinking to 48.9 Hz on the long hold and load settles at 121; models stop near 49.3 Hz / 126 |
+| ad_auction | 0.89 | no leak |
+| reservoir | 0.83 | no leak; quality 0.63 the weak observable |
+| epidemic | 0.77–0.81 | no leak |
+
+One leak in four runs (traffic's round found three in four). A power_grid refit on p8 is running,
+alongside a control-effect audit across all ten systems and a market depth push.
