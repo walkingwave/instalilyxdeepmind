@@ -1517,3 +1517,28 @@ vaccination 200, 300; exams (400-tick test-shaped, held out of every fit) for ho
 ad_auction, power_grid. Balances after: 7,827 (social 189, hospital 230, market 460, epidemic 589,
 traffic 760, wildlife 889, supply 1,030, power 1,100, ad 1,100, reservoir 1,480), kept as reserve for
 the Final days.
+
+### 31. Mechanism teams on purchase-6 data and upload u014 (Sun evening, no credits)
+
+Each team: brief-faithful base with the three history mechanisms as switches, all pairs fitted by
+the lab at 1.0 σ, judged by leave-one-run-out on the same run set (the old models recomputed as
+baselines), the held-out exams, and the long-hold map. Notes: `plans/<sys>_y_notes.md`,
+`plans/zoo_select.md`.
+
+| system | pick | baseline LOO → pick | exam | finding |
+|---|---|---|---|---|
+| epidemic | y2, pair AC | x11 0.622 → **0.683** | — | cases have a pure two-tick reporting delay: after every start or switch two observations stay on the old trend, then the slope turns at once (x11 smoothed it over 2–3 ticks); near-switch in-sample 0.704 → 0.741 |
+| hospital_queue | y3, pair AB | p3 0.670 → **0.721** | 0.674 (p3 0.654) | orientation is active (staffing 7 → 20 without overtime: capacity 9–12/tick, not ≥ 18); fatigue neutral at steady state; the pair BC makes overtime a permanent gain again, rejected by the long-hold map |
+| market | y3, pair AB, alone | x4p 0.565 → **0.618** | 0.591 (x4p 0.512) | consumer warehouses as explicit inventory; risk-capacity loss (B) is active; steady price near-linear in rate (92 / 83 / 74 at 0 / 0.05 / 0.1); the price blend with l0b_lin now hurts (−0.043) |
+| social_contagion | y13, pair BC | x7 0.544 → **0.595** | 0.636 (x7 0.567) | the two communities' audiences mix differently (large incentive-led audience in a, small in b) and bridge introductions recruit in b through relationships that fade over ≈ 30 ticks; incentive expectations (B) clearly active |
+| ad_auction | per-observable library pick | +0.011 held-out | 0.830 (public model 0.814) | spend and conversions from means of two members |
+| power_grid | per-observable library pick | +0.012 held-out | flat | renewable share from a mean of two members |
+
+The library pick's cold-start check reversed two apparent gains (supply_chain +0.12 warm → −0.11
+cold; wildlife +0.06 → −0.016): held-out folds started from a model fitted on the held-out run
+leak it.
+
+u014 = u013 with these six (`submissions/20260927-2139-u014`). Every predictor verified: 4,000-tick
+finite on four categories, ≤ 1.73 s per episode (ad_auction; ≈ 70 s for 40 episodes). Forecast by
+0.6 × held-out gain: epidemic 0.72, hospital 0.72, market 0.66, social 0.66, ad 0.862, power 0.776:
+mean ≈ **0.754**.

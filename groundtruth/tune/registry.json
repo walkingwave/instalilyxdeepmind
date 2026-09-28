@@ -881,6 +881,67 @@
    },
    "uploaded": true,
    "why": {}
+  },
+  {
+   "date": "2026-09-27",
+   "dir": "submissions\\20260927-2139-u014",
+   "id": "u014",
+   "phase": "public",
+   "scores": {},
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "zoo perobs: win_rate=pub_v8b, spend=mean(pub_v8b,s1), conversions=mean(pub_v8b,min)",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode:epidemic_y2",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode:hospital_queue_y3",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode:market_y3",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "zoo perobs: load=pub_v9c, frequency=pub_v9c, renewable_share=mean(v8k,min)",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_y13",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
   }
  ]
 }
