@@ -1606,3 +1606,22 @@ deterministic and each fold is essentially one polish from the initial parameter
 need well over +0.02 to be visible. p7's depth drain under a high rate with an interior tax (111 →
 11) reads as dealer inventory funded at the rate outside freezes (mechanism A); family `market_z12`
 models it and is being judged against y3 on the 9-run set.
+
+### 36. Decisive tests after the discovery runs; upload u016 (Mon 13:00–14:30, no credits)
+
+Leave-one-run-out at 1.0 σ on every run including the p7 long holds:
+
+| system | candidates (LOO) | pick | why |
+|---|---|---|---|
+| wildlife | v8h 0.675, w2 0.660, w4 0.658, z9 0.645 | **v8h refit** | only structure that fits the long hunting hold (p7 fold 0.756 vs ≈ 0.62); pulse fold kept (0.724 vs z9 0.714) |
+| traffic | z8 0.742, v8d refit 0.710 (7 runs, exam as a fold) | **z8** (toll-elastic demand) | long hold 0.613 vs 0.579, multilevel +0.041, exam +0.054; toll-0 pulse fold −0.012 = its noise level |
+| market | y3 0.615, z12 (dealer inventory under A) | **y3** | z12 loses the multilevel fold (0.484 vs 0.589); no structure fits p7's depth drain yet |
+| social_contagion | z20 0.603 (pulse fold 0.560, exam 0.647) | **z20** | short relationship memory (τ ≈ 15) and slower onboarding in b; y13's long memory kept recruiting in b after pulses |
+| reservoir | test-mix weighting +0.024 | **weighted refit** | from the fitting study (§34) |
+
+Deeper fits (4× budget, 3× starts): epidemic y2 0.680 vs 0.683 standard, so standard fits are
+converged there; hospital, market, social still running.
+
+u016 (`submissions/20260928-1430-u016`) = u015 with wildlife, traffic, social, reservoir changed.
+All ten predictors verified (4,000-tick finite, ≤ 1.94 s per episode). Forecast by 0.6 × held-out
+gain: wildlife ≈ 0.742, traffic ≈ 0.795, social ≈ 0.648, reservoir ≈ 0.845; mean ≈ **0.754**.
