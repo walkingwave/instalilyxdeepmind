@@ -1593,3 +1593,16 @@ wildlife 700, traffic 600, market 300. Balance after ≈ 5,400. Every past predi
 | supply_chain | nothing new | 0.98 for all | |
 
 The traffic and market teams now fit on these runs; a wildlife team refits with p7 as a fold.
+
+Correction to §34: market's p7 run is (rate 0.0949, tax 0.0403) for 175 ticks, then (0.05, 0.025)
+for 125 ticks, not a pure rate hold. First block: price slides 104.7 → 90.7, depth drains 111 → 10.9;
+second block: price settles at 83.0, depth rebuilds to 26.7.
+
+### 35. Overnight rounds interrupted by the machine sleeping (Mon)
+
+The machine slept 01:35–12:40, past every overnight time box. Market z round (`plans/market_z_notes.md`):
+nothing beats y3 AB (LOO 0.615; 15 other fits 0.568–0.611, sd ≈ 0.011 around 0.600); the lab is
+deterministic and each fold is essentially one polish from the initial parameters, so structures
+need well over +0.02 to be visible. p7's depth drain under a high rate with an interior tax (111 →
+11) reads as dealer inventory funded at the rate outside freezes (mechanism A); family `market_z12`
+models it and is being judged against y3 on the 9-run set.
