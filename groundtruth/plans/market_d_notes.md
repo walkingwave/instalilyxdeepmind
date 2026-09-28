@@ -78,3 +78,31 @@ the other 8 folds anything; its p7 fold is not a hold-out (the pins came from fi
   settled state; it would identify $r_c$ and $\Delta x_c$ outside p7.
 
 Files: `gtlab/ode/market_d.py`, `market_d2.py`, `market_d3.py`; `plans/market_market_d*_AB{,pin}.json` + `_doc.json`.
+
+### 4a. Pinned d2 result (`plans/market_market_d2_ABpin.json`)
+
+Folds: hold_rec 0.713, pulse40 0.553, mid40 0.684, multilevel 0.442, compose 0.620, rate_hold 0.524, testlike 0.548,
+voi 0.572, p7 0.541 (P/V/D .222/.726/.674; not a hold-out). LOO 0.577, but folds 1–8 average 0.582 vs y3's 0.598,
+and multilevel (−0.15), pulse40 (−0.04) and rate_hold (−0.08) all lose. The p7 structure, held fixed, still costs the
+other runs. Recommendation unchanged.
+
+### 4b. All pinned runs (p7 fold not a hold-out: pins came from fits that saw p7)
+
+| fold | y3 r9 | d pin | d2 pin | d3 pin |
+|---|---:|---:|---:|---:|
+| hold_rec | 0.725 | 0.748 | 0.713 | 0.715 |
+| pulse40 | 0.589 | 0.632 | 0.553 | 0.575 |
+| mid40 | 0.579 | 0.622 | 0.684 | 0.690 |
+| multilevel | **0.589** | 0.456 | 0.442 | 0.443 |
+| compose | 0.593 | 0.630 | 0.620 | 0.628 |
+| rate_hold | 0.603 | 0.553 | 0.524 | 0.637 |
+| testlike (exam) | 0.581 | 0.586 | 0.548 | 0.563 |
+| voi | 0.522 | 0.578 | 0.572 | 0.566 |
+| p7 (P/V/D) | 0.293 | 0.352 (.167/.616/.274) | 0.541 (.222/.726/.674) | 0.481 (.170/.616/.656) |
+| mean folds 1–8 | 0.598 | 0.601 | 0.582 | 0.602 |
+| LOO (9) | 0.564 | 0.573 | 0.577 | 0.589 |
+
+With the structure pinned, d and d3 match y3 on the other 8 runs (+0.003/+0.004, noise) and add the p7 depth, but
+every variant loses the multilevel fold by 0.13–0.15. Multilevel holds (0.089, 0.048) and (0.1, 0.05) blocks where the
+pinned gate/tie-up changes the frozen depth path. By the rule (never lose multilevel) none ships; d3 pin
+(`plans/market_market_d3_ABpin_doc.json`) is the best hedge for high-rate, mid-tax episodes.
