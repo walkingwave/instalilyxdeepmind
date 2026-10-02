@@ -1,0 +1,71 @@
+{
+  "git_sha": "e619978",
+  "stamp": "20260928-2049",
+  "systems": {
+    "ad_auction": {
+      "kind": "ode",
+      "model_id": "ode:ad_auction_pair",
+      "ode": [
+        "ad_auction_pair"
+      ]
+    },
+    "epidemic": {
+      "kind": "ensemble",
+      "model_id": "epidemic mean y2+c",
+      "ode": [
+        "epidemic_c",
+        "epidemic_y2"
+      ]
+    },
+    "hospital_queue": {
+      "kind": "ode",
+      "model_id": "ode:hospital_queue_canon2",
+      "ode": [
+        "hospital_queue_canon2"
+      ]
+    },
+    "market": {
+      "kind": "ode",
+      "model_id": "market canon4 hard hysteresis gate",
+      "ode": [
+        "market_canon4"
+      ]
+    },
+    "power_grid": {
+      "kind": "perobs",
+      "model_id": "perobs[pg9_L0 load, w5 frequency+share]",
+      "ode": [
+        "power_grid_pg9",
+        "power_grid_w5"
+      ]
+    },
+    "social_contagion": {
+      "kind": "ensemble",
+      "model_id": "social median z20 z21 canon3",
+      "ode": [
+        "social_contagion_canon3",
+        "social_contagion_z20",
+        "social_contagion_z21"
+      ]
+    },
+    "supply_chain": {
+      "kind": "ode",
+      "model_id": "ens9 perobs: shipments=v8c, inventory_supplier=v8c, inventory_retail=v8c",
+      "ode": [
+        "supply_chain_v8c"
+      ]
+    },
+    "wildlife": {
+      "kind": "ensemble",
+      "model_id": "wildlife_tm median: v8h p7, tmqs AB shelter lag + predator settlement, tmq AC",
+      "ode": [
+        "wildlife_tmq",
+        "wildlife_tmqs",
+        "wildlife_v8h"
+      ]
+    }
+  },
+  "tag": "alt1parts",
+  "zip_bytes": 53280,
+  "zip_sha256": "334019af893588a55e78c9ea7d57cb8559f1e455dd077795ce93d3a6b2000f18"
+}

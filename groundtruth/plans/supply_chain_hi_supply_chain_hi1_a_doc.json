@@ -1,0 +1,106 @@
+{
+ "format": 1,
+ "system": "supply_chain",
+ "observables": [
+  "shipments",
+  "inventory_supplier",
+  "inventory_retail"
+ ],
+ "controls": [
+  "order_quantity",
+  "lead_time_buy",
+  "product_mix",
+  "production_effort",
+  "receiving_effort",
+  "maintenance"
+ ],
+ "bounds": {
+  "order_quantity": [
+   0.0,
+   80.0
+  ],
+  "lead_time_buy": [
+   0.0,
+   1.0
+  ],
+  "product_mix": [
+   0.0,
+   1.0
+  ],
+  "production_effort": [
+   0.0,
+   1.5
+  ],
+  "receiving_effort": [
+   0.0,
+   1.5
+  ],
+  "maintenance": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "order_quantity": 0.0,
+  "lead_time_buy": 1.0,
+  "product_mix": 0.5,
+  "production_effort": 1.0,
+  "receiving_effort": 1.5,
+  "maintenance": 1.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  112.89410442145669,
+  731.3408383407568,
+  2245.2839509089754
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "supply_chain_hi1",
+  "theta": [
+   11.335466233889937,
+   0.3659643946057281,
+   0.9921269159508873,
+   0.44052922941567546,
+   807.9349890754315,
+   1412.394265529571,
+   0.45501721575404336,
+   0.2354449165187272,
+   212.61079092611027,
+   8.427837112299795,
+   4.982979652260719,
+   41.130008424174555,
+   0.09277248790007007,
+   25.49815439401162,
+   0.5181584989600017,
+   0.009329755167533723,
+   0.7061739378867974,
+   0.00868092386828718,
+   0.49474134560112615
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 1
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:supply_chain_hi1",
+  "n_runs": 4
+ }
+}

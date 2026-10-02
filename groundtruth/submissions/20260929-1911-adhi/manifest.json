@@ -1,0 +1,17 @@
+{
+  "git_sha": "19d65a1",
+  "stamp": "20260929-1911",
+  "systems": {
+    "ad_auction": {
+      "kind": "perobs",
+      "model_id": "ad_auction_hi:hi1m:med(hi1,v8b);hi1;med(hi1,v8b)",
+      "ode": [
+        "ad_auction_hi1",
+        "ad_auction_v8b"
+      ]
+    }
+  },
+  "tag": "adhi",
+  "zip_bytes": 7302,
+  "zip_sha256": "e1f968f8a5379a236d193cd57e0bf0f148528137303216f90a322b71c86495ba"
+}

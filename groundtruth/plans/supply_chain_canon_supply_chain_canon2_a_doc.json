@@ -1,0 +1,104 @@
+{
+ "format": 1,
+ "system": "supply_chain",
+ "observables": [
+  "shipments",
+  "inventory_supplier",
+  "inventory_retail"
+ ],
+ "controls": [
+  "order_quantity",
+  "lead_time_buy",
+  "product_mix",
+  "production_effort",
+  "receiving_effort",
+  "maintenance"
+ ],
+ "bounds": {
+  "order_quantity": [
+   0.0,
+   80.0
+  ],
+  "lead_time_buy": [
+   0.0,
+   1.0
+  ],
+  "product_mix": [
+   0.0,
+   1.0
+  ],
+  "production_effort": [
+   0.0,
+   1.5
+  ],
+  "receiving_effort": [
+   0.0,
+   1.5
+  ],
+  "maintenance": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "order_quantity": 0.0,
+  "lead_time_buy": 1.0,
+  "product_mix": 0.5,
+  "production_effort": 1.0,
+  "receiving_effort": 1.5,
+  "maintenance": 1.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  112.89410442145669,
+  731.3408383407568,
+  2245.2839509089754
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "supply_chain_canon2",
+  "theta": [
+   11.625220316698384,
+   0.3925400026412439,
+   1.0056599372394683,
+   1401.3727038440522,
+   3.438390708319606,
+   0.3038666517537656,
+   0.38153565264747913,
+   0.25605207637611044,
+   57.87451223833507,
+   42.075889311063065,
+   0.3379182169215692,
+   0.007470344797905618,
+   0.08746733607526502,
+   0.7086784658651204,
+   76.84920344321637,
+   0.712603741235896,
+   0.5457116719753896
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:supply_chain_canon2",
+  "n_runs": 4
+ }
+}

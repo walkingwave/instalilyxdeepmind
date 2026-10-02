@@ -82,6 +82,12 @@ effect needs a steep rate threshold (0.085 → none, 0.095 → strong). B cannot
 build capacity loss at our $k_R$, and y3 cuts B off above tax 0.037). It reads as **A beyond the freeze**: dealers
 take on inventory through trades and fund it at the rate.
 
+Every 8-run full fit of this round, scored on p7 (a true hold-out: fitted before it existed), P / V / D, mean:
+y3 AB .149/.637/.091 0.293; y3 BC 0.291; y5 AB 0.289; z AB 0.288; z BC 0.286; z2 AB 0.287; z3 AB 0.291;
+z4 AB 0.295; z5 AB 0.291; z7 AB 0.293; z8 AB 0.287; z8 BC 0.290; z9 AB 0.272; z9 BC 0.273; z10 AB 0.292;
+z11 AB 0.268. Depth is 0.09 for all of them: none of the structures can drain depth below the tax level while
+trading.
+
 `market_z12` (built; lab run on 9 runs not finished): y3 +
 $\dot F = k_F\,g\,(r/0.1)^{n_F}\,s_d(x)\,(1-F) - F/\tau_F$ under A, depth $\times (1-F)$, price support
 $A_1 + k_{FP}F$, volume $+\,c_F \times$ build. No build in a freeze (multilevel holds depth 22 through 80 frozen

@@ -1,0 +1,17 @@
+{
+  "git_sha": "19d65a1",
+  "stamp": "20260929-1832",
+  "systems": {
+    "power_grid": {
+      "kind": "ensemble",
+      "model_id": "ens9 perobs: load=v9c+w5, frequency=v9c+w5, renewable_share=v9c+w5",
+      "ode": [
+        "power_grid_v9c",
+        "power_grid_w5"
+      ]
+    }
+  },
+  "tag": "pgens",
+  "zip_bytes": 6303,
+  "zip_sha256": "6b35595454553b5b10ceb4ca5b5999a48d8c1a8c7173b20c997c27000b479f20"
+}

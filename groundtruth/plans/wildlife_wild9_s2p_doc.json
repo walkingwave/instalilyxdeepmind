@@ -1,0 +1,95 @@
+{
+ "format": 1,
+ "system": "wildlife",
+ "observables": [
+  "prey_north",
+  "predator_north",
+  "prey_south",
+  "predator_south"
+ ],
+ "controls": [
+  "hunting_quota",
+  "habitat_protection",
+  "corridor_access"
+ ],
+ "bounds": {
+  "hunting_quota": [
+   0.0,
+   8.0
+  ],
+  "habitat_protection": [
+   0.0,
+   1.0
+  ],
+  "corridor_access": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "hunting_quota": 0.0,
+  "habitat_protection": 1.0,
+  "corridor_access": 0.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  405.08029385844577,
+  22.645370695097846,
+  330.88636415862425,
+  23.595791697538118
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "wildlife_wild9p",
+  "theta": [
+   0.8808542347385102,
+   0.7975559776432426,
+   1.3679210929831758,
+   25.10751258551428,
+   0.022415886831882822,
+   0.03480665493839356,
+   88.06126139556702,
+   0.9009507418792193,
+   898.4621785824578,
+   0.025934196891793958,
+   2.3528179848824946e-05,
+   0.40625352293732203,
+   0.047178310123975935,
+   0.030439676088799085,
+   1.7679310288109504,
+   1.128539203225617,
+   0.10132402353824638,
+   19.622238239382696,
+   0.029743134949109507,
+   18.1073226714383,
+   0.8056096865981848
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:wildlife_wild9p two-stage fit (prey on prey, predators with own transit)",
+  "n_runs": 5
+ }
+}

@@ -1679,3 +1679,100 @@ footprint. The largest single miss anywhere remains hospital's post-overtime wai
 Reading after this round: on the data we own, structure and fitting are close to exhausted; the
 gains of the last two days came from runs in regimes nobody had observed (traffic +0.063,
 wildlife, power_grid).
+
+### 40. Mon night round: per-system structure pushes, no credits (`plans/*_{mkt9,soc9,hosp9,epi9,wild9,str9,pg9}_notes.md`, `plans/ens9_select.md`)
+
+Leave-one-run-out at 1.0 σ on every run; acceptance: mean up, pulse/recovery fold and exam not down.
+Fit noise: rerunning the same fit moves one fold by up to ±0.03 and the mean by ±0.01 (time-budgeted
+fits on a loaded machine), so gains under 0.01 are not evidence.
+
+| system | candidate | LOO pick → cand | decision |
+|---|---|---|---|
+| hospital | h9w1: wait target $c_w W/(f_1+\epsilon_w)$, rise/fall $\tau_w=51$, $\tau_{dn}=20$ | 0.675 → 0.699, exam +0.044 | built into final2 |
+| reservoir | str9 c: groundwater $G=g\,\mathrm{softplus}(L_{gw}-L)$, slow quality stock $\dot N=(L/L_f-N)/\tau_n$, $k_{ret}=0$ | 0.812 → 0.8745 | final2 |
+| power_grid | w5 package; pg9 thermostat load population | exam 0.657 → 0.685 | final2, **later lost publicly (§45)** |
+| social | median(z20, z21) | 0.598 → 0.622, 5/6 folds | final2 |
+| wildlife | median(v8h, wild9p two-stage, wild9m) | 0.675 → 0.685 | final2 |
+| market | gates, committees (60 combos) | best +0.016 but loses exam and p7 | keep y3 |
+| epidemic | 8 structures; mean(y2, c) +0.006 | noise | keep y2 |
+| supply, ad | diagnosis only | – | keep |
+
+Market diagnosis: the trade/freeze boundary in (rate, tax) is not linear: (0.085, 0.0425) trades,
+(0.0949, 0.0403) freezes, (0.0323, 0.0459) freezes, (0.0965, 0.0362) trades.
+
+### 41. Literal-code reading of the simulators (no credits; `plans/*_canon_notes.md`, `plans/textmine_report.md`, `plans/snap_report.md`)
+
+Hypothesis: the simulators are written code, so they use textbook forms, hard `min`/`max`/`if`
+switches and dt = 1 updates. Results:
+- **Market: the freeze is a switch with memory.** Book starts closed; an open book closes when
+  tax > $x_{hi}\in(0.0425, 0.0436)$; a closed book reopens only when tax < $x_{lo}\in(0.0342, 0.0403)$.
+  Fits every block with no rate term. A funding stock $F$ that fills only while frozen,
+  $\dot F=(1-g)(r/0.1)/116$, reproduces p7's depth drain 110 → 12 in-sample (p7 0.325 → 0.662). LOO:
+  canon4 0.573 vs y3 0.568, p7 +0.09, but multilevel −0.093 (price flow speed while trading). Not shipped.
+- **Hospital: canon2 = handover (orientation lag) + returns after discharge, fatigue off.** The recovery
+  hold settles at queue 23.0, discharges 11.5, wait 0: every patient spends exactly 2 ticks in service.
+  LOO 0.699 → 0.735, all 8 folds up. Risk: long recovery queue 23 → 105 by t1000 (pick 15.5).
+  50/50 mean with h9w1: 0.719, every fold ≥ pick (shipped in final3).
+- **Epidemic: clinic availability $=1-H/h_{cap}$** ($k$ lands 0.94–1.06 in all seven fits), $\tau_{wane}\approx90$,
+  length of stay ≈ 10, $h_{cap}\approx154$. Closure acts on children only. No LOO gain.
+- **Supply: 3-tick pure delay, supplier drops by exactly the order quantity 40 in one tick, shipments
+  alternate 29.35/44.74 on even/odd ticks on the interior hold** (dt = 1 threshold). Active pair
+  congestion + commitment. No LOO gain.
+- **Round constants: not supported.** 73 of 181 parameters within 3% of a round value vs 72 expected at
+  random; snapping ties a non-round pin at the same distance. Reservoir inflow (observed directly)
+  is 11.28 / 2.21 / period 67.75: the constants are not round, the structure is literal.
+- Social, wildlife, traffic, power_grid, ad/reservoir mechanism pruning: no gain (textbook forms lose;
+  reservoir's irrigation return fits to ≈ 0, confirming AC; ad needs B and C).
+- The free `documents` text is now saved (`data/<sys>/docs.json`); it repeats the brief plus reset ranges.
+
+### 42. Reset rule and horizon audits (Tue, no credits; `plans/rr_report.md`, `plans/lh_report.md`)
+
+Reset rule: 7 systems match the documented init. Mismatches: supply conveyors seeded (+0.0005 when
+fixed), power_grid (the literal rule loses 0.006), reservoir bank (+0.008, weakly pinned). None shipped.
+Horizon: models agree early and split late only on social (final3 vs alt1 0.26 → 0.50 σ): the 2-mean
+carries half of z21's long-hold defect, so social ships median(z20, z21, canon3). Horizon switches
+never win a nested test.
+
+### 43. Strong systems (Tue, no credits; `plans/{ad_auction,traffic,reservoir,supply_chain}_hi_notes.md`)
+
+- **ad_auction hi1:** exposure and preparation kept per breadth bin (10 bins, impressions ∝ people still
+  available); v8b spread the depleted narrow core over new people when targeting widened (exam spend
+  79 vs 39 predicted). Per-observable median with v8b: LOO 0.859 → 0.867, 4/5 folds, hold_rec −0.020.
+- **traffic dln_s:** 4-stage travel delay (flows are exactly 0 for 11 ticks after a start), lane closure
+  slows route b even when empty $(1-c_b\,\mathrm{lane}^{n})$, $c_b=1.12$, $n=4.5$, and shrinks its holding capacity.
+  LOO 0.745 → 0.767, wins pulse40 and exam. $v_{free}=48.7$ is the real empty-road speed.
+- **reservoir str9 c survives refit without p8:** p8 held-out +0.05–0.06 from p1 + p2 alone.
+- **supply:** a dt = 1 literal family fixes the pulse fold (0.44 → 0.91) but every candidate loses hold_mid.
+
+### 44. Public-history consistency check (Tue, no credits; `plans/ph_*.md`)
+
+For candidate $C$ as truth, score every past upload on 40 eval-like 4,000-tick episodes and compare
+with its public score. It separates old l0/l1 models from the ODE models cleanly (LOO error 0.10–0.65
+vs 0.013–0.03) but cannot rank close neighbours: candidate differences 0.001–0.01 equal the seed
+noise, and the w5 sanity check passes only weakly. Readings: hospital history rules out a recovery
+queue of ~15 (h9w1 worst fit; canon2 and the 50/50 best); reservoir str9 c as truth fits the history
+best (gap 0.013, corr 1.00); ad, traffic, wildlife, supply, market, power_grid, epidemic: no reliable edge.
+
+### 45. u017 and the builds for the last two days
+
+u017 = final1 with power_grid w5: **0.7538**; power_grid 0.7585 vs 0.7745. w5's held-out gain (+0.028
+exam, most of it from the p8 fold) did not transfer: −0.016. Rule since: a gain must be spread over
+most folds, not driven by one run.
+
+| build | changes vs final1 | forecast |
+|---|---|---:|
+| final4 (`submissions/20260929-2000-final4`) | reservoir str9 c, hospital 50/50, social 3-median, wildlife median-5, ad hi1, traffic dln_s | ~0.76–0.77 |
+| alt1b (`submissions/20260929-1840-alt1b`) | runners-up: supply v8c, hospital canon2, market canon4, pg median(v9c,w5), epi y2+c, social 2-mean, reservoir v8 | test build |
+
+Plan: final4 in Public first (the only confident measurement), Final only if it beats 0.7555.
+Purchase 9 (`plans/p9_final.json`, 2,727 credits with the market hysteresis test and the hospital
+canon2 separator) designed and dry-run checked, not bought.
+
+### 46. Final entry (Tue night)
+
+u019 (final4) public **0.7681**: reservoir 0.894 (+0.063), hospital 0.729 (+0.040), ad 0.878 (+0.013),
+traffic 0.847 (+0.009), wildlife 0.750 (+0.012); social 0.636 (−0.009, the 3-median lost to z20).
+u020 (final6 = final5 with hospital canon2 alone) public **0.7681**: hospital 0.717 (−0.012 vs the 50/50).
+Final entry: `submissions/20260929-2130-final5` = the best Public-scored version of every system
+(social back on u016's z20, supply on u010b's v8b): expected **0.769**. Three of the four late held-out
+wins lost publicly (w5, social 3-median, canon2 alone); only Public-verified pieces went into the Final.

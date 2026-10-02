@@ -1,0 +1,32 @@
+{
+ "ad_auction": {
+  "doc": "submissions/20260928-1440-final1/ad_auction/model.json"
+ },
+ "epidemic": {
+  "doc": "submissions/20260928-1440-final1/epidemic/model.json"
+ },
+ "hospital_queue": {
+  "doc": "plans/ens9_hospital_queue_doc.json"
+ },
+ "market": {
+  "doc": "plans/ens9_market_doc.json"
+ },
+ "power_grid": {
+  "doc": "plans/ens9_power_grid_doc.json"
+ },
+ "reservoir": {
+  "doc": "submissions/20260928-1440-final1/reservoir/model.json"
+ },
+ "social_contagion": {
+  "doc": "plans/ens9_social_contagion_doc.json"
+ },
+ "supply_chain": {
+  "doc": "plans/ens9_supply_chain_doc.json"
+ },
+ "traffic": {
+  "doc": "submissions/20260928-1440-final1/traffic/model.json"
+ },
+ "wildlife": {
+  "doc": "submissions/20260928-1440-final1/wildlife/model.json"
+ }
+}

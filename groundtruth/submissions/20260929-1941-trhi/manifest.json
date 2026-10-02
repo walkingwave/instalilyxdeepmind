@@ -1,0 +1,16 @@
+{
+  "git_sha": "19d65a1",
+  "stamp": "20260929-1941",
+  "systems": {
+    "traffic": {
+      "kind": "ode",
+      "model_id": "ode:traffic_hi4",
+      "ode": [
+        "traffic_hi4"
+      ]
+    }
+  },
+  "tag": "trhi",
+  "zip_bytes": 6995,
+  "zip_sha256": "196b71cb752e30452c755bc2df7bd65295159adf5937dc393f479b2b7973fd85"
+}

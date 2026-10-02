@@ -1,0 +1,92 @@
+{
+  "git_sha": "a729357",
+  "stamp": "20260928-1440",
+  "systems": {
+    "ad_auction": {
+      "kind": "perobs",
+      "model_id": "perobs",
+      "ode": [
+        "ad_auction_min",
+        "ad_auction_s1",
+        "ad_auction_v8b"
+      ]
+    },
+    "epidemic": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "epidemic_y2"
+      ]
+    },
+    "hospital_queue": {
+      "kind": "ensemble",
+      "model_id": "hosp median: h9w1 + canon2 handover+returns (50/50)",
+      "ode": [
+        "hospital_queue_canon2",
+        "hospital_queue_hosp9"
+      ]
+    },
+    "market": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "market_y3"
+      ]
+    },
+    "power_grid": {
+      "kind": "ode",
+      "model_id": "ode:power_grid_w5",
+      "ode": [
+        "power_grid_w5"
+      ]
+    },
+    "reservoir": {
+      "kind": "ode",
+      "model_id": "ode:reservoir_str9",
+      "ode": [
+        "reservoir_str9"
+      ]
+    },
+    "social_contagion": {
+      "kind": "ensemble",
+      "model_id": "ens9 perobs: adopters_a=z20+z21, adopters_b=z20+z21",
+      "ode": [
+        "social_contagion_z20",
+        "social_contagion_z21"
+      ]
+    },
+    "supply_chain": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "supply_chain_v8b"
+      ]
+    },
+    "traffic": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "traffic_z8"
+      ]
+    },
+    "wildlife": {
+      "kind": "ensemble",
+      "model_id": "wildlife_tm median: v8h p7, wild9m, tmq AC (settlement on prey and predators), tmp AB predation, tms AB shelter lag",
+      "ode": [
+        "wildlife_tmp",
+        "wildlife_tmq",
+        "wildlife_tms",
+        "wildlife_v8h",
+        "wildlife_wild9m"
+      ]
+    }
+  },
+  "tag": "final3",
+  "zip_bytes": 59970,
+  "zip_sha256": "613261f8e6e77b186ff18e5c5dac043d6920db805874c0c32c52668fe6d1f811",
+  "from": "final2",
+  "swapped": {
+    "hospital_queue": "C:\\Users\\Dylan Ho\\Documents\\Projects\\instalily-hackathon\\instalilyxdeepmind\\groundtruth\\submissions\\20260928-1947-f3parts",
+    "wildlife": "C:\\Users\\Dylan Ho\\Documents\\Projects\\instalily-hackathon\\instalilyxdeepmind\\groundtruth\\submissions\\20260928-1947-f3parts"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "git_sha": "e619978",
+  "stamp": "20260928-1801",
+  "systems": {
+    "social_contagion": {
+      "kind": "ensemble",
+      "model_id": "ens9 perobs: adopters_a=z20+z21, adopters_b=z20+z21",
+      "ode": [
+        "social_contagion_z20",
+        "social_contagion_z21"
+      ]
+    }
+  },
+  "tag": "f2soc",
+  "zip_bytes": 6464,
+  "zip_sha256": "a605d71d0db68cfa2b6189438ae184fd39c9471374d3abccd861804e8df49248"
+}
