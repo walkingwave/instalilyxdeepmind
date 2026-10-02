@@ -1,0 +1,15 @@
+supply_chain / supply_chain_min2: runs [('p1.hold_rec', 120), ('p2.pulse200_200', 400), ('p3.hold_mid', 450)] sigma [ 15.925 173.597 415.48 ]
+  LOO p1.hold_rec          ode [0.987 0.928 0.999] mean 0.971 | l0b_lin [0.365 0.426 0.773] mean 0.521 | pers 0.543 [121s]
+  LOO p2.pulse200_200      ode [0.807 0.918 0.948] mean 0.891 | l0b_lin [0.503 0.643 0.605] mean 0.584 | pers 0.569 [121s]
+  LOO p3.hold_mid          ode [0.679 0.441 0.335] mean 0.485 | l0b_lin [0.334 0.41  0.392] mean 0.379 | pers 0.645 [120s]
+  full fit cost 157.5 [241s]
+  in-sample p1.hold_rec          [0.987 0.984 0.999] mean 0.990
+  in-sample p2.pulse200_200      [0.87  0.919 0.956] mean 0.915
+  in-sample p3.hold_mid          [0.812 0.964 0.908] mean 0.895
+  theta {'p0': 10.18969, 'kc': 0.45058, 'tau_c': 1.72539, 'd0': 0.0, 'd1': 51.65381, 'kq0': 1.49979, 'kl': 9.19068, 'a0': 45.59971, 'dem': 26.6865, 'kd': 0.00808, 'kcool': 0.01452}
+  AT BOUND: ['d0', 'kq0']
+  eval[sustained  ] finite=True 0.3s outside=0.00 min=[  3.3 108.5   1.8] max=[ 31.2 362.  235.8]
+  eval[order      ] finite=True 0.3s outside=0.05 min=[0. 0. 0.] max=[  68.4  362.  4659.9]
+  eval[recovery   ] finite=True 0.3s outside=0.00 min=[ -0. 108.   0.] max=[ 31.  362.  101.4]
+  eval[composition] finite=True 0.3s outside=0.02 min=[-0.  0.  0.] max=[  64.1  362.  2069.8]
+VERDICT ship: LOO ode 0.782 vs l0b_lin 0.495; in-sample 0.933 -> plans\supply_chain_supply_chain_min2_v7b.json

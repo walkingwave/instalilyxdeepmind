@@ -1,0 +1,1297 @@
+{
+ "system": "supply_chain",
+ "sigma": [
+  8.99628796266578,
+  98.06675380768466,
+  234.70898230576614
+ ],
+ "n_episodes": 40,
+ "seed": 23,
+ "history": {
+  "u001": {
+   "hash": "persistence",
+   "public": 0.4203,
+   "sustained": 0.462,
+   "sequence": 0.406
+  },
+  "u003": {
+   "hash": "0b340872",
+   "public": 0.7016,
+   "sustained": 0.508,
+   "sequence": 0.7661
+  },
+  "u004": {
+   "hash": "01772186",
+   "public": 0.6997,
+   "sustained": 0.508,
+   "sequence": 0.764
+  },
+  "u005": {
+   "hash": "1b968cd1",
+   "public": 0.6444,
+   "sustained": 0.506,
+   "sequence": 0.691
+  },
+  "u008": {
+   "hash": "e30a9597",
+   "public": 0.7526,
+   "sustained": 0.577,
+   "sequence": 0.811
+  },
+  "u009": {
+   "hash": "0a7669d9",
+   "public": 0.7549,
+   "sustained": 0.583,
+   "sequence": 0.812
+  },
+  "u010b": {
+   "hash": "93a4c49a",
+   "public": 0.824,
+   "sustained": 0.759,
+   "sequence": 0.845
+  },
+  "u012..u017": {
+   "hash": "9fb0dc3a",
+   "public": 0.8217,
+   "sustained": 0.754,
+   "sequence": 0.844
+  }
+ },
+ "candidates": {
+  "final4": {
+   "hash": "9fb0dc3a",
+   "dir": "submissions/20260929-2000-final4",
+   "in_history_as": "u012..u017"
+  },
+  "alt1b": {
+   "hash": "214aed88",
+   "dir": "submissions/20260929-1840-alt1b",
+   "in_history_as": null
+  }
+ },
+ "truths": {
+  "final4": {
+   "hash": "9fb0dc3a",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.09612404351946738,
+     "rmse": 0.10248772206570354,
+     "offset": -0.09612404351946738,
+     "corr": 0.9965557125978893,
+     "rank_corr": 0.9642857142857145
+    },
+    "common": {
+     "n": 7,
+     "mae": 0.09612404351946738,
+     "rmse": 0.10248772206570354,
+     "offset": -0.09612404351946738,
+     "corr": 0.9965557125978893,
+     "rank_corr": 0.9642857142857145
+    },
+    "bands_common": {
+     "n": 14,
+     "mae": 0.1393642384066198,
+     "rmse": 0.17703860269368893,
+     "offset": -0.13820957090458388,
+     "corr": 0.7285035728895979,
+     "rank_corr": 0.7142857142857143
+    }
+   },
+   "forecast": {
+    "alt1b": {
+     "implied": 0.9219510274002541,
+     "offset_fc": 0.8258269838807868,
+     "linear_fc": 0.7946617362401618
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.43189206712849,
+     "sustained": 0.4539173274857487,
+     "sequence": 0.42455031367607043,
+     "cat_mean": 0.43189206712849,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.7986914662669164,
+     "sustained": 0.7734033633474531,
+     "sequence": 0.8071208339067376,
+     "cat_mean": 0.7986914662669164,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.7991468117026048,
+     "sustained": 0.776463574661241,
+     "sequence": 0.8067078907163928,
+     "cat_mean": 0.7991468117026048,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.7535214577735798,
+     "sustained": 0.7239086298811552,
+     "sequence": 0.7633924004043879,
+     "cat_mean": 0.7535214577735798,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.8727195257328102,
+     "sustained": 0.8773142625708324,
+     "sequence": 0.871187946786803,
+     "cat_mean": 0.8727195257328103,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.8748540662337355,
+     "sustained": 0.8844223357383406,
+     "sequence": 0.8716646430655338,
+     "cat_mean": 0.8748540662337355,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.9395429097981347,
+     "sustained": 0.9693848860389476,
+     "sequence": 0.9295955843845304,
+     "cat_mean": 0.9395429097981347,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.9219510274002543,
+     "sustained": 0.9040655621984343,
+     "sequence": 0.9279128491341941,
+     "cat_mean": 0.9219510274002541,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "alt1b": {
+   "hash": "214aed88",
+   "stats": {
+    "others": {
+     "n": 8,
+     "mae": 0.08255866178111954,
+     "rmse": 0.08853940045306843,
+     "offset": -0.08255866178111954,
+     "corr": 0.9941822452098616,
+     "rank_corr": 0.9523809523809524
+    },
+    "common": {
+     "n": 7,
+     "mae": 0.08003118097838602,
+     "rmse": 0.08673731687103473,
+     "offset": -0.08003118097838602,
+     "corr": 0.9937734024840417,
+     "rank_corr": 0.9642857142857145
+    },
+    "bands_common": {
+     "n": 14,
+     "mae": 0.11386753681438765,
+     "rmse": 0.14306219033249284,
+     "offset": -0.11129762543457278,
+     "corr": 0.8125748232937093,
+     "rank_corr": 0.8637362637362638
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.9219510274002541,
+     "offset_fc": 0.8419198464218681,
+     "linear_fc": 0.8099329929778116
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.42605960806438387,
+     "sustained": 0.44401062034129596,
+     "sequence": 0.4200759373054132,
+     "cat_mean": 0.42605960806438387,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.7785183151386778,
+     "sustained": 0.7206705092346432,
+     "sequence": 0.7978009171066892,
+     "cat_mean": 0.7785183151386776,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.7784443696245793,
+     "sustained": 0.7234459079661021,
+     "sequence": 0.796777190177405,
+     "cat_mean": 0.7784443696245793,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.7329106606112756,
+     "sustained": 0.6720307450814192,
+     "sequence": 0.7532039657878945,
+     "cat_mean": 0.7329106606112756,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.8696085846801189,
+     "sustained": 0.8426773312914859,
+     "sequence": 0.8785856691429967,
+     "cat_mean": 0.869608584680119,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.8639915981736437,
+     "sustained": 0.8281054888101481,
+     "sequence": 0.8759536346281421,
+     "cat_mean": 0.8639915981736437,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.9081851305560228,
+     "sustained": 0.8880229977035293,
+     "sequence": 0.9149058415068542,
+     "cat_mean": 0.908185130556023,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.9219510274002543,
+     "sustained": 0.9040655621984343,
+     "sequence": 0.9279128491341941,
+     "cat_mean": 0.9219510274002541,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.9219510274002543,
+     "sustained": 0.9040655621984343,
+     "sequence": 0.9279128491341941,
+     "cat_mean": 0.9219510274002541,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "hist:u001": {
+   "hash": "persistence",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.3111557414097491,
+     "rmse": 0.31692402780480816,
+     "offset": 0.3111557414097491,
+     "corr": 0.19005850399250745,
+     "rank_corr": 0.03571428571428572
+    },
+    "common": {
+     "n": 6,
+     "mae": 0.298047042832789,
+     "rmse": 0.3030774519465831,
+     "offset": 0.298047042832789,
+     "corr": 0.2150263070705047,
+     "rank_corr": 0.3142857142857143
+    },
+    "bands_common": {
+     "n": 12,
+     "mae": 0.24165796770291129,
+     "rmse": 0.27536302450806094,
+     "offset": 0.24165796770291129,
+     "corr": -0.3243656642798318,
+     "rank_corr": -0.2517482517482518
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.43189206712849,
+     "offset_fc": 0.729939109961279,
+     "linear_fc": 0.7299730455714368
+    },
+    "alt1b": {
+     "implied": 0.42605960806438387,
+     "offset_fc": 0.7241066508971729,
+     "linear_fc": 0.7236528106143164
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.4327083811911942,
+     "sustained": 0.441645544344549,
+     "sequence": 0.42972932680674275,
+     "cat_mean": 0.4327083811911943,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.43276279254572286,
+     "sustained": 0.4422536633133866,
+     "sequence": 0.4295991689565016,
+     "cat_mean": 0.43276279254572286,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.4153471080954586,
+     "sustained": 0.4224234143089586,
+     "sequence": 0.4129883393576252,
+     "cat_mean": 0.4153471080954585,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.4482476239120004,
+     "sustained": 0.4596387520110822,
+     "sequence": 0.4444505812123066,
+     "cat_mean": 0.44824762391200046,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.43991101484897044,
+     "sustained": 0.45273039857748376,
+     "sequence": 0.435637886939466,
+     "cat_mean": 0.43991101484897044,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.4199408224099196,
+     "sustained": 0.44877932278560434,
+     "sequence": 0.4103279889513581,
+     "cat_mean": 0.41994082240991965,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.43189206712849,
+     "sustained": 0.4539173274857487,
+     "sequence": 0.42455031367607043,
+     "cat_mean": 0.43189206712849,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.43189206712849,
+     "sustained": 0.4539173274857487,
+     "sequence": 0.42455031367607043,
+     "cat_mean": 0.43189206712849,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.42605960806438387,
+     "sustained": 0.44401062034129596,
+     "sequence": 0.4200759373054132,
+     "cat_mean": 0.42605960806438387,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "hist:u003": {
+   "hash": "0b340872",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.09742909791379747,
+     "rmse": 0.1407717489808893,
+     "offset": -0.08406122657381641,
+     "corr": 0.7065626820923372,
+     "rank_corr": -0.14285714285714288
+    },
+    "common": {
+     "n": 6,
+     "mae": 0.10983252527724979,
+     "rmse": 0.151760449697005,
+     "offset": -0.10190618662496641,
+     "corr": 0.7501320498971015,
+     "rank_corr": -0.028571428571428574
+    },
+    "bands_common": {
+     "n": 12,
+     "mae": 0.14063294703269968,
+     "rmse": 0.2018313580283817,
+     "offset": -0.13156648774884092,
+     "corr": 0.5431222821596657,
+     "rank_corr": 0.3916083916083916
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.7986914662669164,
+     "offset_fc": 0.69678527964195,
+     "linear_fc": 0.6907279537922346
+    },
+    "alt1b": {
+     "implied": 0.7785183151386776,
+     "offset_fc": 0.6766121285137112,
+     "linear_fc": 0.6791995095884105
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.4327083811911942,
+     "sustained": 0.441645544344549,
+     "sequence": 0.42972932680674275,
+     "cat_mean": 0.4327083811911943,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.9900760662560067,
+     "sustained": 0.9896176174359914,
+     "sequence": 0.9902288825293454,
+     "cat_mean": 0.9900760662560069,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.8594839062885132,
+     "sustained": 0.8501880667915704,
+     "sequence": 0.8625825194541608,
+     "cat_mean": 0.8594839062885131,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.8099705367793562,
+     "sustained": 0.7401076517380211,
+     "sequence": 0.8332581651264679,
+     "cat_mean": 0.8099705367793562,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.8148772451915782,
+     "sustained": 0.749946823353703,
+     "sequence": 0.8365207191375367,
+     "cat_mean": 0.8148772451915782,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.8002209840431498,
+     "sustained": 0.7680168363157043,
+     "sequence": 0.8109556999522983,
+     "cat_mean": 0.8002209840431498,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.7986914662669164,
+     "sustained": 0.7734033633474531,
+     "sequence": 0.8071208339067376,
+     "cat_mean": 0.7986914662669164,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.7986914662669164,
+     "sustained": 0.7734033633474531,
+     "sequence": 0.8071208339067376,
+     "cat_mean": 0.7986914662669164,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.7785183151386778,
+     "sustained": 0.7206705092346432,
+     "sequence": 0.7978009171066892,
+     "cat_mean": 0.7785183151386776,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "hist:u004": {
+   "hash": "01772186",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.09699018659770157,
+     "rmse": 0.14013704097905344,
+     "offset": -0.08375051161996039,
+     "corr": 0.7095356336799733,
+     "rank_corr": -0.14285714285714288
+    },
+    "common": {
+     "n": 6,
+     "mae": 0.10939635298108598,
+     "rmse": 0.15108501220514703,
+     "offset": -0.10146779493951964,
+     "corr": 0.7526015868843764,
+     "rank_corr": -0.028571428571428574
+    },
+    "bands_common": {
+     "n": 12,
+     "mae": 0.1404965068509587,
+     "rmse": 0.2016076367982961,
+     "offset": -0.13147721911110807,
+     "corr": 0.5438819833256152,
+     "rank_corr": 0.3916083916083916
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.7991468117026048,
+     "offset_fc": 0.6976790167630852,
+     "linear_fc": 0.6914072334576049
+    },
+    "alt1b": {
+     "implied": 0.7784443696245793,
+     "offset_fc": 0.6769765746850597,
+     "linear_fc": 0.6795301136263112
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.43276279254572286,
+     "sustained": 0.4422536633133866,
+     "sequence": 0.4295991689565016,
+     "cat_mean": 0.43276279254572286,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.9900760662560067,
+     "sustained": 0.9896176174359914,
+     "sequence": 0.9902288825293454,
+     "cat_mean": 0.9900760662560069,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.8593656880411018,
+     "sustained": 0.8482112020591366,
+     "sequence": 0.8630838500350902,
+     "cat_mean": 0.8593656880411018,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.8098749523509271,
+     "sustained": 0.7429810136958126,
+     "sequence": 0.8321729319026319,
+     "cat_mean": 0.809874952350927,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.8143129445680583,
+     "sustained": 0.7504974354627085,
+     "sequence": 0.8355847809365082,
+     "cat_mean": 0.8143129445680584,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.8002143258753008,
+     "sustained": 0.7689654727586743,
+     "sequence": 0.8106306102475097,
+     "cat_mean": 0.800214325875301,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.7991468117026048,
+     "sustained": 0.776463574661241,
+     "sequence": 0.8067078907163928,
+     "cat_mean": 0.7991468117026048,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.7991468117026048,
+     "sustained": 0.776463574661241,
+     "sequence": 0.8067078907163928,
+     "cat_mean": 0.7991468117026048,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.7784443696245793,
+     "sustained": 0.7234459079661021,
+     "sequence": 0.796777190177405,
+     "cat_mean": 0.7784443696245793,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "hist:u005": {
+   "hash": "1b968cd1",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.07098847884421157,
+     "rmse": 0.09289292732185156,
+     "offset": -0.030883009305833018,
+     "corr": 0.7885297535603429,
+     "rank_corr": -0.14285714285714288
+    },
+    "common": {
+     "n": 6,
+     "mae": 0.07145680161384348,
+     "rmse": 0.09639792356411679,
+     "offset": -0.04739326789454188,
+     "corr": 0.8310345939284737,
+     "rank_corr": -0.028571428571428574
+    },
+    "bands_common": {
+     "n": 12,
+     "mae": 0.11229812887320571,
+     "rmse": 0.15753803260821567,
+     "offset": -0.07992169131597884,
+     "corr": 0.5926029726848575,
+     "rank_corr": 0.44055944055944063
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.7535214577735798,
+     "offset_fc": 0.7061281898790379,
+     "linear_fc": 0.7020551252844379
+    },
+    "alt1b": {
+     "implied": 0.7329106606112756,
+     "offset_fc": 0.6855173927167337,
+     "linear_fc": 0.6874644049808034
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.4153471080954586,
+     "sustained": 0.4224234143089586,
+     "sequence": 0.4129883393576252,
+     "cat_mean": 0.4153471080954585,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.8594839062885132,
+     "sustained": 0.8501880667915704,
+     "sequence": 0.8625825194541608,
+     "cat_mean": 0.8594839062885131,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.8593656880411018,
+     "sustained": 0.8482112020591366,
+     "sequence": 0.8630838500350902,
+     "cat_mean": 0.8593656880411018,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.768296784742849,
+     "sustained": 0.7037181953661535,
+     "sequence": 0.7898229812017474,
+     "cat_mean": 0.768296784742849,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.7782038294526922,
+     "sustained": 0.7246467480713706,
+     "sequence": 0.7960561899131328,
+     "cat_mean": 0.7782038294526922,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.7567622907466367,
+     "sustained": 0.716133602355927,
+     "sequence": 0.7703051868768732,
+     "cat_mean": 0.7567622907466367,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.7535214577735798,
+     "sustained": 0.7239086298811552,
+     "sequence": 0.7633924004043879,
+     "cat_mean": 0.7535214577735798,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.7535214577735798,
+     "sustained": 0.7239086298811552,
+     "sequence": 0.7633924004043879,
+     "cat_mean": 0.7535214577735798,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.7329106606112756,
+     "sustained": 0.6720307450814192,
+     "sequence": 0.7532039657878945,
+     "cat_mean": 0.7329106606112756,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "hist:u008": {
+   "hash": "e30a9597",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.09648321892809178,
+     "rmse": 0.11027169492475491,
+     "offset": -0.09648321892809178,
+     "corr": 0.9400591617960666,
+     "rank_corr": 0.8928571428571429
+    },
+    "common": {
+     "n": 6,
+     "mae": 0.10406050112730536,
+     "rmse": 0.11727171789271176,
+     "offset": -0.10406050112730536,
+     "corr": 0.9540796896514733,
+     "rank_corr": 0.942857142857143
+    },
+    "bands_common": {
+     "n": 12,
+     "mae": 0.13244553235991655,
+     "rmse": 0.1657942710654048,
+     "offset": -0.1320519910284302,
+     "corr": 0.7884662507092003,
+     "rank_corr": 0.8601398601398602
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.8727195257328103,
+     "offset_fc": 0.768659024605505,
+     "linear_fc": 0.7457132759522219
+    },
+    "alt1b": {
+     "implied": 0.869608584680119,
+     "offset_fc": 0.7655480835528137,
+     "linear_fc": 0.7433576370706005
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.4482476239120004,
+     "sustained": 0.4596387520110822,
+     "sequence": 0.4444505812123066,
+     "cat_mean": 0.44824762391200046,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.8099705367793562,
+     "sustained": 0.7401076517380211,
+     "sequence": 0.8332581651264679,
+     "cat_mean": 0.8099705367793562,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.8098749523509271,
+     "sustained": 0.7429810136958126,
+     "sequence": 0.8321729319026319,
+     "cat_mean": 0.809874952350927,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.768296784742849,
+     "sustained": 0.7037181953661535,
+     "sequence": 0.7898229812017474,
+     "cat_mean": 0.768296784742849,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.9534777150595491,
+     "sustained": 0.9384292725240787,
+     "sequence": 0.9584938625713727,
+     "cat_mean": 0.9534777150595491,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.8793953939191503,
+     "sustained": 0.8686849396489318,
+     "sequence": 0.8829655453425564,
+     "cat_mean": 0.8793953939191503,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.8727195257328102,
+     "sustained": 0.8773142625708324,
+     "sequence": 0.871187946786803,
+     "cat_mean": 0.8727195257328103,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.8727195257328102,
+     "sustained": 0.8773142625708324,
+     "sequence": 0.871187946786803,
+     "cat_mean": 0.8727195257328103,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.8696085846801189,
+     "sustained": 0.8426773312914859,
+     "sequence": 0.8785856691429967,
+     "cat_mean": 0.869608584680119,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "hist:u009": {
+   "hash": "0a7669d9",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.09922434831220905,
+     "rmse": 0.11398104557886686,
+     "offset": -0.09922434831220905,
+     "corr": 0.937941942211293,
+     "rank_corr": 0.8928571428571429
+    },
+    "common": {
+     "n": 6,
+     "mae": 0.10690272865862131,
+     "rmse": 0.12118608040363775,
+     "offset": -0.10690272865862131,
+     "corr": 0.953290090380145,
+     "rank_corr": 0.942857142857143
+    },
+    "bands_common": {
+     "n": 12,
+     "mae": 0.1379634295673486,
+     "rmse": 0.17198353672870947,
+     "offset": -0.1364184959969292,
+     "corr": 0.7742540762135784,
+     "rank_corr": 0.8601398601398602
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.8748540662337355,
+     "offset_fc": 0.7679513375751142,
+     "linear_fc": 0.7433344327873045
+    },
+    "alt1b": {
+     "implied": 0.8639915981736437,
+     "offset_fc": 0.7570888695150224,
+     "linear_fc": 0.735311071552312
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.43991101484897044,
+     "sustained": 0.45273039857748376,
+     "sequence": 0.435637886939466,
+     "cat_mean": 0.43991101484897044,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.8148772451915782,
+     "sustained": 0.749946823353703,
+     "sequence": 0.8365207191375367,
+     "cat_mean": 0.8148772451915782,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.8143129445680583,
+     "sustained": 0.7504974354627085,
+     "sequence": 0.8355847809365082,
+     "cat_mean": 0.8143129445680584,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.7782038294526922,
+     "sustained": 0.7246467480713706,
+     "sequence": 0.7960561899131328,
+     "cat_mean": 0.7782038294526922,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.9534777150595491,
+     "sustained": 0.9384292725240787,
+     "sequence": 0.9584938625713727,
+     "cat_mean": 0.9534777150595491,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 0.8832336228308794,
+     "sustained": 0.8758995060519255,
+     "sequence": 0.8856783284238642,
+     "cat_mean": 0.8832336228308795,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.8748540662337355,
+     "sustained": 0.8844223357383406,
+     "sequence": 0.8716646430655338,
+     "cat_mean": 0.8748540662337355,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.8748540662337355,
+     "sustained": 0.8844223357383406,
+     "sequence": 0.8716646430655338,
+     "cat_mean": 0.8748540662337355,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.8639915981736437,
+     "sustained": 0.8281054888101481,
+     "sequence": 0.8759536346281421,
+     "cat_mean": 0.8639915981736437,
+     "hash": "214aed88"
+    }
+   }
+  },
+  "hist:u010b": {
+   "hash": "93a4c49a",
+   "stats": {
+    "others": {
+     "n": 7,
+     "mae": 0.09783267211476175,
+     "rmse": 0.10615903410038072,
+     "offset": -0.09773004994616738,
+     "corr": 0.9953357156647278,
+     "rank_corr": 1.0
+    },
+    "common": {
+     "n": 6,
+     "mae": 0.09449763250086625,
+     "rmse": 0.10408428656477504,
+     "offset": -0.09437790663750616,
+     "corr": 0.9973018463870207,
+     "rank_corr": 1.0
+    },
+    "bands_common": {
+     "n": 12,
+     "mae": 0.1374736995116682,
+     "rmse": 0.1760716952759884,
+     "offset": -0.13527025330926892,
+     "corr": 0.7067543595354444,
+     "rank_corr": 0.8951048951048951
+    }
+   },
+   "forecast": {
+    "final4": {
+     "implied": 0.9395429097981347,
+     "offset_fc": 0.8451650031606286,
+     "linear_fc": 0.7950371853715485
+    },
+    "alt1b": {
+     "implied": 0.908185130556023,
+     "offset_fc": 0.8138072239185169,
+     "linear_fc": 0.7722729988744693
+    }
+   },
+   "rows": {
+    "u001": {
+     "overall": 0.4199408224099196,
+     "sustained": 0.44877932278560434,
+     "sequence": 0.4103279889513581,
+     "cat_mean": 0.41994082240991965,
+     "public": 0.4203,
+     "sustained_pub": 0.462,
+     "sequence_pub": 0.406,
+     "hash": "persistence"
+    },
+    "u003": {
+     "overall": 0.8002209840431498,
+     "sustained": 0.7680168363157043,
+     "sequence": 0.8109556999522983,
+     "cat_mean": 0.8002209840431498,
+     "public": 0.7016,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.7661,
+     "hash": "0b340872"
+    },
+    "u004": {
+     "overall": 0.8002143258753008,
+     "sustained": 0.7689654727586743,
+     "sequence": 0.8106306102475097,
+     "cat_mean": 0.800214325875301,
+     "public": 0.6997,
+     "sustained_pub": 0.508,
+     "sequence_pub": 0.764,
+     "hash": "01772186"
+    },
+    "u005": {
+     "overall": 0.7567622907466367,
+     "sustained": 0.716133602355927,
+     "sequence": 0.7703051868768732,
+     "cat_mean": 0.7567622907466367,
+     "public": 0.6444,
+     "sustained_pub": 0.506,
+     "sequence_pub": 0.691,
+     "hash": "1b968cd1"
+    },
+    "u008": {
+     "overall": 0.8793953939191503,
+     "sustained": 0.8686849396489318,
+     "sequence": 0.8829655453425564,
+     "cat_mean": 0.8793953939191503,
+     "public": 0.7526,
+     "sustained_pub": 0.577,
+     "sequence_pub": 0.811,
+     "hash": "e30a9597"
+    },
+    "u009": {
+     "overall": 0.8832336228308794,
+     "sustained": 0.8758995060519255,
+     "sequence": 0.8856783284238642,
+     "cat_mean": 0.8832336228308795,
+     "public": 0.7549,
+     "sustained_pub": 0.583,
+     "sequence_pub": 0.812,
+     "hash": "0a7669d9"
+    },
+    "u010b": {
+     "overall": 1.0,
+     "sustained": 1.0,
+     "sequence": 1.0,
+     "cat_mean": 1.0,
+     "public": 0.824,
+     "sustained_pub": 0.759,
+     "sequence_pub": 0.845,
+     "hash": "93a4c49a"
+    },
+    "u012..u017": {
+     "overall": 0.9395429097981347,
+     "sustained": 0.9693848860389476,
+     "sequence": 0.9295955843845304,
+     "cat_mean": 0.9395429097981347,
+     "public": 0.8217,
+     "sustained_pub": 0.754,
+     "sequence_pub": 0.844,
+     "hash": "9fb0dc3a"
+    },
+    "cand:final4": {
+     "overall": 0.9395429097981347,
+     "sustained": 0.9693848860389476,
+     "sequence": 0.9295955843845304,
+     "cat_mean": 0.9395429097981347,
+     "hash": "9fb0dc3a"
+    },
+    "cand:alt1b": {
+     "overall": 0.9081851305560228,
+     "sustained": 0.8880229977035293,
+     "sequence": 0.9149058415068542,
+     "cat_mean": 0.908185130556023,
+     "hash": "214aed88"
+    }
+   }
+  }
+ }
+}

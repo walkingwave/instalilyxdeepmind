@@ -217,3 +217,175 @@ What limits it:
 
 Next checks before it goes into an upload: run it through `scripts/screen.py` next to the l0b_lin
 and l1 candidates, and try it as a blend member behind the current pick.
+
+## Sat Sep 26: the compose run breaks the wait model (v5, stranded cohort)
+
+Data now: 5 runs, 770 ticks (the four above plus `p3.compose`, 330 ticks). `sigma_proxy` moved to
+[100.0, 120.1, 5.27]. Harness: `scripts/ode_lab.py --system hospital_queue --family hospital_queue_min
+--budget 300 --starts 10 --nfev 60 --tag v2` (5 LOO folds + full fit, 18 min). The old v4 structure was
+refitted on the same five runs for the comparison (`plans/hospital_queue_hospital_queue_min_p3b.json`; the
+committed `_p3.json` is the same full fit, identical theta, LOO 0.822 from another multistart draw).
+
+### What the compose run showed
+
+Recovery baseline (staffing 20, elective 0, diag 0.4, urgent 0.6, overtime 0, followup 1); each control
+alone at 85% of its pulse level for 30 ticks, 15 ticks of recovery in between, then the joint pulse.
+
+| block | ticks | queue | wait | discharges | reading |
+|---|---|---|---|---|---|
+| staffing 7.25 | 0-30 | 49 -> 193 | 3 -> 11 | 0 -> ~10 (batchy) | arrivals ~11.5 minus a slow drain |
+| recovery | 30-45 | 190 -> 154 | 11 -> 16 | ~12 | wait keeps rising while the queue falls: lag |
+| elective 17 | 45-75 | 170 -> 261, plateau | 17 -> 29 | ~10 | plateau at 260, far below the 322-333 cap |
+| diagnostic 0.7 | 90-120 | 250 -> 306 | 34 -> 41 | 6-7 | assessment share up, treatment down |
+| urgent 0.94 | 135-165 | 283 -> 199 | 41 -> 33 | 11-12 | the queue drains 1.5/tick faster with the SAME discharges |
+| overtime 0.85 | 180-210 | 161 -> 23 | 26 -> 20, then 32, 56, 78, ... 254 | 20-28, then 11.5 | wait explodes once the queue nears empty |
+| recovery, followup 0.15, recovery | 210-270 | 23 | 259 -> 396 | 11.5 | wait keeps climbing ~2-3/tick with nothing moved |
+| joint pulse | 270-300 | 51 -> 319 | 370 -> 60 | 0-8 | the refill resets the estimate, time constant ~8 |
+| recovery | 300-330 | 320 -> 289 | 59 -> 46 | ~9 | ordinary Little behaviour again |
+
+Reading the wait as a first-order filter $\dot w = (w^* - w)/\tau_w$ with $\tau_w \approx 10$ gives the target
+$w^* = w + \tau_w \dot w$: about 20 up to $t = 187$, then $\approx 270$ at $t = 188$ (one tick), then
+$+2$ to $+3$ per tick for 80 ticks (300 at $t = 210$, 330 at 225, 380 at 250, 410 at 265), and back to
+$\approx 60$ within two ticks of the refill. So the reported wait is NOT a function of the current queue:
+after the drain the estimate points at something that has been ageing for a long time (270 ticks at 2/tick
+puts its origin near $t = 50$, the start of the long high-queue period), and it is only hidden while the
+ordinary waiting pool is large. The plateau at 260 under elective 17 and the faster drain under urgent
+priority (at unchanged discharges) are two more things v4 could not do: it has one referral gate at 322 and
+no urgent term.
+
+### Structure v5 (cohort model; ends up as the alternate `gtlab/ode/hospital_queue_min2.py`, see verdict)
+
+Seven states $W, A_1, A_2, T, w, C, a$: waiting pool, two assessment stages (chairs), treatment (beds),
+reported wait, stranded cohort size and its mean age. $q = W + A_1 + A_2 + T$, $K = 3$. Fatigue and
+$k_{fat}$ are dropped (no throughput loss is visible after the overtime block: discharges 11.5 = arrivals).
+
+$$\text{eff} = S(1 + g_{ot} O),\quad r_a = c_a\,\text{eff}\,\frac{D}{D + 0.04},\quad r_t = c_t\,\text{eff}\,(1 - D)$$
+$$f_1 = \min(r_a, 3W, 3(\text{chairs} - A_1 - A_2)),\quad f_{2a} = \tfrac{2}{1.77}A_1,\quad
+f_{2b} = \min(\tfrac{2}{1.77}A_2, 3(\text{beds} - T)),\quad f_3 = \min(r_t, 3T)$$
+$$\dot W = \lambda_0\,\sigma\!\left(\tfrac{325 - q}{6}\right) + E\,\sigma\!\left(\tfrac{q_e - q}{20}\right)
+- f_1 - k_l U W - s,\qquad s = k_s W \frac{w}{w + 30}$$
+$$\dot A_1 = f_1 - f_{2a},\quad \dot A_2 = f_{2a} - f_{2b},\quad \dot T = f_{2b} - f_3$$
+$$\dot C = s - C/\tau_z,\quad \dot a = g_z - a\,\frac{s}{C + 1} - a/\tau_z,\quad \tau_z = 150$$
+$$w^* = \frac{W}{f_1 + 1} + a\,\frac{C}{C + 5}\,\sigma\!\left(\tfrac{w_{th} - W}{5}\right),\quad
+\dot w = (w^* - w)/\tau_w$$
+Observables: wait $= w$, queue $= q$, discharges $= f_3$. Reset: $W = q_0$, $w = w_0$, everything else 0.
+Elective cases are cancelled by their own gate at $q_e$ (the 260 plateau); urgent priority pushes routine
+cases out of the pending list ($k_l U W$, so the drain speeds up with $U$ at unchanged discharges);
+waiting patients deteriorate into the cohort at a rate that needs a long reported wait; the cohort ages at
+$g_z$ per tick, is diluted by newcomers and cleared over $\tau_z$ (so $a \le g_z \tau_z$); the estimate
+shows the cohort age only when the ordinary pool is nearly empty ($W < w_{th}$), and a refill hides it
+again through the same $\tau_w$ filter that the data show. Twelve parameters; $\tau_a = 1.77$, $d_h = 0.04$,
+$q_{cap} = 325$ are frozen at their v4 values.
+
+### First fit of v5 (tag v2: $\tau_z = 600$, $s = k_s W$, $w_{th} \le 80$)
+
+Full fit cost 262.0 (old structure on the same runs: 438.6), nothing at a bound:
+lam0 10.37, c_a 0.816, c_t 0.926, chairs 30.5, beds 12.2, ot_gain 0.378, k_l 0.0121, tau_w 6.36,
+q_e 231.9, k_s 1.9e-4, g_z 4.98, w_th 75.1.
+
+| fold (held out) | v4 refit [wait, queue, disch] | mean | v5/v2 [wait, queue, disch] | mean | l0b_lin | persistence |
+|---|---|---|---|---|---|---|
+| hold_rec | 0.989 0.919 0.768 | 0.892 | 0.879 0.818 0.798 | 0.832 | 0.710 | 0.768 |
+| pulse40 | 0.790 0.932 0.739 | 0.820 | 0.771 0.853 0.708 | 0.777 | 0.733 | 0.503 |
+| mid40 | 0.981 0.888 0.587 | 0.819 | 0.951 0.936 0.599 | 0.829 | 0.614 | 0.603 |
+| multilevel200 | 0.759 0.942 0.764 | 0.822 | 0.710 0.896 0.734 | 0.780 | 0.549 | 0.444 |
+| compose | 0.689 0.732 0.695 | 0.705 | 0.706 0.772 0.726 | 0.735 | 0.607 | 0.615 |
+| **LOO mean** | | **0.812** | | **0.790** | 0.643 | 0.587 |
+
+| run | v4 refit in-sample | mean | v5/v2 in-sample | mean |
+|---|---|---|---|---|
+| hold_rec | 0.989 0.916 0.850 | 0.918 | 0.904 0.910 0.824 | 0.879 |
+| pulse40 | 0.849 0.897 0.735 | 0.827 | 0.787 0.865 0.712 | 0.788 |
+| mid40 | 0.980 0.881 0.588 | 0.816 | 0.959 0.953 0.597 | 0.836 |
+| multilevel200 | 0.824 0.952 0.762 | 0.846 | 0.768 0.950 0.765 | 0.828 |
+| compose | 0.738 0.873 0.746 | 0.786 | 0.896 0.914 0.738 | 0.849 |
+| **mean** | | **0.839** | | **0.836** |
+
+Eval sanity (4,000 ticks): v4 refit 0% outside on all four categories, wait max 186; v5/v2 sustained and
+order 0%, but recovery 17% and composition 18% outside with wait reaching 1,095 and 1,466.
+
+Reading: the cohort does what it was built for (compose wait 0.896 vs 0.738 in-sample, compose fold
++0.03) but it leaks into the other runs: with $s = k_s W$ the age $a$ grows from reset at 5/tick even when
+the cohort is a fraction of a patient, and $C/(C+5)$ is linear in $C$, so hold_rec picks up ~10 ticks of
+phantom wait; and $w_{th} = 75$ lets the cohort show whenever the pool is merely low. On long eval
+schedules the cohort formed during a pulse is exposed by every later drain and the age is unbounded
+($g_z \tau_z = 3{,}000$).
+
+### Second fit (tag v3: $\tau_z = 150$, deterioration needs a long wait $s = k_s W\,w/(w+30)$, $w_{th} \le 40$)
+
+Full fit cost 266.1, nothing at a bound: lam0 10.40, c_a 0.829, c_t 0.924, chairs 33.4, beds 11.2,
+ot_gain 0.507, k_l 0.0136, tau_w 7.97, q_e 258.8, k_s 1.9e-3, g_z 5.83, w_th 39.6.
+
+| fold (held out) | v4 refit mean | v5/v3 [wait, queue, disch] | mean |
+|---|---|---|---|
+| hold_rec | 0.892 | 0.803 0.808 0.797 | 0.803 |
+| pulse40 | 0.820 | 0.797 0.835 0.696 | 0.776 |
+| mid40 | 0.819 | 0.979 0.957 0.588 | 0.841 |
+| multilevel200 | 0.822 | 0.714 0.897 0.732 | 0.781 |
+| compose | 0.705 | 0.704 0.770 0.724 | 0.733 |
+| **LOO mean** | **0.812** | | **0.787** |
+
+In-sample: hold_rec 0.882, pulse40 0.789, mid40 0.834, multilevel200 0.823, compose 0.844 (wait 0.894);
+mean 0.834 vs 0.839. Eval sanity: sustained / order / recovery 0% outside, composition 7%, wait max
+165 / 86 / 435 / 538 (the eval schedules do drain the queue after overtime, so the cohort shows there by
+design; the bound $g_z \tau_z = 875$ now holds it).
+
+Reading: the elective gate ($q_e = 259$, plateau reproduced) and the urgent drain both fit; the cohort
+reproduces the compose explosion; but hold_rec (held out) still loses 0.09: a cohort of 0.1 patient
+still carries $0.1/5.1 = 2\%$ of an age that has grown to ~500, i.e. 10 ticks of phantom wait at queue 23,
+and the fold also gives up some queue accuracy because $\tau_a$, $d_h$ and $q_{cap}$ are frozen (the v4
+refit moved them to 0.80, 0.087 and 316.6 on these five runs).
+
+### Third fit (tag v4: cohort weight $C^2/(C^2 + 25)$ instead of $C/(C + 5)$)
+
+A cohort of a fraction of a patient now carries nothing, so the age state cannot leak into runs that
+never strand anyone. Full fit cost 263.9; $w_{th}$ at its upper bound (40):
+lam0 10.51, c_a 0.834, c_t 0.930, chairs 33.2, beds 11.2, ot_gain 0.486, k_l 0.0131, tau_w 7.67,
+q_e 242.0, k_s 2.4e-3, g_z 4.71, w_th 40.0.
+
+| fold (held out) | v4 refit [wait, queue, disch] | mean | cohort v4 [wait, queue, disch] | mean | l0b_lin | persistence |
+|---|---|---|---|---|---|---|
+| hold_rec | 0.989 0.919 0.768 | 0.892 | 0.982 0.839 0.810 | 0.877 | 0.710 | 0.768 |
+| pulse40 | 0.790 0.932 0.739 | 0.820 | 0.791 0.836 0.701 | 0.776 | 0.733 | 0.503 |
+| mid40 | 0.981 0.888 0.587 | 0.819 | 0.973 0.956 0.593 | 0.841 | 0.614 | 0.603 |
+| multilevel200 | 0.759 0.942 0.764 | 0.822 | 0.709 0.894 0.733 | 0.778 | 0.549 | 0.444 |
+| compose | 0.689 0.732 0.695 | 0.705 | 0.703 0.769 0.723 | 0.732 | 0.607 | 0.615 |
+| **LOO mean** | | **0.812** | | **0.801** | 0.643 | 0.587 |
+
+| run | v4 refit in-sample | mean | cohort v4 in-sample | mean |
+|---|---|---|---|---|
+| hold_rec | 0.989 0.916 0.850 | 0.918 | 0.990 0.900 0.841 | 0.910 |
+| pulse40 | 0.849 0.897 0.735 | 0.827 | 0.809 0.850 0.706 | 0.789 |
+| mid40 | 0.980 0.881 0.588 | 0.816 | 0.974 0.956 0.592 | 0.841 |
+| multilevel200 | 0.824 0.952 0.762 | 0.846 | 0.761 0.932 0.767 | 0.820 |
+| compose | 0.738 0.873 0.746 | 0.786 | 0.894 0.906 0.745 | 0.848 |
+| **mean** | | **0.839** | | **0.842** |
+
+Eval sanity (4,000 ticks): finite, 0.4 s per category, outside 0 / 0 / 0 / 7% (sustained / order /
+recovery / composition), wait max 165 / 86 / 444 / 538, queue 25-326, discharges 0.3-21.
+
+### Verdict
+
+The old pipeline (v4 structure, refitted on the five runs) stays in `gtlab/ode/hospital_queue_min.py`
+and `plans/hospital_queue_hospital_queue_min_p3.json` / `_doc.json` (0.822 there, 0.812 in our repeat `_p3b`):
+LOO 0.812-0.822 vs 0.801 for the cohort model, the difference sitting in the pulse40 and multilevel folds (queue 0.93 vs 0.84, wait 0.76
+vs 0.71). The cohort model is kept as the alternate `gtlab/ode/hospital_queue_min2.py` with
+`plans/hospital_queue_hospital_queue_min2_v4.json` / `_doc.json` (v2 and v3 there are the two earlier
+variants, thetas not interchangeable with the module). It is the only one of the two that does what the
+compose run shows: wait 0.894 vs 0.738 in-sample on that run, and a held-out compose fold of 0.732 vs
+0.705. The test schedules that move overtime alone and then drain the queue are exactly where the old
+model predicts a wait near zero and the data say 300-400, so the cohort model is the candidate to try as
+a blend member or as the wait_time source behind the old model's queue and discharges.
+
+What the old structure cannot do on this data: the elective plateau at 260 (it only has the gate at
+322-333), the faster drain under urgent priority at unchanged discharges, and the stranded wait. What
+the cohort model loses: a queue fit on the two pulse-shaped runs, partly because $\tau_a$, $d_h$ and
+$q_{cap}$ had to be frozen to stay within twelve parameters (the old refit moved them to 0.80, 0.087 and
+316.6), and partly because the elective cancellation gate at 242 slows the climb to 333 in pulse40, where
+the data climb through 242-321 at ~9/tick: elective cases are cancelled by wait or by staffing shortfall,
+not by the queue alone. Neither model gives discharges better than ~0.75 (batchy in the data).
+Structures rejected on the way: the age growing regardless of the cohort (v2, hold_rec leak of 10-25
+ticks of phantom wait, unbounded age on 4,000-tick schedules), the linear cohort weight (v3, same leak at
+a smaller size). Not tried for lack of time: a wait-driven elective cancellation, unfreezing $\tau_a$ by
+dropping $w_{th}$ (fix it at 40, where the fit put it), and a warm start of $C$ from a large $w_0$ at reset
+(an episode that starts after a stranding is unmodelled by both).

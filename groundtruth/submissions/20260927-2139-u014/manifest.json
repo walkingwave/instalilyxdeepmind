@@ -1,0 +1,83 @@
+{
+  "git_sha": "c889221",
+  "stamp": "20260927-2139",
+  "systems": {
+    "ad_auction": {
+      "kind": "perobs",
+      "model_id": "zoo perobs: win_rate=pub_v8b, spend=mean(pub_v8b,s1), conversions=mean(pub_v8b,min)",
+      "ode": [
+        "ad_auction_min",
+        "ad_auction_s1",
+        "ad_auction_v8b"
+      ]
+    },
+    "epidemic": {
+      "kind": "ode",
+      "model_id": "ode:epidemic_y2",
+      "ode": [
+        "epidemic_y2"
+      ]
+    },
+    "hospital_queue": {
+      "kind": "ode",
+      "model_id": "ode:hospital_queue_y3",
+      "ode": [
+        "hospital_queue_y3"
+      ]
+    },
+    "market": {
+      "kind": "ode",
+      "model_id": "ode:market_y3",
+      "ode": [
+        "market_y3"
+      ]
+    },
+    "power_grid": {
+      "kind": "perobs",
+      "model_id": "zoo perobs: load=pub_v9c, frequency=pub_v9c, renewable_share=mean(v8k,min)",
+      "ode": [
+        "power_grid_min",
+        "power_grid_v8k",
+        "power_grid_v9c"
+      ]
+    },
+    "reservoir": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "reservoir_v8"
+      ]
+    },
+    "social_contagion": {
+      "kind": "ode",
+      "model_id": "ode:social_contagion_y13",
+      "ode": [
+        "social_contagion_y13"
+      ]
+    },
+    "supply_chain": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "supply_chain_v8b"
+      ]
+    },
+    "traffic": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "traffic_v8d"
+      ]
+    },
+    "wildlife": {
+      "kind": "ode",
+      "model_id": "ode",
+      "ode": [
+        "wildlife_x13"
+      ]
+    }
+  },
+  "tag": "u014",
+  "zip_bytes": 59802,
+  "zip_sha256": "6f7ac2fb634bc902cff590a02bab5598a193292ffb14de4028ec0284f353c835"
+}

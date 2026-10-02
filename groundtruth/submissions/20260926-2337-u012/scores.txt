@@ -1,0 +1,10 @@
+ad_auction    scored    0.8565
+epidemic    scored    0.6855
+hospital_queue    scored    0.6791
+market    scored    0.5875
+power_grid    scored    0.7576
+reservoir    scored    0.8311
+social_contagion    scored    0.6209
+supply_chain    scored    0.8217
+traffic    scored    0.7757
+wildlife    scored    0.6970

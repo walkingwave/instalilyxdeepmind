@@ -1,0 +1,151 @@
+{
+ "bounds": {
+  "lead_time_buy": [
+   0.0,
+   1.0
+  ],
+  "maintenance": [
+   0.0,
+   1.0
+  ],
+  "order_quantity": [
+   0.0,
+   80.0
+  ],
+  "product_mix": [
+   0.0,
+   1.0
+  ],
+  "production_effort": [
+   0.0,
+   1.5
+  ],
+  "receiving_effort": [
+   0.0,
+   1.5
+  ]
+ },
+ "clip_hi": [
+  112.89410442145669,
+  731.3408383407568,
+  2245.2839509089754
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "controls": [
+  "order_quantity",
+  "lead_time_buy",
+  "product_mix",
+  "production_effort",
+  "receiving_effort",
+  "maintenance"
+ ],
+ "format": 1,
+ "hard_hi": [
+  null,
+  null,
+  null
+ ],
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "supply_chain_v8c",
+  "theta": [
+   11.522277332701297,
+   0.35250053872107723,
+   1294.3544073493163,
+   4.999995625036969,
+   2.9977488234977328,
+   21.730568765450716,
+   7.838046632846099,
+   34.63331230452663,
+   21.827561388415226,
+   0.64588441942295,
+   0.016672285014154183,
+   0.40094326762296184,
+   0.545844532263668,
+   999.8832810064789
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "observables": [
+  "shipments",
+  "inventory_supplier",
+  "inventory_retail"
+ ],
+ "post": [],
+ "recovery": {
+  "lead_time_buy": 1.0,
+  "maintenance": 1.0,
+  "order_quantity": 0.0,
+  "product_mix": 0.5,
+  "production_effort": 1.0,
+  "receiving_effort": 1.5
+ },
+ "system": "supply_chain",
+ "info": {
+  "model_id": "ens9 perobs: shipments=v8c, inventory_supplier=v8c, inventory_retail=v8c",
+  "members": {
+   "v8c": "supply_chain_v8c:AB"
+  },
+  "checks": {
+   "max_err_vs_manual_sigma": 0.0,
+   "insample": {
+    "p1.hold_rec": [
+     0.9782648922383035,
+     0.948884396530115,
+     0.996854474843024
+    ],
+    "p2.pulse200_200": [
+     0.870275539035181,
+     0.9531915168677798,
+     0.9392123955538344
+    ],
+    "p3.hold_mid": [
+     0.7005567997134792,
+     0.976073642187604,
+     0.8898717518540896
+    ],
+    "p7.longhold": [
+     0.9809107911141062,
+     0.9674289736848434,
+     0.9960932337506934
+    ]
+   },
+   "eval": {
+    "sustained": {
+     "finite": true,
+     "seconds": 0.3642451763153076,
+     "frac_outside": 0.0
+    },
+    "order": {
+     "finite": true,
+     "seconds": 0.3505079746246338,
+     "frac_outside": 0.0
+    },
+    "recovery": {
+     "finite": true,
+     "seconds": 0.3753621578216553,
+     "frac_outside": 0.004166666666666667
+    },
+    "composition": {
+     "finite": true,
+     "seconds": 0.36206960678100586,
+     "frac_outside": 0.011666666666666667
+    }
+   },
+   "ok": true
+  }
+ }
+}

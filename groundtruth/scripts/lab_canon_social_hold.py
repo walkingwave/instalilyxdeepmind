@@ -1,0 +1,50 @@
+"""Long holds and eval-shaped rollouts for a canon full fit: python scripts/lab_canon_social_hold.py <label> [mech]"""
+import importlib
+import json
+import sys
+import time
+from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lab_canon_social_loo import SCRATCH, setup  # noqa: E402
+from gtlab import design as D  # noqa: E402
+from gtlab.ode import core  # noqa: E402
+
+label = sys.argv[1]
+mech = frozenset(sys.argv[2] if len(sys.argv) > 2 else "BC")
+fam = label.split("_")[0]
+spec, runs, sigma = setup()
+mod = importlib.import_module(f"gtlab.ode.social_contagion_{fam}")
+pay = json.loads((SCRATCH / f"{label}__FULL.json").read_text())
+th = core.theta_dict(mod, pay["theta"])
+print(label, {k: round(v, 5) for k, v in th.items()})
+print("in-sample", {k: np.round(v, 3).tolist() for k, v in pay["insample"].items()},
+      "mean", round(float(np.mean([np.mean(v) for v in pay["insample"].values()])), 4))
+
+
+def roll(y0, u, T=4000):
+    return core.rollout(mod, np.array(y0, float), np.tile(np.array(u, float), (T, 1)), th, mech, n_sub=2)
+
+
+Y = roll([48.6, 35.9], [0, 0, 0])
+print("zero from (48.6,35.9): t120", Y[119].round(0), "t4000", Y[-1].round(0))
+print("zero from (190,130): t4000", roll([190, 130], [0, 0, 0])[-1].round(0))
+print("incentive 0/1/2 at s5 b0.5:", [roll([48.6, 35.9], [5, c, 0.5])[-1].round(0).tolist() for c in (0, 1, 2)])
+print("bridge 0/0.5/1 at s5 c1:", [roll([48.6, 35.9], [5, 1, b])[-1].round(0).tolist() for b in (0, 0.5, 1)])
+print("p6 hold (9.03,0.14,0.67) / p2 hold (9,2,0.6):", roll([70, 34], [9.03, 0.14, 0.67])[-1].round(0).tolist(),
+      roll([30, 41], [9, 2, 0.6])[-1].round(0).tolist())
+print("seeding 0/1/3/5/7/10 a:", [round(float(roll([48.6, 35.9], [s, 1, 0.5])[-1, 0])) for s in (0, 1, 3, 5, 7, 10)])
+Yall = np.concatenate([r.Y for r in runs])
+lo, hi = Yall.min(0), Yall.max(0)
+rg = hi - lo
+rng = np.random.default_rng(0)
+for cat in ("sustained", "order", "recovery", "composition"):
+    U = D.eval_like(spec, cat, 4000, rng)
+    t0 = time.time()
+    Y = core.rollout(mod, runs[0].y0, U, th, mech, n_sub=2)
+    dt = time.time() - t0
+    out = float(np.mean((Y > hi + 0.05 * rg) | (Y < lo - 0.05 * rg)))
+    print(f"eval {cat:<12} finite {bool(np.all(np.isfinite(Y)))} {dt:.2f}s outside {out:.2f} "
+          f"min {Y.min(0).round(0)} max {Y.max(0).round(0)}")

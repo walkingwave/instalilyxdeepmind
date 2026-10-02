@@ -1,0 +1,16 @@
+{
+  "git_sha": "e619978",
+  "stamp": "20260928-1635",
+  "systems": {
+    "power_grid": {
+      "kind": "ode",
+      "model_id": "ode:power_grid_w5",
+      "ode": [
+        "power_grid_w5"
+      ]
+    }
+  },
+  "tag": "pg9-w5",
+  "zip_bytes": 5828,
+  "zip_sha256": "a076a14c7c26d7647f9ea88491cf49b52967af717d1922cfdfa528a952bf2acf"
+}

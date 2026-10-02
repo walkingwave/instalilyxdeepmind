@@ -1,0 +1,110 @@
+{
+ "format": 1,
+ "system": "traffic",
+ "observables": [
+  "flow_a",
+  "flow_b",
+  "speed_a",
+  "speed_b"
+ ],
+ "controls": [
+  "signal_timing",
+  "lane_closure",
+  "toll",
+  "ramp_metering",
+  "freight_priority",
+  "clearance_effort"
+ ],
+ "bounds": {
+  "signal_timing": [
+   0.1,
+   0.9
+  ],
+  "lane_closure": [
+   0.0,
+   0.75
+  ],
+  "toll": [
+   0.0,
+   5.0
+  ],
+  "ramp_metering": [
+   0.0,
+   1.0
+  ],
+  "freight_priority": [
+   0.0,
+   1.0
+  ],
+  "clearance_effort": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "signal_timing": 0.5,
+  "lane_closure": 0.0,
+  "toll": 5.0,
+  "ramp_metering": 0.0,
+  "freight_priority": 0.5,
+  "clearance_effort": 1.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  135.76431892219952,
+  81.97009430078842,
+  87.44374520593351,
+  82.29991838864672
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "traffic_v8d",
+  "theta": [
+   47.742330239270885,
+   1.0309476725478917,
+   0.26385451423753337,
+   34.475861409058936,
+   11.184264625057397,
+   1.6463362717359412e-13,
+   0.9999999999220418,
+   1.166325213420163,
+   48.90545197134566,
+   220.32299122254167,
+   0.2892990635679599,
+   1026.766881428659,
+   1.0417260580395271,
+   0.5469007719372786,
+   0.3518157393445108,
+   0.8676927476400244
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:traffic_v8d",
+  "n_runs": 5,
+  "n_ticks": 840,
+  "cost": 693.307646882493
+ }
+}

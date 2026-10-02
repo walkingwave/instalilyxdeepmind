@@ -1,0 +1,81 @@
+{
+ "format": 1,
+ "system": "social_contagion",
+ "observables": [
+  "adopters_a",
+  "adopters_b"
+ ],
+ "controls": [
+  "seeding",
+  "incentive",
+  "bridge_outreach"
+ ],
+ "bounds": {
+  "seeding": [
+   0.0,
+   10.0
+  ],
+  "incentive": [
+   0.0,
+   2.0
+  ],
+  "bridge_outreach": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "seeding": 0.0,
+  "incentive": 0.0,
+  "bridge_outreach": 0.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  386.184865600208,
+  244.798011276972
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "social_contagion_mech",
+  "theta": [
+   265.22404117629424,
+   232.222355584168,
+   0.016624455739995096,
+   0.002289003418712167,
+   0.03607102137275342,
+   19.72710541085405,
+   0.008963178094888499,
+   0.17749069170064857,
+   0.6999999620512306,
+   0.35139002276769005,
+   0.18812456009475928,
+   64.6577302919728,
+   0.04783046788536824,
+   55.559757614273785,
+   0.5142198554372879
+  ],
+  "mech": [
+   "A",
+   "B"
+  ],
+  "n_sub": 2
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:social_contagion_mech",
+  "n_runs": 3,
+  "n_ticks": 811,
+  "cost": 28.24219280684995
+ }
+}

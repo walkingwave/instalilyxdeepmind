@@ -1,0 +1,17 @@
+{
+  "git_sha": "e619978",
+  "stamp": "20260928-1717",
+  "systems": {
+    "power_grid": {
+      "kind": "perobs",
+      "model_id": "perobs[pg9_L0 load, w5 frequency+share]",
+      "ode": [
+        "power_grid_pg9",
+        "power_grid_w5"
+      ]
+    }
+  },
+  "tag": "pg9-perobs",
+  "zip_bytes": 8533,
+  "zip_sha256": "980ddfd4abfa3062e18c94dea5621faddada03858f12714ddf1a579b066598da"
+}

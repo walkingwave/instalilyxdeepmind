@@ -1211,3 +1211,568 @@ on hospital and wildlife, disagreed on market (public median 0.500 > ODE 0.423):
 never hold a long interest-rate hold, so they cannot see the floor failure. The bigger epidemic
 template (§9) under pairs AB / BC fits in-sample 0.90 / 0.91 with LOO 0.60 / 0.59 against the
 SIRS 0.53; pair AC fails (0.23). Both refit on the new data now.
+
+### 18. u010b: refits on purchase-3 data (Sat 02:00)
+
+| system | factor | before | u010b (sust / seq) | Δ |
+|---|---|---:|---:|---:|
+| supply_chain | v7 two-class retail, receiving-scaled arrivals, on hold_mid | 0.755 | **0.824** (0.759 / 0.845) | +0.07 |
+| hospital_queue | old pipeline refit on 5 runs (incl. compose) | 0.605 | **0.690** (0.677 / 0.694) | +0.09 |
+| epidemic | full template, mechanism pair BC, on compose | 0.478 | **0.545** (0.587 / 0.531) | +0.07 |
+| social_contagion | v2 (conversion, spillover) median with l0b_lin | 0.518 | **0.553** (0.418 / 0.597) | +0.04 |
+| wildlife | v7 habitat sets K, shelters north; corridor | 0.630 | 0.636 (0.611 / 0.644) | +0.01 |
+| market | median of refits on 5 runs | 0.500 | 0.505 (0.472 / 0.516) | +0.01 |
+| traffic | refit incl. hold_mid | 0.756 | 0.751 (0.633 / 0.790) | −0.005 |
+
+Mean 0.687 (best-of 0.687), from 0.661. Readings: data on the right question moves the
+system (supply_chain sustained 0.58 → 0.76 from one interior hold; hospital +0.09 from one
+compose run). Traffic's interior hold fixed the local fold (0.848) but not the public sustained
+band (0.633): the test holds levels other than α = 0.5, so the sustained map, not one level, is
+what traffic lacks. Wildlife and market barely moved despite large local gains: local LOO with
+three to five runs no longer predicts public changes of ±0.05. Social's sustained band (0.42)
+is the lowest band anywhere.
+
+### 19. Mechanism-pair search on the weak four (Sat 02:00–03:00, no credits)
+
+Each brief names three candidate mechanisms, exactly two active. One family per system with the
+three as switchable terms (`gtlab/ode/<sys>_mech.py`), each pair fitted through the lab on all
+runs we own; equations and tables in `plans/<sys>_mech_notes.md`.
+
+| system | AB | AC | BC | current model | reading |
+|---|---:|---:|---:|---:|---|
+| social_contagion | 0.786 | 0.677 | **0.828** | 0.698 | incentive-expectation churn (B) is active: without it the post-incentive collapse cannot be fitted (AC cost ×9); bridge ties (C) fit to zero, so A vs C is open |
+| wildlife | **0.842** (0.844 adults-only) | 0.834 | 0.818 | 0.843 | food renewal (B) is supported (slow-then-sharp decline under habitat loss); juvenile stage collapses to instant crowding; settlement unidentified. AB gets the pulse level right (7 vs v7's 16) |
+| market | 0.816–0.828 | **0.843–0.847** | 0.812–0.821 | 0.839 | tie; tax has a threshold at 0.047 above which trading freezes (all fits agree); where price stops under a long high rate is unobserved (min 73.6 and falling): models disagree by 45 points on long holds |
+| hospital_queue | 0.801 | 0.804 | 0.811 | **0.822** | tie; fatigue and orientation are confounded (every staffing rise follows overtime); returns never seen; the post-overtime wait spike predates overtime (a cohort, not fatigue) |
+
+Leave-one-run-out means across all folds; fold-to-fold noise between multistart draws is ≈ 0.05
+on a single fold, so only social's +0.13 is a clear local result. Public decides the ties.
+
+Decision for Sunday's first slot, one new factor per system:
+- social_contagion: pair BC alone (the largest local gain we have measured on a weak system).
+- wildlife: pair AB (adults-only prey) alone: public is stuck at 0.64 with v7 against 0.84 local,
+  and the pulse level is v7's largest systematic miss.
+- market: the tax threshold ported into the median members (free, all fits agree).
+- hospital_queue: per-observable pick, wait_time from pair BC (best compose fold), queue and
+  discharges from p3.
+- supply_chain v7b; epidemic pair AB (the other top pair) as its factor.
+
+Credit questions this search leaves, each a small discriminating run (needs the go):
+market rate-only hold (r = 0.1, tax 0, 200 ticks) for the long-hold price level; wildlife
+corridor-only on/off (150) for settlement; social bridge-only (150) for A vs C; hospital
+staffing step without overtime (150) for fatigue vs orientation. About 650 credits in total.
+
+### 20. Value-of-information simulations and the organizer's scale (Sat 03:00–05:00, no credits)
+
+**Scale calibration** (`scripts/calibrate_sigma.py`, `plans/sigma_calibration.md`). Every scored
+upload's shipped predictor replayed on our ledger runs; the factor $k$ in
+$\sigma_{org} = k\,\hat\sigma_{proxy}$ fitted so the run-based score matches the public score:
+
+| system | $k$ | public | system | $k$ | public |
+|---|---:|---:|---|---:|---:|
+| market | 0.085 | 0.50 | power_grid | 0.43 | 0.75 |
+| epidemic | 0.13 | 0.55 | reservoir | 0.43 | 0.78 |
+| social_contagion | 0.155 | 0.55 | ad_auction | 0.52 | 0.83 |
+| wildlife | 0.17 | 0.64 | supply_chain | 0.57 | 0.82 |
+| hospital_queue | 0.23 | 0.69 | traffic | 0.57 | 0.75 |
+
+The weakest systems are scored on the tightest scales, and every fit so far used $\hat\sigma_{proxy}$,
+4–12× too loose there: errors of 5–10 units looked free to the fitter and cost the most on the
+board. Out-of-sample anchors put $k$ 1.5–2× higher (fitted uploads are partly scored on their own
+runs), so we fit at $1.5\,k$. The lab takes `--sigma-cal`; the weak five are refitting at that scale.
+
+**Value of information per weak system** (`scripts/voi_<sys>.py`, `plans/voi_<sys>.md`): a
+committee of every validated model per system, rolled on 40 test-shaped schedules; experiments
+valued by the committee's disagreement on them, weighted by how often the test visits that regime.
+
+| system | where the models disagree | best buy | credits | best free change |
+|---|---|---|---:|---|
+| epidemic | long joint restriction holds (>150 ticks): three members settle at ~40, ~80, 0 cases | joint hold α = 0.85, 300 ticks | 300 | median of the three ODE members |
+| market | price under long rate holds: floor models 79, mechanism models 37–43 | rate 0.1 hold (tax 0) | 200–300 | median(gate, AC, l0b_lin) |
+| social_contagion | long interior holds; the linear half of the public blend drifts | three 100-tick interior holds | 300 | median(BC, AB, l0b_lin) |
+| wildlife | prey after releases and at unseen middle levels | corridor 0.5 / 1.0, then habitat 0.5 | 300 | re-level recovery equilibrium; pulse level from AB |
+| hospital_queue | wait during long recoveries (tail to 300–400) | pulse 40, recovery 260 | 300 | wait from the median of five ODE members, rest from p3 |
+
+Brief-suggested mechanism tests rank low everywhere: the test rarely visits those regimes.
+
+### 21. Purchase 4: five value-of-information runs (Sat, 1,400 credits)
+
+Schedules from the §20 simulations (`plans/p4.json`, phase `p4`). Balances after: 11,327
+(epidemic, social, wildlife 889; hospital 930; market 1,060). What each answered:
+
+| system | run | result | consequence |
+|---|---|---|---|
+| market | rate 0.1, tax 0, 200 ticks | price 102 → 81 (t=50) → 76 → 74, flattening | the floor models were right (mechanism models' 37–43 wrong); floor ≈ 74, not 79 |
+| epidemic | joint restriction α = 0.85, 300 | cases 106 → 188 → 44 (t=150) → 60, beds → 40 | pair BC's suppressed plateau (≈ 43) with a mild rebound; not elimination, not the AB rebound to 80 |
+| hospital_queue | pulse 40, recovery 260 | wait 65 → 4.5, queue 332 → 92, discharges 11 | **no wait tail**: p3 was right, the cohort members wrong; the planned wait-median fix is dropped |
+| social_contagion | three 100-tick interior joint holds | a/b → 150/103, 135/97, 191/137 | first interior equilibria; the sustained map is now pinned at three levels |
+| wildlife | corridor 0.5 / 1.0, habitat 0.5 | corridor 0.5: 177 overshoot → 123/102; corridor 1: 113/80; habitat 0.5: 92/79 | middle levels observed for both controls |
+
+All seven candidates refit on every run including these, at the calibrated scale ($1.5k\,\hat\sigma$).
+
+### 22. Refits at the organizer's scale (Sat evening, no credits)
+
+All candidates refit on every run (including purchase 4) with residuals in units of
+$1.5\,k\,\hat\sigma_{proxy}$ (§20). Scored in-sample on all runs at $k\,\hat\sigma_{proxy}$, where the
+old fits reproduce their public scores to about 0.01 (hospital 0.678 vs 0.690, wildlife 0.643 vs
+0.636, market 0.497 vs 0.505), so these numbers are a forecast of public:
+
+| system | public | old fit | recalibrated | pick |
+|---|---:|---:|---:|---|
+| epidemic | 0.545 | 0.579 (p3BC) | **0.668** | full template, pair AB |
+| social_contagion | 0.553 | 0.574 (mech BC) | **0.652** | mechanism family, pair AB, alone |
+| market | 0.505 | 0.497 (gate) | **0.524** | tax-threshold floor model, alone |
+| wildlife | 0.636 | 0.643 (v7) | **0.660** | mechanism family AB, adults-only prey |
+| hospital_queue | 0.690 | 0.678 (p3) | **0.693** | p3 structure |
+
+Refitting at the right scale changes which mechanism pair wins (epidemic and social: AB over
+BC once small errors count), because a loose scale let the fitter trade many small misses for a
+few large ones. These five form Sunday's first upload (u011); the strong five refit the same
+way for the second.
+
+### 23. Structural pass on the five systems below 0.7, at the organizer's scale (Sat evening, no credits)
+
+One worker per system: error budget at the calibrated scale (loss by observable, run and
+constant-control segment), structural fixes aimed at the three largest leaks, a change kept only if
+calibrated in-sample rose and leave-one-run-out did not drop. Full equations and tables in
+`plans/<sys>_v8_notes.md`. Calibrated in-sample on all runs (a forecast of public, §22):
+
+| system | before | after | LOO before → after | what fixed it |
+|---|---:|---:|---|---|
+| epidemic | 0.668 | **0.749** | 0.478 → 0.604 | initial state anchored on both observables; two-stage referral delay to beds; waning always on; per-capita, age-targeted vaccination (the fixed-count form eliminated cases on long vaccination holds, rejected) |
+| hospital_queue | 0.693 | **0.746** | 0.659 → 0.704 | long-memory fatigue after overtime (holds the queue at 92 after a pulse), orientation lag on staff increases, discharges reported ≈ 0 at low treatment work (0 on 70 % of ticks in data), asymmetric wait filter |
+| social_contagion | 0.652 | **0.742** | 0.532 → 0.658 | organic adoption toward ≈ 65, Erlang-3 onboarding (the ≈ 7-tick delay), disappointed pool returning after ≈ 15 ticks, credibility eroded by paid promises to waiting cohorts |
+| wildlife | 0.660 | **0.709** | 0.645 → 0.694 | predators relax to a prey-set level with a 63-tick lag, transit pools losing ≈ 25 %, harvest as a fixed quota with a floor, fast habitat effect (north stronger) |
+| market | 0.524 | **0.645** | 0.499 → 0.650 | price follows a moving anchor that drops toward ≈ 70 above a rate threshold (fast down, slow up), tax freeze at 0.0452, volume from price velocity, depth loses risk capacity when price falls |
+
+Market stays below 0.7: depth under tax mid-run settles in 25 ticks while right after a reset it
+drains slowly, and no structure separated the two. Known risks: hospital's fatigue never recovers
+(τ at 5,000; the data only show none within 260 ticks); market's floor with an interior tax is fitted
+from one segment.
+
+u011 = these five plus the strong five unchanged from u010b (`submissions/20260926-2120-u011`).
+Every packaged predictor reproduces the forecast above, runs 4,000 ticks finite on all four
+categories in ≤ 0.5 s. Forecast mean 0.753 (strong five at their public scores).
+
+### 24. Structural pass on the strong five and a second pass on market (Sat night, no credits)
+
+Same method as §23 (error budget at the calibrated scale, fixes aimed at the largest leaks, keep only
+if calibrated in-sample rises and leave-one-run-out does not drop; parameters polished directly on
+the calibrated score). Notes per system in `plans/<sys>_v8_notes.md` (`market_v9_notes.md`).
+
+| system | before | after | LOO before → after | what fixed it |
+|---|---:|---:|---|---|
+| ad_auction | 0.851 | **0.900** | 0.788 → 0.820 | rival capital leaving depleted audiences (win rate rises), a preparation state that starts empty (same conversion ramp in hold and pulse), idle fulfilment capacity (burst at pulse start, plateau after) |
+| reservoir | 0.829 | **0.896** | 0.726 → 0.785 | the default inflow post rule removed (it overwrote the model's inflow with a formula fitted on one run and dropped the return flow: +0.02); bank storage; inflow-proportional loss at full pool; slow quality deficit |
+| power_grid | 0.737 | **0.796** | 0.696 → 0.726 | slow governor (≈ 40 ticks); reserve partly from storage recharged through charging_allowance (explains the dip after release); frequency ceiling +1.56 Hz; renewable share following the reserve request |
+| traffic | 0.777 | **0.817** | 0.746 → 0.812 | speed target from a lagged occupancy (second time constant) with approach vehicles weighted by the signal's junction share (a starved route slows at once) |
+| supply_chain | 0.876* | **0.903*** | 0.785 → 0.830 | congested transport: dispatch throttles when the conveyor is full (the 30-tick refill delay, the post-pulse backlog, the interior-hold retail climb in one mechanism) |
+| market | 0.645 | **0.687** | 0.650 → 0.661 | depth rebuilt: one fast pool (τ ≈ 8) toward a tax-set target plus reset-burst stock on dealer books that clears slower under tax (separates post-reset drain from mid-run steps) |
+
+\* supply_chain at its per-observable calibrated scale (the only system where that fit was
+identifiable); at the single-factor scale it is a tie (0.920 → 0.920).
+
+u012 = u011 with these six (`submissions/20260926-2337-u012`): all ten predictors reproduce their
+calibrated in-sample, 4,000-tick finite on four categories, ≤ 0.5 s per episode; reservoir ships with
+no post rule. Forecast by delta (public + calibrated in-sample gain over the model that earned it):
+ad 0.88, supply 0.83, reservoir 0.85, power 0.81, traffic 0.79, hospital 0.76, social 0.72, epidemic
+0.72, wildlife 0.70, market 0.69: mean ≈ 0.775. u012 supersedes u011 as Sunday's first upload
+(each system is still a single factor against its own public score).
+
+## 2026-09-27 (Sun) — u012 scored; what transferred and what did not
+
+### 25. u012 public result against the forecast
+
+Mean **0.731** (from 0.687); board after the sweep: #1 0.783, #5 0.751, #8 0.736.
+
+| system | before | forecast | u012 | sustained (before) | sequence (before) | share of forecast gain realised | how the model was fitted |
+|---|---:|---:|---:|---|---|---:|---|
+| wildlife | 0.636 | 0.70 | 0.697 | 0.656 (0.611) | 0.711 (0.644) | 92 % | lab fit |
+| epidemic | 0.545 | 0.72 | 0.685 | 0.660 (0.587) | 0.694 (0.531) | 82 % | lab fit |
+| reservoir | 0.782 | 0.85 | 0.831 | 0.870 (0.833) | 0.818 (0.765) | 73 % | polished |
+| traffic | 0.751 | 0.79 | 0.776 | 0.635 (0.633) | 0.823 (0.790) | 62 % | polished |
+| ad_auction | 0.830 | 0.88 | 0.857 | 0.846 (0.826) | 0.860 (0.832) | 54 % | polished |
+| market | 0.505 | 0.69 | 0.588 | 0.491 (0.472) | 0.620 (0.505) | 44 % | polished |
+| social_contagion | 0.553 | 0.72 | 0.621 | 0.571 (0.418) | 0.637 (0.597) | 40 % | lab fit at 1.0 |
+| supply_chain | 0.824 | 0.83 | 0.822 | 0.754 (0.759) | 0.844 (0.845) | 0 % | polished |
+| power_grid | 0.754 | 0.81 | 0.758 | **0.698 (0.715)** | 0.778 (0.767) | 7 % | polished |
+| hospital_queue | 0.690 | 0.76 | 0.679 | **0.628 (0.677)** | 0.696 (0.694) | < 0 | polished |
+
+Readings:
+1. **Sequence transferred almost everywhere** (nine of ten up, +0.01 to +0.16): the structural
+   fixes to transients were real.
+2. **Sustained is where the forecast failed.** It fell on hospital (−0.05) and power_grid (−0.02)
+   and stayed flat on traffic and supply_chain. Our runs are at most 450 ticks; the sustained
+   category holds for thousands. hospital's fatigue never recovers in v8f ($\tau_f$ at its 5,000
+   bound, flagged as a risk in §23): on long holds after any overtime it under-serves forever.
+3. **Direct polishing on the in-sample score over-fits.** Models whose parameters were polished
+   directly on the calibrated in-sample score realised 0–73 % of their forecast gain; the two fitted
+   by the lab (robust loss, multistart) realised 82–92 %. With 2–6 runs, the in-sample score is not
+   a forecast once the parameters were chosen on it; the leave-one-run-out gain is the better guide
+   (hospital's lab LOO gain was +0.01, power_grid's +0.03).
+
+Rules from here: forecast with the LOO gain, not the in-sample gain; polishing only inside the
+LOO loop; every model must be checked for plausible 4,000-tick holds at interior and extreme levels
+(states that never recover, levels that drift) before it ships.
+
+### 26. Purchase 5, stage 1: three test-shaped runs (Sun 00:30, 1,200 credits)
+
+One 400-tick run per system shaped like a test episode (`eval_like(..., "mixed")`: a sustained,
+an order, a recovery and a composition quarter), on the three worst sustained bands: market,
+social_contagion, traffic. Balances after: 10,127 (market 660, social 489, traffic 760). Purpose:
+a final exam on data shaped like the test before a model ships (u012's forecast failed because
+nothing we owned looked like a test episode).
+
+Every distinct uploaded predictor scored on its system's new run (calibrated scale):
+
+| system | exam ranking (score) | public ranking agrees? |
+|---|---|---|
+| traffic | u012 0.682 > u008 0.661 > u010b 0.654 > u005 0.568 > u003 0.554 > u004 0.504 | yes, all six in order |
+| social_contagion | u012 0.550 > u009 0.502 > u008 0.498 > u003 0.487 > u004 0.467 > u010b 0.432 > u002 0.302 | yes except u010b |
+| market | u010b 0.496 > u012 0.466 > u003 0.453 > u008 0.447 > u009 0.437 > u004 0.348 > u005 0.203 | partly: public has u012 first |
+
+One 400-tick run ranks traffic and social the way the public does, so it is a usable exam there;
+market's is noisier (price scores 0.25–0.36 for every model on it, the weak spot). Stage 2 only if
+these runs change a pick. The rebuild teams use them as held-out exams.
+
+### 27. Long-hold audit (Sun 01:00, no credits; `scripts/longhold_audit.py`, `plans/longhold_audit.md`)
+
+Every distinct scored predictor per system rolled on 4,000-tick holds (20 sustained-style schedules,
+10 random constant holds, monotone control sweeps, low vs high initial states). The public
+sustained band is our only evidence about truth past tick 450; two checks use it: (i) if predictor
+P were the truth, what would persistence score, against u001's real band; (ii) does P as truth rank
+the other uploads the way their public bands do. No predictor is unstable (drift < 0.03 σ);
+every sustained loss is a wrong steady-state level or map. Required long-hold properties, ranked
+by expected gain:
+
+| system | defect in the u012 model | required property |
+|---|---|---|
+| market (0.491) | price frozen at its initial value on 4 of 6 holds | settles within 450–1,000 ticks to a control-set level independent of the start: ≈ 95–100 at (0, 0), ≈ 72 once rate ≥ 0.05, +10–40 with tax 0.05 |
+| social_contagion (0.571) | zero-control hold grows adopters (49, 36) → (105, 101) | no large spontaneous growth at seeding 0; adopters rise with incentive at steady state (sign wrong now) |
+| hospital_queue (0.628) | overtime a permanent gain (wait 30, discharges 6.7 at overtime 1, staffing 8) | overtime ≈ neutral at steady state (p3: 51 / 4.6, sustained 0.677); discharges ≥ 1.2 under stress |
+| power_grid (0.698) | reserve lowers steady frequency at interconnector 0 (49.88 vs 50.25) | reserve raises frequency at every interconnector setting, ≈ +0.3 / +1.1 / +2.0 Hz at 0 / 0.5 / 1 for 150 units (u008, sustained 0.715) |
+| traffic (0.635) | route-B speed 2.5 above A under the pulse hold; long-hold speeds ≈ 2 km/h high | weak evidence; symmetric routes |
+| wildlife, epidemic, supply_chain, reservoir, ad_auction | none visible | keep |
+
+Each property is now a check the next candidate for that system must pass; forwarded to the
+market, social, hospital teams and a power_grid fix (v9).
+
+### 28. Rebuild round (Sun 00:00–02:30, no credits beyond §26) and upload u013
+
+Rebuild teams on the weak systems and two long-hold fixes, all judged by lab leave-one-run-out at
+the calibrated scale (fold noise ≈ 0.02), the 4,000-tick hold check, and for market/social the new
+test-shaped exam. Notes: `plans/<sys>_x_notes.md`, `hospital_queue_v9_notes.md`,
+`power_grid_v9_notes.md`.
+
+| system | pick | LOO (current → pick) | what changed |
+|---|---|---|---|
+| epidemic | x11, pair AC | 0.593 → 0.656 | two-stage latent period (every control acts two ticks late); gathering debt speeds the release rebound; masks do the work, closure ≈ 0; vaccination bounds stop die-out on long holds |
+| wildlife | x13 | 0.621 → 0.653 | prey split into exposed and sheltered (shelter ∝ habitat): the pulse floor; nursery crowding against the food stock; equilibrium patch occupancy (explicit relocation rates sat at the RK4 stability edge and shaped the fit) |
+| social_contagion | x7 | 0.593 → 0.619; exam 0.550 → 0.582 | incentive-led audience; incentive now raises the steady level; no finite workforce found (every fit put it far above the observed totals) |
+| market | x4 + price median(x4, l0b_lin) | 0.582 → 0.591; exam 0.467 → 0.534 (x4), price on the exam 0.330 → 0.417 with the blend | price settles to a control-set level independent of the start (≈ 89 at zero controls, ≈ 74.5 under rate); freeze at tax ≈ 0.043; orders keep executing in a freeze |
+| hospital_queue | v9g | 0.713 → 0.716 | fatigue relaxes to the overtime level with $k_{fat} = g/(1+g)$, so full overtime nets to 1 at steady state (long-hold map of the best-sustained model); reported discharges not discounted under stress |
+| power_grid | v9c | 0.726 → 0.731 | storage refill over the same interconnector as delivery: reserve raises steady frequency at every setting (+0.38 / +1.15 / +1.41 Hz vs u008's +0.30 / +1.14 / +1.98) |
+
+The rebuilds all fell short of their +0.08 targets on held-out runs: every remaining leak is pinned
+by a single run. Each team named the runs that would pin it (in its notes).
+
+u013 = u012 with these six (`submissions/20260927-0233-u013`); ad_auction, reservoir, supply_chain,
+traffic unchanged. Every predictor verified (reproduces its lab score, 4,000-tick finite, ≤ 0.71 s).
+Forecast by discounted held-out gains: ≈ 0.74 (0.735–0.75).
+
+### 29. u013 result (Sun)
+
+Mean **0.739** (forecast 0.74 from discounted held-out gains: the new forecasting rule held).
+Best-of per system across all uploads: **0.741**.
+
+| system | u012 | u013 | sustained u012 → u013 | sequence u012 → u013 | verdict |
+|---|---:|---:|---|---|---|
+| market | 0.588 | **0.627** | 0.491 → 0.526 | 0.620 → 0.661 | x4 + price blend transfers both bands |
+| wildlife | 0.697 | **0.724** | 0.656 → 0.655 | 0.711 → 0.748 | sequence gain from sheltered prey |
+| power_grid | 0.758 | **0.769** | 0.698 → **0.715** | 0.778 → 0.787 | sign fix restored sustained, kept sequence |
+| social_contagion | 0.621 | 0.626 | 0.571 → 0.561 | 0.637 → 0.648 | small |
+| epidemic | 0.686 | 0.687 | 0.660 → **0.700** | 0.694 → 0.682 | two-stage latent helps long holds, costs a little on transients |
+| hospital_queue | 0.679 | 0.672 | 0.628 → 0.649 | 0.696 → 0.680 | worse than p3 (u010b 0.690: 0.677 / 0.694); p3 stays best |
+
+Board: #1 0.783, #5 0.751, #6 0.742.
+
+### 30. Two purchase simulations and purchase 6 (Sun, 2,300 credits)
+
+**Exam value** (`scripts/exam_value.py`, `plans/exam_value.md`): every scored predictor replayed on
+every owned run; pairwise-order agreement with the public board. The three exams we own averaged
++0.06 over the mean of owned runs; their value is being held out (every other run becomes training
+data). Owned runs already rank epidemic, supply_chain, wildlife, reservoir like public; hospital
+(coin flip on its ten close pairs), ad_auction and power_grid (no held-out run at all) need exams.
+
+**Round-2 value of information** (`scripts/voi_round2.py`, `plans/voi_round2.md`): validated
+committees for the five weakest systems, preposterior value of each candidate run on the
+test-shaped distribution. The proposed five runs (1,730 credits) were worth 0.383 committee units;
+the optimal 1,100-credit set 0.572 (+0.014 expected on the public mean). Value saturates past
+≈ 1,100 credits (the last 700 of a 2,500 budget buy 0.004 per 100). Data alone cannot close the gap
+to the top three; the model structure must.
+
+Bought (phase `p6`, `plans/p6.json`): social joint hold (9.03, 0.135, 0.673) 300; market hold
+(0.05, 0.025) 200; hospital pulse 40 + recovery 260 from a new start 300; epidemic mask 100 then
+vaccination 200, 300; exams (400-tick test-shaped, held out of every fit) for hospital_queue,
+ad_auction, power_grid. Balances after: 7,827 (social 189, hospital 230, market 460, epidemic 589,
+traffic 760, wildlife 889, supply 1,030, power 1,100, ad 1,100, reservoir 1,480), kept as reserve for
+the Final days.
+
+### 31. Mechanism teams on purchase-6 data and upload u014 (Sun evening, no credits)
+
+Each team: brief-faithful base with the three history mechanisms as switches, all pairs fitted by
+the lab at 1.0 σ, judged by leave-one-run-out on the same run set (the old models recomputed as
+baselines), the held-out exams, and the long-hold map. Notes: `plans/<sys>_y_notes.md`,
+`plans/zoo_select.md`.
+
+| system | pick | baseline LOO → pick | exam | finding |
+|---|---|---|---|---|
+| epidemic | y2, pair AC | x11 0.622 → **0.683** | — | cases have a pure two-tick reporting delay: after every start or switch two observations stay on the old trend, then the slope turns at once (x11 smoothed it over 2–3 ticks); near-switch in-sample 0.704 → 0.741 |
+| hospital_queue | y3, pair AB | p3 0.670 → **0.721** | 0.674 (p3 0.654) | orientation is active (staffing 7 → 20 without overtime: capacity 9–12/tick, not ≥ 18); fatigue neutral at steady state; the pair BC makes overtime a permanent gain again, rejected by the long-hold map |
+| market | y3, pair AB, alone | x4p 0.565 → **0.618** | 0.591 (x4p 0.512) | consumer warehouses as explicit inventory; risk-capacity loss (B) is active; steady price near-linear in rate (92 / 83 / 74 at 0 / 0.05 / 0.1); the price blend with l0b_lin now hurts (−0.043) |
+| social_contagion | y13, pair BC | x7 0.544 → **0.595** | 0.636 (x7 0.567) | the two communities' audiences mix differently (large incentive-led audience in a, small in b) and bridge introductions recruit in b through relationships that fade over ≈ 30 ticks; incentive expectations (B) clearly active |
+| ad_auction | per-observable library pick | +0.011 held-out | 0.830 (public model 0.814) | spend and conversions from means of two members |
+| power_grid | per-observable library pick | +0.012 held-out | flat | renewable share from a mean of two members |
+
+The library pick's cold-start check reversed two apparent gains (supply_chain +0.12 warm → −0.11
+cold; wildlife +0.06 → −0.016): held-out folds started from a model fitted on the held-out run
+leak it.
+
+u014 = u013 with these six (`submissions/20260927-2139-u014`). Every predictor verified: 4,000-tick
+finite on four categories, ≤ 1.73 s per episode (ad_auction; ≈ 70 s for 40 episodes). Forecast by
+0.6 × held-out gain: epidemic 0.72, hospital 0.72, market 0.66, social 0.66, ad 0.862, power 0.776:
+mean ≈ **0.754**.
+
+### 32. u014 result (Sun night)
+
+Mean **0.7415** (forecast 0.754). Best-of per system across all uploads: **0.746**. Board: #1 0.790,
+#3 0.781, #5 0.768, #8 0.752.
+
+| system | u013 | u014 | forecast | sustained | sequence | verdict |
+|---|---:|---:|---:|---|---|---|
+| epidemic | 0.687 | **0.717** | 0.72 | 0.700 → 0.770 | 0.682 → 0.699 | reporting delay transfers in full |
+| ad_auction | 0.857 | **0.866** | 0.862 | 0.846 → 0.853 | 0.860 → 0.870 | library pick transfers |
+| power_grid | 0.769 | **0.775** | 0.776 | 0.715 → 0.720 | 0.787 → 0.793 | library pick transfers |
+| market | 0.627 | 0.634 | 0.66 | 0.526 → 0.582 | 0.661 → 0.651 | sustained up, sequence slightly down |
+| hospital_queue | 0.672 | 0.666 | 0.72 | 0.649 → 0.638 | 0.680 → 0.676 | fifth attempt below p3 (0.690) |
+| social_contagion | 0.626 | 0.605 | 0.66 | 0.561 → 0.578 | 0.648 → **0.614** | sequence fell 0.034 |
+
+Why the forecast missed on social and hospital: the mean leave-one-run-out gain hid a loss on the
+fold shaped like the recovery category. social y13 lost its pulse fold (0.535 → 0.476) while the
+average rose; the public recovery band is where it fell. Rule from here: a candidate must not lose
+the pulse or recovery-shaped fold, whatever its mean gain. Hospital: p3 stays the best evidence; no
+further structural attempts without new data that separates the candidates.
+
+## 2026-09-28 (Mon)
+
+### 33. u015: best evidence per system (Mon 00:10)
+
+Mean **0.7467** (forecast 0.748). hospital back on p3: 0.6896; social_contagion on y10 BC (kept the
+recovery-shaped fold): **0.634**, its best so far (x7 0.626, y13 0.605): the recovery-fold rule held.
+Board: the top three are all above 0.785.
+
+### 34. Fitting-procedure study and purchase 7, discovery (Mon 01:00, 2,400 credits)
+
+**Fitting procedures** (`scripts/fitproc.py`, `plans/fitproc.md`), nested leave-one-run-out on all
+ten systems against the standard robust fit: weighting data by the test's category mix is the only
+change that helps broadly (recovery-shaped fold up on 8 of 10; wins reservoir +0.024, wildlife
++0.021; hurts market, supply_chain, power_grid, so it needs a per-system check); fold bagging pays
+only with many runs and unstable fits (social +0.014); a score-shaped loss with a ridge pull does
+nothing systematic; denoising the initial observation is worth nothing (reset spread is 10–100× the
+noise). Model and fitting improvements on the current data are nearly exhausted.
+
+**Discovery purchase** (phase `p7`, `plans/p7.json`): one sustained-style run per system
+(`eval_like(..., "sustained")`, holds of hundreds of ticks), our first data past tick 450: supply 800,
+wildlife 700, traffic 600, market 300. Balance after ≈ 5,400. Every past predictor scored on them:
+
+| system | what the long hold showed | best past predictor | newest model |
+|---|---|---|---|
+| traffic | harsh hold (signal 0.2, lane 0.5, ramp 0.9, clearance 0.1): speeds collapse to 7 / 16 by t300 | 0.552 (u012) | every model predicts speeds ≈ 30: the sustained leak |
+| market | rate 0.1, tax 0 for 300 ticks: price settles at 83, depth drains to 27 | 0.330 (u008) | 0.293; depth predicted 44–49 |
+| wildlife | hunting 5.9, habitat 0.3, corridor 0.9 for 566 ticks: prey 11 / 11 | 0.760 (u008), 0.734 (v8h) | x13 0.591, z9 0.623 (prey 27 / 23: the collapse is too shallow) |
+| supply_chain | nothing new | 0.98 for all | |
+
+The traffic and market teams now fit on these runs; a wildlife team refits with p7 as a fold.
+
+Correction to §34: market's p7 run is (rate 0.0949, tax 0.0403) for 175 ticks, then (0.05, 0.025)
+for 125 ticks, not a pure rate hold. First block: price slides 104.7 → 90.7, depth drains 111 → 10.9;
+second block: price settles at 83.0, depth rebuilds to 26.7.
+
+### 35. Overnight rounds interrupted by the machine sleeping (Mon)
+
+The machine slept 01:35–12:40, past every overnight time box. Market z round (`plans/market_z_notes.md`):
+nothing beats y3 AB (LOO 0.615; 15 other fits 0.568–0.611, sd ≈ 0.011 around 0.600); the lab is
+deterministic and each fold is essentially one polish from the initial parameters, so structures
+need well over +0.02 to be visible. p7's depth drain under a high rate with an interior tax (111 →
+11) reads as dealer inventory funded at the rate outside freezes (mechanism A); family `market_z12`
+models it and is being judged against y3 on the 9-run set.
+
+### 36. Decisive tests after the discovery runs; upload u016 (Mon 13:00–14:30, no credits)
+
+Leave-one-run-out at 1.0 σ on every run including the p7 long holds:
+
+| system | candidates (LOO) | pick | why |
+|---|---|---|---|
+| wildlife | v8h 0.675, w2 0.660, w4 0.658, z9 0.645 | **v8h refit** | only structure that fits the long hunting hold (p7 fold 0.756 vs ≈ 0.62); pulse fold kept (0.724 vs z9 0.714) |
+| traffic | z8 0.742, v8d refit 0.710 (7 runs, exam as a fold) | **z8** (toll-elastic demand) | long hold 0.613 vs 0.579, multilevel +0.041, exam +0.054; toll-0 pulse fold −0.012 = its noise level |
+| market | y3 0.615, z12 (dealer inventory under A) | **y3** | z12 loses the multilevel fold (0.484 vs 0.589); no structure fits p7's depth drain yet |
+| social_contagion | z20 0.603 (pulse fold 0.560, exam 0.647) | **z20** | short relationship memory (τ ≈ 15) and slower onboarding in b; y13's long memory kept recruiting in b after pulses |
+| reservoir | test-mix weighting +0.024 | **weighted refit** | from the fitting study (§34) |
+
+Deeper fits (4× budget, 3× starts): epidemic y2 0.680 vs 0.683 standard, so standard fits are
+converged there; hospital, market, social still running.
+
+u016 (`submissions/20260928-1430-u016`) = u015 with wildlife, traffic, social, reservoir changed.
+All ten predictors verified (4,000-tick finite, ≤ 1.94 s per episode). Forecast by 0.6 × held-out
+gain: wildlife ≈ 0.742, traffic ≈ 0.795, social ≈ 0.648, reservoir ≈ 0.845; mean ≈ **0.754**.
+
+### 37. u016 result (Mon 14:35)
+
+Mean **0.7552** (forecast 0.754). Best-of per system: 0.7555.
+
+| system | u015 | u016 | forecast | verdict |
+|---|---:|---:|---:|---|
+| traffic | 0.776 | **0.8385** | 0.795 | toll-elastic demand plus the long-hold fit: +0.063, the largest single-system gain since u012; the discovery run paid for itself |
+| wildlife | 0.724 | **0.738** | 0.742 | v8h refit with the long hunting hold transfers |
+| social_contagion | 0.634 | **0.645** | 0.648 | z20 transfers; recovery-fold rule holds again |
+| reservoir | 0.831 | 0.829 | 0.845 | test-mix weighting did not transfer (−0.003); keep the unweighted fit |
+
+Deep fits (4× budget, 3× starts): social z20 0.607 vs 0.603 standard, epidemic 0.680 vs 0.683: the
+standard fits are converged; deeper search is not a lever.
+
+### 38. Final tab and purchase 8, discovery round 2 (Mon afternoon, 2,500 credits)
+
+Final slot 1: `submissions/20260928-1440-final1` = u016 with reservoir back on u015's fit (best
+public evidence on every system, ≈ 0.7555).
+
+Discovery round 2 (phase `p8`, `plans/p8.json`), sustained-style long runs on the systems that still
+had credits: reservoir 700, power_grid 700, ad_auction 700, epidemic 400 (balance after 2,927). Every
+past predictor scored on them:
+
+| system | best shipped model on the long run | reading |
+|---|---:|---|
+| power_grid | 0.64 (frequency 0.49) | **leak**: frequency keeps sinking to 48.9 Hz on the long hold and load settles at 121; models stop near 49.3 Hz / 126 |
+| ad_auction | 0.89 | no leak |
+| reservoir | 0.83 | no leak; quality 0.63 the weak observable |
+| epidemic | 0.77–0.81 | no leak |
+
+One leak in four runs (traffic's round found three in four). A power_grid refit on p8 is running,
+alongside a control-effect audit across all ten systems and a market depth push.
+
+### 39. Power_grid on the long run; control-effect audit (Mon afternoon, no credits)
+
+**power_grid w5** (`plans/power_grid_w_notes.md`): the p8 leak is three effects, not a slow decay:
+reserve delivery saturates at a limit that grows with the interconnector ($\min(c_r R, p_l + p_r\,ic)$,
+$p_l = 22$, $p_r = 82$); the interconnector delivers power even with no reserve ($g_i(ic - 1)$,
+$g_i = 13.7$); demand is curved in price ($D = d_0 - d_1 p + d_2 (p - 0.8)^2$, $d_2 = -7.7$). LOO 0.696 →
+0.710 on the same runs, pulse fold +0.015, exam 0.657 → 0.685, p8 end 48.91 Hz vs 48.89 true. One
+family replaces the per-observable doc. Forecast ≈ 0.79.
+
+**Control-effect audit** (`scripts/control_audit.py`, `plans/control_audit.md`): controls the models
+ignore (authority < 0.05 σ) include traffic freight_priority and clearance_effort, power_grid
+charging_allowance, hospital urgent_priority and followup_capacity, supply_chain lead_time_buy. Adding
+them never paid on held-out runs (seven fixes, all ties or losses; hospital's follow-up staff term
++0.013 but loses the exam and the recovery-shaped fold). In our runs these controls move for only
+3–10 ticks, so no fit can pin them; toll worked for traffic because the long hold gave it a sustained
+footprint. The largest single miss anywhere remains hospital's post-overtime wait (up to +16.7 σ).
+
+Reading after this round: on the data we own, structure and fitting are close to exhausted; the
+gains of the last two days came from runs in regimes nobody had observed (traffic +0.063,
+wildlife, power_grid).
+
+### 40. Mon night round: per-system structure pushes, no credits (`plans/*_{mkt9,soc9,hosp9,epi9,wild9,str9,pg9}_notes.md`, `plans/ens9_select.md`)
+
+Leave-one-run-out at 1.0 σ on every run; acceptance: mean up, pulse/recovery fold and exam not down.
+Fit noise: rerunning the same fit moves one fold by up to ±0.03 and the mean by ±0.01 (time-budgeted
+fits on a loaded machine), so gains under 0.01 are not evidence.
+
+| system | candidate | LOO pick → cand | decision |
+|---|---|---|---|
+| hospital | h9w1: wait target $c_w W/(f_1+\epsilon_w)$, rise/fall $\tau_w=51$, $\tau_{dn}=20$ | 0.675 → 0.699, exam +0.044 | built into final2 |
+| reservoir | str9 c: groundwater $G=g\,\mathrm{softplus}(L_{gw}-L)$, slow quality stock $\dot N=(L/L_f-N)/\tau_n$, $k_{ret}=0$ | 0.812 → 0.8745 | final2 |
+| power_grid | w5 package; pg9 thermostat load population | exam 0.657 → 0.685 | final2, **later lost publicly (§45)** |
+| social | median(z20, z21) | 0.598 → 0.622, 5/6 folds | final2 |
+| wildlife | median(v8h, wild9p two-stage, wild9m) | 0.675 → 0.685 | final2 |
+| market | gates, committees (60 combos) | best +0.016 but loses exam and p7 | keep y3 |
+| epidemic | 8 structures; mean(y2, c) +0.006 | noise | keep y2 |
+| supply, ad | diagnosis only | – | keep |
+
+Market diagnosis: the trade/freeze boundary in (rate, tax) is not linear: (0.085, 0.0425) trades,
+(0.0949, 0.0403) freezes, (0.0323, 0.0459) freezes, (0.0965, 0.0362) trades.
+
+### 41. Literal-code reading of the simulators (no credits; `plans/*_canon_notes.md`, `plans/textmine_report.md`, `plans/snap_report.md`)
+
+Hypothesis: the simulators are written code, so they use textbook forms, hard `min`/`max`/`if`
+switches and dt = 1 updates. Results:
+- **Market: the freeze is a switch with memory.** Book starts closed; an open book closes when
+  tax > $x_{hi}\in(0.0425, 0.0436)$; a closed book reopens only when tax < $x_{lo}\in(0.0342, 0.0403)$.
+  Fits every block with no rate term. A funding stock $F$ that fills only while frozen,
+  $\dot F=(1-g)(r/0.1)/116$, reproduces p7's depth drain 110 → 12 in-sample (p7 0.325 → 0.662). LOO:
+  canon4 0.573 vs y3 0.568, p7 +0.09, but multilevel −0.093 (price flow speed while trading). Not shipped.
+- **Hospital: canon2 = handover (orientation lag) + returns after discharge, fatigue off.** The recovery
+  hold settles at queue 23.0, discharges 11.5, wait 0: every patient spends exactly 2 ticks in service.
+  LOO 0.699 → 0.735, all 8 folds up. Risk: long recovery queue 23 → 105 by t1000 (pick 15.5).
+  50/50 mean with h9w1: 0.719, every fold ≥ pick (shipped in final3).
+- **Epidemic: clinic availability $=1-H/h_{cap}$** ($k$ lands 0.94–1.06 in all seven fits), $\tau_{wane}\approx90$,
+  length of stay ≈ 10, $h_{cap}\approx154$. Closure acts on children only. No LOO gain.
+- **Supply: 3-tick pure delay, supplier drops by exactly the order quantity 40 in one tick, shipments
+  alternate 29.35/44.74 on even/odd ticks on the interior hold** (dt = 1 threshold). Active pair
+  congestion + commitment. No LOO gain.
+- **Round constants: not supported.** 73 of 181 parameters within 3% of a round value vs 72 expected at
+  random; snapping ties a non-round pin at the same distance. Reservoir inflow (observed directly)
+  is 11.28 / 2.21 / period 67.75: the constants are not round, the structure is literal.
+- Social, wildlife, traffic, power_grid, ad/reservoir mechanism pruning: no gain (textbook forms lose;
+  reservoir's irrigation return fits to ≈ 0, confirming AC; ad needs B and C).
+- The free `documents` text is now saved (`data/<sys>/docs.json`); it repeats the brief plus reset ranges.
+
+### 42. Reset rule and horizon audits (Tue, no credits; `plans/rr_report.md`, `plans/lh_report.md`)
+
+Reset rule: 7 systems match the documented init. Mismatches: supply conveyors seeded (+0.0005 when
+fixed), power_grid (the literal rule loses 0.006), reservoir bank (+0.008, weakly pinned). None shipped.
+Horizon: models agree early and split late only on social (final3 vs alt1 0.26 → 0.50 σ): the 2-mean
+carries half of z21's long-hold defect, so social ships median(z20, z21, canon3). Horizon switches
+never win a nested test.
+
+### 43. Strong systems (Tue, no credits; `plans/{ad_auction,traffic,reservoir,supply_chain}_hi_notes.md`)
+
+- **ad_auction hi1:** exposure and preparation kept per breadth bin (10 bins, impressions ∝ people still
+  available); v8b spread the depleted narrow core over new people when targeting widened (exam spend
+  79 vs 39 predicted). Per-observable median with v8b: LOO 0.859 → 0.867, 4/5 folds, hold_rec −0.020.
+- **traffic dln_s:** 4-stage travel delay (flows are exactly 0 for 11 ticks after a start), lane closure
+  slows route b even when empty $(1-c_b\,\mathrm{lane}^{n})$, $c_b=1.12$, $n=4.5$, and shrinks its holding capacity.
+  LOO 0.745 → 0.767, wins pulse40 and exam. $v_{free}=48.7$ is the real empty-road speed.
+- **reservoir str9 c survives refit without p8:** p8 held-out +0.05–0.06 from p1 + p2 alone.
+- **supply:** a dt = 1 literal family fixes the pulse fold (0.44 → 0.91) but every candidate loses hold_mid.
+
+### 44. Public-history consistency check (Tue, no credits; `plans/ph_*.md`)
+
+For candidate $C$ as truth, score every past upload on 40 eval-like 4,000-tick episodes and compare
+with its public score. It separates old l0/l1 models from the ODE models cleanly (LOO error 0.10–0.65
+vs 0.013–0.03) but cannot rank close neighbours: candidate differences 0.001–0.01 equal the seed
+noise, and the w5 sanity check passes only weakly. Readings: hospital history rules out a recovery
+queue of ~15 (h9w1 worst fit; canon2 and the 50/50 best); reservoir str9 c as truth fits the history
+best (gap 0.013, corr 1.00); ad, traffic, wildlife, supply, market, power_grid, epidemic: no reliable edge.
+
+### 45. u017 and the builds for the last two days
+
+u017 = final1 with power_grid w5: **0.7538**; power_grid 0.7585 vs 0.7745. w5's held-out gain (+0.028
+exam, most of it from the p8 fold) did not transfer: −0.016. Rule since: a gain must be spread over
+most folds, not driven by one run.
+
+| build | changes vs final1 | forecast |
+|---|---|---:|
+| final4 (`submissions/20260929-2000-final4`) | reservoir str9 c, hospital 50/50, social 3-median, wildlife median-5, ad hi1, traffic dln_s | ~0.76–0.77 |
+| alt1b (`submissions/20260929-1840-alt1b`) | runners-up: supply v8c, hospital canon2, market canon4, pg median(v9c,w5), epi y2+c, social 2-mean, reservoir v8 | test build |
+
+Plan: final4 in Public first (the only confident measurement), Final only if it beats 0.7555.
+Purchase 9 (`plans/p9_final.json`, 2,727 credits with the market hysteresis test and the hospital
+canon2 separator) designed and dry-run checked, not bought.
+
+### 46. Final entry (Tue night)
+
+u019 (final4) public **0.7681**: reservoir 0.894 (+0.063), hospital 0.729 (+0.040), ad 0.878 (+0.013),
+traffic 0.847 (+0.009), wildlife 0.750 (+0.012); social 0.636 (−0.009, the 3-median lost to z20).
+u020 (final6 = final5 with hospital canon2 alone) public **0.7681**: hospital 0.717 (−0.012 vs the 50/50).
+Final entry: `submissions/20260929-2130-final5` = the best Public-scored version of every system
+(social back on u016's z20, supply on u010b's v8b): expected **0.769**. Three of the four late held-out
+wins lost publicly (w5, social 3-median, canon2 alone); only Public-verified pieces went into the Final.

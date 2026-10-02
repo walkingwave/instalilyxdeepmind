@@ -604,6 +604,715 @@
    },
    "uploaded": true,
    "why": {}
+  },
+  {
+   "date": "2026-09-26",
+   "dir": "submissions\\20260926-0135-u010b",
+   "id": "u010b",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8304,
+    "epidemic": 0.5451,
+    "hospital_queue": 0.6896,
+    "market": 0.5047,
+    "power_grid": 0.7535,
+    "reservoir": 0.7819,
+    "social_contagion": 0.5527,
+    "supply_chain": 0.824,
+    "traffic": 0.751,
+    "wildlife": 0.6355
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode:hospital_queue_min",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ensemble",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ensemble",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-26",
+   "dir": "submissions\\20260926-2120-u011",
+   "id": "u011",
+   "phase": "public",
+   "scores": {},
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode:epidemic_v8g",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode:hospital_queue_v8f",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode:market_v8t2",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_v8o",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode:wildlife_v8h",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-26",
+   "dir": "submissions\\20260926-2337-u012",
+   "id": "u012",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8565,
+    "epidemic": 0.6855,
+    "hospital_queue": 0.6791,
+    "market": 0.5875,
+    "power_grid": 0.7576,
+    "reservoir": 0.8311,
+    "social_contagion": 0.6209,
+    "supply_chain": 0.8217,
+    "traffic": 0.7757,
+    "wildlife": 0.697
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "ode:ad_auction_v8b",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode:market_v9g",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "ode:power_grid_v8g",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode:reservoir_v8",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode:supply_chain_v8b",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode:traffic_v8d",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-27",
+   "dir": "submissions\\20260927-0233-u013",
+   "id": "u013",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8565,
+    "epidemic": 0.6867,
+    "hospital_queue": 0.6721,
+    "market": 0.6272,
+    "power_grid": 0.769,
+    "reservoir": 0.8311,
+    "social_contagion": 0.6261,
+    "supply_chain": 0.8217,
+    "traffic": 0.7757,
+    "wildlife": 0.7244
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode:epidemic_x11",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode:hospital_queue_v9g",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "x4 + price median(x4, l0b_lin)",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "ode:power_grid_v9c",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_x7",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode:wildlife_x13",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-27",
+   "dir": "submissions\\20260927-2139-u014",
+   "id": "u014",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8656,
+    "epidemic": 0.7166,
+    "hospital_queue": 0.6665,
+    "market": 0.6339,
+    "power_grid": 0.7745,
+    "reservoir": 0.8311,
+    "social_contagion": 0.6052,
+    "supply_chain": 0.8217,
+    "traffic": 0.7757,
+    "wildlife": 0.7244
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "zoo perobs: win_rate=pub_v8b, spend=mean(pub_v8b,s1), conversions=mean(pub_v8b,min)",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode:epidemic_y2",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode:hospital_queue_y3",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode:market_y3",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "zoo perobs: load=pub_v9c, frequency=pub_v9c, renewable_share=mean(v8k,min)",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_y13",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-27",
+   "dir": "submissions\\20260927-2151-u015",
+   "id": "u015",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8656,
+    "epidemic": 0.7166,
+    "hospital_queue": 0.6896,
+    "market": 0.6339,
+    "power_grid": 0.7745,
+    "reservoir": 0.8311,
+    "social_contagion": 0.6342,
+    "supply_chain": 0.8217,
+    "traffic": 0.7757,
+    "wildlife": 0.7244
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "perobs",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "perobs",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_y10",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-28",
+   "dir": "submissions\\20260928-1430-u016",
+   "id": "u016",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8656,
+    "epidemic": 0.7166,
+    "hospital_queue": 0.6896,
+    "market": 0.6339,
+    "power_grid": 0.7745,
+    "reservoir": 0.8286,
+    "social_contagion": 0.6448,
+    "supply_chain": 0.8217,
+    "traffic": 0.8385,
+    "wildlife": 0.7381
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "perobs",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "perobs",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_z20",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode:traffic_z8",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode:wildlife_v8h",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-29",
+   "dir": "submissions\\20260929-1823-u017",
+   "id": "u017",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8656,
+    "epidemic": 0.7166,
+    "hospital_queue": 0.6896,
+    "market": 0.6339,
+    "power_grid": 0.7585,
+    "reservoir": 0.8311,
+    "social_contagion": 0.6448,
+    "supply_chain": 0.8217,
+    "traffic": 0.8385,
+    "wildlife": 0.7381
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "perobs",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "ode:power_grid_w5",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-29",
+   "dir": "submissions\\20260929-2000-final4",
+   "id": "u019",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8783,
+    "epidemic": 0.7166,
+    "hospital_queue": 0.7294,
+    "market": 0.6339,
+    "power_grid": 0.7745,
+    "reservoir": 0.8938,
+    "social_contagion": 0.6358,
+    "supply_chain": 0.8217,
+    "traffic": 0.8473,
+    "wildlife": 0.7502
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "ad_auction_hi:hi1m:med(hi1,v8b);hi1;med(hi1,v8b)",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "hosp median: h9w1 + canon2 handover+returns (50/50)",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "perobs",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode:reservoir_str9",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "social median z20 z21 canon3",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode:traffic_hi4",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "wildlife_tm median: v8h p7, wild9m, tmq AC (settlement on prey and predators), tmp AB predation, tms AB shelter lag",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
+  },
+  {
+   "date": "2026-09-29",
+   "dir": "submissions\\20260929-2230-final6",
+   "id": "u020",
+   "phase": "public",
+   "scores": {
+    "ad_auction": 0.8783,
+    "epidemic": 0.7166,
+    "hospital_queue": 0.7172,
+    "market": 0.6339,
+    "power_grid": 0.7745,
+    "reservoir": 0.8938,
+    "social_contagion": 0.6448,
+    "supply_chain": 0.824,
+    "traffic": 0.8473,
+    "wildlife": 0.7502
+   },
+   "systems": {
+    "ad_auction": {
+     "data_ticks": 0,
+     "kind": "ad_auction_hi:hi1m:med(hi1,v8b);hi1;med(hi1,v8b)",
+     "lam": 1.0
+    },
+    "epidemic": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "hospital_queue": {
+     "data_ticks": 0,
+     "kind": "ode:hospital_queue_canon2",
+     "lam": 1.0
+    },
+    "market": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "power_grid": {
+     "data_ticks": 0,
+     "kind": "perobs",
+     "lam": 1.0
+    },
+    "reservoir": {
+     "data_ticks": 0,
+     "kind": "ode:reservoir_str9",
+     "lam": 1.0
+    },
+    "social_contagion": {
+     "data_ticks": 0,
+     "kind": "ode:social_contagion_z20",
+     "lam": 1.0
+    },
+    "supply_chain": {
+     "data_ticks": 0,
+     "kind": "ode",
+     "lam": 1.0
+    },
+    "traffic": {
+     "data_ticks": 0,
+     "kind": "ode:traffic_hi4",
+     "lam": 1.0
+    },
+    "wildlife": {
+     "data_ticks": 0,
+     "kind": "wildlife_tm median: v8h p7, wild9m, tmq AC (settlement on prey and predators), tmp AB predation, tms AB shelter lag",
+     "lam": 1.0
+    }
+   },
+   "uploaded": true,
+   "why": {}
   }
  ]
 }

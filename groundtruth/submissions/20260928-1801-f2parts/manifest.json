@@ -1,0 +1,32 @@
+{
+  "git_sha": "e619978",
+  "stamp": "20260928-1801",
+  "systems": {
+    "hospital_queue": {
+      "kind": "ode",
+      "model_id": "ode:hospital_queue_hosp9",
+      "ode": [
+        "hospital_queue_hosp9"
+      ]
+    },
+    "reservoir": {
+      "kind": "ode",
+      "model_id": "ode:reservoir_str9",
+      "ode": [
+        "reservoir_str9"
+      ]
+    },
+    "wildlife": {
+      "kind": "ensemble",
+      "model_id": "wild9 median: v8h p7 refit, wild9p two-stage, wild9m (gx+pt)",
+      "ode": [
+        "wildlife_v8h",
+        "wildlife_wild9m",
+        "wildlife_wild9p"
+      ]
+    }
+  },
+  "tag": "f2parts",
+  "zip_bytes": 18368,
+  "zip_sha256": "29e30c99019e729be65df88310f15bea885bda88ad7e5498c13745f7d179330d"
+}

@@ -1,0 +1,28 @@
+{
+  "git_sha": "e619978",
+  "stamp": "20260928-1947",
+  "systems": {
+    "hospital_queue": {
+      "kind": "ensemble",
+      "model_id": "hosp median: h9w1 + canon2 handover+returns (50/50)",
+      "ode": [
+        "hospital_queue_canon2",
+        "hospital_queue_hosp9"
+      ]
+    },
+    "wildlife": {
+      "kind": "ensemble",
+      "model_id": "wildlife_tm median: v8h p7, wild9m, tmq AC (settlement on prey and predators), tmp AB predation, tms AB shelter lag",
+      "ode": [
+        "wildlife_tmp",
+        "wildlife_tmq",
+        "wildlife_tms",
+        "wildlife_v8h",
+        "wildlife_wild9m"
+      ]
+    }
+  },
+  "tag": "f3parts",
+  "zip_bytes": 14545,
+  "zip_sha256": "25767af118868a906f839e51bff38a312161de677c6c23947db44127b672e0b7"
+}

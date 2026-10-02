@@ -1,0 +1,290 @@
+{
+ "reservoir": {
+  "balance": 780,
+  "T": 760,
+  "left": 20,
+  "blocks": [
+   {
+    "on": "all",
+    "ticks": 420,
+    "action": {
+     "release_rate": 10.5,
+     "irrigation_allocation": 6.8,
+     "withdrawal_depth": 0.85,
+     "aeration": 0.15
+    }
+   },
+   {
+    "on": "__rec__",
+    "ticks": 120,
+    "action": {
+     "release_rate": 2.0,
+     "irrigation_allocation": 0.0,
+     "withdrawal_depth": 0.0,
+     "aeration": 1.0
+    }
+   },
+   {
+    "on": [
+     "release_rate",
+     "irrigation_allocation"
+    ],
+    "ticks": 220,
+    "action": {
+     "release_rate": 10.5,
+     "irrigation_allocation": 6.8,
+     "withdrawal_depth": 0.0,
+     "aeration": 1.0
+    }
+   }
+  ],
+  "note": "full pulse 420 (fouling and level floor past the 200 ticks we own), refill 120, then release+irrigation alone with screens clean (drain without fouling)"
+ },
+ "ad_auction": {
+  "balance": 400,
+  "T": 380,
+  "left": 20,
+  "blocks": [
+   {
+    "on": "all",
+    "ticks": 230,
+    "action": {
+     "bid": 4.475,
+     "budget_cap": 88.0,
+     "targeting_breadth": 0.7412
+    }
+   },
+   {
+    "on": [
+     "bid"
+    ],
+    "ticks": 150,
+    "action": {
+     "bid": 4.475,
+     "budget_cap": 20.0,
+     "targeting_breadth": 0.55
+    }
+   }
+  ],
+  "note": "full pulse 230 (audience depletion; we own 60), then bid alone 150 (never held)"
+ },
+ "power_grid": {
+  "balance": 400,
+  "T": 380,
+  "left": 20,
+  "blocks": [
+   {
+    "on": [
+     "price_signal",
+     "interconnector"
+    ],
+    "ticks": 200,
+    "action": {
+     "price_signal": 0.225,
+     "reserve_dispatch": 0.0,
+     "charging_allowance": 1.0,
+     "interconnector": 0.32
+    }
+   },
+   {
+    "on": [
+     "price_signal",
+     "interconnector",
+     "charging_allowance"
+    ],
+    "ticks": 180,
+    "action": {
+     "price_signal": 0.225,
+     "reserve_dispatch": 0.0,
+     "charging_allowance": 0.15,
+     "interconnector": 0.32
+    }
+   }
+  ],
+  "note": "price+interconnector 200 (never held), then add charging_allowance cut: its sustained footprint under a depleted store"
+ },
+ "hospital_queue": {
+  "balance": 230,
+  "T": 210,
+  "left": 20,
+  "blocks": [
+   {
+    "on": [
+     "overtime"
+    ],
+    "ticks": 110,
+    "action": {
+     "staffing": 20.0,
+     "elective_scheduling": 0.0,
+     "diagnostic_allocation": 0.4,
+     "urgent_priority": 0.6,
+     "overtime": 0.85,
+     "followup_capacity": 1.0
+    }
+   },
+   {
+    "on": "__rec__",
+    "ticks": 100,
+    "action": {
+     "staffing": 20.0,
+     "elective_scheduling": 0.0,
+     "diagnostic_allocation": 0.4,
+     "urgent_priority": 0.6,
+     "overtime": 0.0,
+     "followup_capacity": 1.0
+    }
+   }
+  ],
+  "note": "overtime alone 110 (the drained-queue wait climb, +16.7 sigma miss; owned 30), then recovery 100: does wait keep climbing without overtime"
+ },
+ "supply_chain": {
+  "balance": 230,
+  "T": 210,
+  "left": 20,
+  "blocks": [
+   {
+    "on": [
+     "order_quantity"
+    ],
+    "ticks": 130,
+    "action": {
+     "order_quantity": 68.0,
+     "lead_time_buy": 1.0,
+     "product_mix": 0.5,
+     "production_effort": 1.0,
+     "receiving_effort": 1.5,
+     "maintenance": 1.0
+    }
+   },
+   {
+    "on": [
+     "order_quantity",
+     "lead_time_buy"
+    ],
+    "ticks": 80,
+    "action": {
+     "order_quantity": 68.0,
+     "lead_time_buy": 0.32,
+     "product_mix": 0.5,
+     "production_effort": 1.0,
+     "receiving_effort": 1.5,
+     "maintenance": 1.0
+    }
+   }
+  ],
+  "note": "orders alone 130 (committee split: supplier 0 vs 362), then add lead_time_buy cut with orders flowing: its sustained footprint"
+ },
+ "epidemic": {
+  "balance": 189,
+  "T": 169,
+  "left": 20,
+  "blocks": [
+   {
+    "on": [
+     "school_closure"
+    ],
+    "ticks": 169,
+    "action": {
+     "school_closure": 0.85,
+     "mask_mandate": 0.0,
+     "vaccination_rate": 0.0
+    }
+   }
+  ],
+  "note": "school closure alone 169 (never held; highest late-window disagreement)"
+ },
+ "social_contagion": {
+  "balance": 189,
+  "T": 169,
+  "left": 20,
+  "blocks": [
+   {
+    "on": [
+     "seeding",
+     "incentive"
+    ],
+    "ticks": 169,
+    "action": {
+     "seeding": 7.65,
+     "incentive": 1.7,
+     "bridge_outreach": 0.0
+    }
+   }
+  ],
+  "note": "seeding+incentive without bridge 169 (never held; largest disagreement)"
+ },
+ "wildlife": {
+  "balance": 189,
+  "T": 169,
+  "left": 20,
+  "blocks": [
+   {
+    "on": [
+     "hunting_quota",
+     "corridor_access"
+    ],
+    "ticks": 169,
+    "action": {
+     "hunting_quota": 5.95,
+     "habitat_protection": 1.0,
+     "corridor_access": 0.85
+    }
+   }
+  ],
+  "note": "harvest with corridors open under full protection 169 (never held; largest long-horizon disagreement)"
+ },
+ "market": {
+  "balance": 160,
+  "T": 140,
+  "left": 20,
+  "blocks": [
+   {
+    "on": [
+     "transaction_tax"
+    ],
+    "ticks": 140,
+    "action": {
+     "interest_rate": 0.0,
+     "transaction_tax": 0.0425
+    }
+   }
+  ],
+  "note": "tax alone 140 (owned only 60 ticks; depth under tax is the weak observable)"
+ },
+ "traffic": {
+  "balance": 160,
+  "T": 140,
+  "left": 20,
+  "blocks": [
+   {
+    "on": "all-toll",
+    "ticks": 80,
+    "action": {
+     "signal_timing": 0.2025,
+     "lane_closure": 0.5525,
+     "toll": 5.0,
+     "ramp_metering": 0.85,
+     "freight_priority": 0.925,
+     "clearance_effort": 0.15
+    }
+   },
+   {
+    "on": [
+     "signal_timing",
+     "lane_closure",
+     "ramp_metering"
+    ],
+    "ticks": 60,
+    "action": {
+     "signal_timing": 0.2025,
+     "lane_closure": 0.5525,
+     "toll": 5.0,
+     "ramp_metering": 0.85,
+     "freight_priority": 0.5,
+     "clearance_effort": 1.0
+    }
+   }
+  ],
+  "note": "harsh pulse with toll kept at 5 for 80 (toll-elastic demand: u016 says speeds 27/32, older fits 11/12), then freight_priority and clearance_effort back to recovery alone for 60: their sustained footprint under congestion"
+ }
+}

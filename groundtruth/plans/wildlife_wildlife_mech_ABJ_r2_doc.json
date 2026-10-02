@@ -1,0 +1,93 @@
+{
+ "format": 1,
+ "system": "wildlife",
+ "observables": [
+  "prey_north",
+  "predator_north",
+  "prey_south",
+  "predator_south"
+ ],
+ "controls": [
+  "hunting_quota",
+  "habitat_protection",
+  "corridor_access"
+ ],
+ "bounds": {
+  "hunting_quota": [
+   0.0,
+   8.0
+  ],
+  "habitat_protection": [
+   0.0,
+   1.0
+  ],
+  "corridor_access": [
+   0.0,
+   1.0
+  ]
+ },
+ "recovery": {
+  "hunting_quota": 0.0,
+  "habitat_protection": 1.0,
+  "corridor_access": 0.0
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  null,
+  null,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  405.08029385844577,
+  20.81069073927521,
+  330.88636415862425,
+  23.595791697538118
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "wildlife_mech",
+  "theta": [
+   0.7365033407844844,
+   0.4999993168190317,
+   0.8130901558967307,
+   0.020802769340633222,
+   0.4049617093501334,
+   0.06405702960296386,
+   2.445714706919098,
+   0.7589978416529342,
+   0.04431334415663698,
+   70.34216569561504,
+   1.4999949609928953,
+   352.375049513665,
+   0.04109062611967541,
+   0.00010054661621629485,
+   0.3901986060487441,
+   1229.3180997116415
+  ],
+  "mech": [
+   "A",
+   "B",
+   "J"
+  ],
+  "n_sub": 2
+ },
+ "post": [],
+ "info": {
+  "model_id": "ode:wildlife_mech",
+  "n_runs": 3,
+  "n_ticks": 811,
+  "cost": 100.55060385116491
+ }
+}

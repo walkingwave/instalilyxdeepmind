@@ -1,0 +1,95 @@
+{
+ "format": 1,
+ "system": "ad_auction",
+ "observables": [
+  "win_rate",
+  "spend",
+  "conversions"
+ ],
+ "controls": [
+  "bid",
+  "budget_cap",
+  "targeting_breadth"
+ ],
+ "bounds": {
+  "bid": [
+   0.0,
+   5.0
+  ],
+  "budget_cap": [
+   0.0,
+   100.0
+  ],
+  "targeting_breadth": [
+   0.1,
+   1.0
+  ]
+ },
+ "recovery": {
+  "bid": 1.5,
+  "budget_cap": 20.0,
+  "targeting_breadth": 0.55
+ },
+ "hard_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "hard_hi": [
+  1.0,
+  null,
+  null
+ ],
+ "clip_lo": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "clip_hi": [
+  1.0,
+  201.48919075262037,
+  14.966893174421802
+ ],
+ "model": {
+  "kind": "ode",
+  "family": "ad_auction_pair",
+  "theta": [
+   261.73079155318106,
+   3.6368423867631066,
+   0.4855359964049302,
+   0.1472477209997856,
+   52.43438295735938,
+   0.24712381703705918,
+   5.794602437914906,
+   5.962039878024496,
+   5.595331022599502,
+   0.47281140999104243,
+   0.3898638406221989,
+   0.6294163499555834,
+   0.49279589348027314,
+   29.382940423928986,
+   0.0,
+   40.000000000000014,
+   0.0
+  ],
+  "mech": [
+   "A",
+   "B",
+   "C"
+  ],
+  "n_sub": 2
+ },
+ "post": [
+  {
+   "type": "le_control",
+   "obs": "spend",
+   "control": "budget_cap",
+   "lag": 1,
+   "scale": 1.04
+  }
+ ],
+ "info": {
+  "model_id": "ode:ad_auction_pair",
+  "n_runs": 5
+ }
+}
